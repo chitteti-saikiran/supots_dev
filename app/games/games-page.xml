@@ -1,0 +1,106 @@
+<Page actionBarHidden="true" xmlns="http://www.nativescript.org/tns.xsd" xmlns:i="nativescript-image-cache-it" loaded="pageLoaded" navigatedTo="onNavigatedTo">
+    <GridLayout rows="58,*" columns="*">
+        <StackLayout col="0" row="0">
+            <GridLayout backgroundColor="#334455" rows="auto, 58" columns="10,40,*,40,6,40,16">
+                <FlexboxLayout justifyContent="center" onTap="toggleDrawer" alignItems="center" row="1" col="1" style="height: 40;width: 40;border-radius: 20;">
+                    <Image class="Ionicons size14" tintColor="#fff" src="{{backIcon}}" row="1" col="1" stretch="none" />
+                </FlexboxLayout>
+                <Label textWrap="true" margin="0 10 0 5" typeName="Button" verticalAlignment="middle" style="text-alignment: left;font-weight: bold;font-size: 24" color="white" row="1" col="2" text="Games" />
+            </GridLayout>
+        </StackLayout>
+        <GridLayout row="1" rows="auto, *" columns="*">
+            <GridLayout row="0" columns="*,*,*,*" style="margin: 20 20;border-color:#4ac;border-width:1;border-radius:5">
+                <Label tap="{{onViewFilterTap}}" padding="5 0" borderRadius="3 0 0 3" background="{{activeView === state.view_filters[0][0]?'#4ac':''}}" textAlignment="center" col="0" text="{{state.view_filters[0][0]}}"/>
+                <Label tap="{{onViewFilterTap}}" padding="5 0" background="{{activeView === state.view_filters[1][0]?'#4ac':''}}" textAlignment="center" col="1" text="{{state.view_filters[1][0]}}"/>
+                <Label tap="{{onViewFilterTap}}" padding="5 0" background="{{activeView === state.view_filters[2][0]?'#4ac':''}}" textAlignment="center" col="2" text="{{state.view_filters[2][0]}}"/>
+                <Label tap="{{onViewFilterTap}}" padding="5 0" borderRadius="0 3 3 0" background="{{activeView === state.view_filters[3][0]?'#4ac':''}}" textAlignment="center" col="3" text="{{state.view_filters[3][0]}}"/>
+            </GridLayout>
+            <GridLayout visibility="{{ activeView !== 'Draft' ? 'visible' : 'collapsed' }}" row="1" rows="*" columns="*">
+            
+                <GridLayout row="0" visibility="{{ state.isLoading ? 'visible' : 'collapsed' }}" rows="*,auto,auto,*" columns="*"> 
+                    <Label row="3" col="0"/>
+                    <ActivityIndicator row="1" busy="true" color="#4ac" />
+                    <Label row="2" text="Loading Games" textAlignment="center" />
+                    <Label row="3" col="0"/>
+                </GridLayout>
+
+                <ScrollView row="0" visibility="{{ !state.isLoading && state.filteredGames.length > 0 ? 'visible' : 'hidden' }}">
+                    <Repeater items="{{ state.filteredGames }}">
+                            <Repeater.itemsLayout>
+                                <StackLayout margin="0 0 20" />
+                            </Repeater.itemsLayout>
+                            <Repeater.itemTemplate>
+                                <GridLayout id="{{$value._id}}" loaded="onGameItemLoaded" columns="5,70, *, 70,5" margin="0 0 0 0" rows="auto, auto" pageTarget="{{_id}}" uri="{{_id}}" orientation="vertical" style="
+                                    border-bottom-color: #eee;
+                                    border-bottom-width: 1;
+                                    padding: 20 0
+                                ">
+                                    <FlexboxLayout tap="onGameItemToggle" flexDirection="column" justifyContent="center" col="1">
+                                        <FlexboxLayout style="
+                                            margin-bottom: 0;
+                                            border-badius: 20;
+                                            width: 40;
+                                            height: 40;
+                                            align-items: center;
+                                            justify-content: center
+                                        ">
+                                            <i:ImageCacheIt stretch="Fill" src="{{$value.teamOne.image}}" loadMode="" onTap="toggleDrawer" style="height: 35;width: 35;border-radius: 17.5;" />
+                                        </FlexboxLayout>
+                                        <Label textWrap="true" fontSize="12" textAlignment="center" text="{{$value.teamOne.name}}"/>
+                                    </FlexboxLayout>
+                                    <FlexboxLayout tap="onGameItemToggle" loaded="gameItemLabelLoaded" flexDirection='column' alignItems='center' justifyContent='center' col="2" row="0">
+                                        <Label loaded="gameItem1LabelLoaded" game="{{$value}}" id="gameLblFirst" text=""/>
+                                        <Label loaded="gameItem2LabelLoaded" color="#345" game="{{$value}}" id="gameLblSecond" text=""/>
+                                    </FlexboxLayout>
+                                    <FlexboxLayout tap="onGameItemToggle" flexDirection="column" justifyContent="center" col="3">
+                                        <FlexboxLayout style="
+                                            margin-bottom: 0;
+                                            border-badius: 20;
+                                            width: 40;
+                                            height: 40;
+                                            align-items: center;
+                                            justify-content: center
+                                        ">
+                                            <i:ImageCacheIt stretch="Fill" src="{{$value.teamTwo.image}}" loadMode="" onTap="toggleDrawer" style="height: 35;width: 35;border-radius: 17.5;" />
+                                        </FlexboxLayout>
+                                        <Label textWrap="true" fontSize="12" textAlignment="center" text="{{$value.teamTwo.name}}"/>
+                                    </FlexboxLayout>
+
+                                    <GridLayout rows="40" columns="0,*, 10,*,0" visibility="collapsed" padding="15 20 20" colSpan="5" row="1">
+                                        <StackLayout touch="onTouch"  class="{{$value.state!=='none'?'save-button hidden':'save-button round'}}" col="1">
+                                            <Label text="EDIT" textWrap="true" />
+                                        </StackLayout>
+
+                                        <StackLayout touch="onTouch" class="{{$value.state==='none'?'save-button hidden':'save-button red round'}}" col="1">
+                                            <Label text="VIEW" textWrap="true" />
+                                        </StackLayout>
+
+                                        <StackLayout game="{{$value}}" tap="goGMC" touch="onTouch" class="save-button light round" col="3">
+                                            <Label text="GMC" textWrap="true" />
+                                        </StackLayout>
+                                    </GridLayout>
+                                </GridLayout>
+                            </Repeater.itemTemplate>
+                        </Repeater>
+                </ScrollView>
+
+                <StackLayout row="0"  style="margin-top: 20;background: #fff" visibility="{{!state.isLoading && state.filteredGames.length === 0 ?'visible':'hidden'}}">
+                    <FlexboxLayout flexDirection='column' alignItems='center' justifyContent='center' style="padding: 20;background: #fff">
+                        <Label fontSize="24" color="#888" text="Ops, nothing yet!" />
+                        <Label textWrap="true" fontSize="15" textAlignment="center" color="#999" text="No Games found!" />
+                    </FlexboxLayout>
+                </StackLayout>
+
+            </GridLayout>
+
+            <GridLayout visibility="{{ activeView === 'Draft' ? 'visible' : 'collapsed' }}" row="1" rows="*" columns="*">
+                <StackLayout row="0"  style="margin-top: 20;background: #fff" visibility="{{state.draft_games.length === 0 ?'visible':'hidden'}}">
+                    <FlexboxLayout flexDirection='column' alignItems='center' justifyContent='center' style="padding: 20;background: #fff">
+                        <Label fontSize="24" color="#888" text="Ops, nothing yet!" />
+                        <Label textWrap="true" fontSize="15" textAlignment="center" color="#999" text="No Games found!" />
+                    </FlexboxLayout>
+                </StackLayout>
+            </GridLayout>
+        </GridLayout>
+    </GridLayout>
+</Page>

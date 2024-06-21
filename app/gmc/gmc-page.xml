@@ -1,0 +1,53 @@
+<Page actionBarHidden="true" background="#fff" xmlns="http://www.nativescript.org/tns.xsd" xmlns:i="nativescript-image-cache-it" xmlns:lv="nativescript-ui-listview" loaded="pageLoaded" navigatedTo="onNavigatedTo">
+    <GridLayout rows="auto,*" columns="*">
+        <StackLayout col="0" row="0">
+            <GridLayout backgroundColor="#000" rows="auto, 40" columns="10, auto,40,*,40,6,auto,16">
+                <FlexboxLayout justifyContent="center" onTap="toggleDrawer" alignItems="center" paddingTop="5" row="1" col="2" style="">
+                    <Image class="Ionicons size10" tintColor="#fff" src="{{backIcon}}" row="1" col="1" stretch="none" />
+                </FlexboxLayout>
+                <Label textWrap="true" margin="0 10 2 5" typeName="Button" verticalAlignment="middle" style="text-alignment: left;font-weight: bold;font-size: 18" color="white" row="1" col="3" text="Games" />
+                <FlexboxLayout touch="onTouch" tap="goToGMCNext" visibility="{{ newGame.sport && newGame.role ? 'visible' : 'collapsed' }}" justifyContent="center" alignItems="center" col="6" padding="0 0" row="1">
+                    <StackLayout class="gmc-next-btn red">
+                        <Label text="NEXT"/> 
+                    </StackLayout>
+                </FlexboxLayout>
+            </GridLayout>
+        </StackLayout>
+        <FlexboxLayout flexDirection="row" justifyContent="center" alignItems="center" row="1" backgroundImage="~/images/gmc_bg.png">
+            <FlexboxLayout minWidth="200" flexDirection="column" justifyContent="center" alignItems="center" class="gmc-detail-picker">
+                <FlexboxLayout width="120" justifyContent="center" alignItems="center" background="rgba(0,0,0,0.5)" borderRadius="60" height="120">
+                    <FlexboxLayout visibility="{{ newGame.sport._id ===null ?'visible' : 'collapsed' }}" touch="onTouch" tap="openSportPicker" justifyContent="center" alignItems="center" width="80" height="80" borderRadius="40" background="#fff">
+                        <Image class="Ionicons size14" tintColor="#000" src="{{addIcon}}" row="1" col="1" stretch="none" />
+                    </FlexboxLayout>
+                    <FlexboxLayout touch="onTouch" tap="openSportPicker" visibility="{{ newGame.sport._id !==null ?'visible' : 'collapsed' }}" justifyContent="center" alignItems="center" width="80" height="80" borderRadius="40" background="{{newGame.sport?'':'#fff'}}">
+                        <i:ImageCacheIt stretch="Fill" height="80" width="80" borderRadius="40" src="{{newGame.sport.image}}" row="1" col="1" />
+                    </FlexboxLayout>
+                </FlexboxLayout>
+                <StackLayout margin="10">
+                    <Label fontSize="14" color="#fff" textAlignment="center" margin="0 0 8" text="{{newGame.sport.name || '' }}"/>
+                    <StackLayout touch="onTouch" tap="openSportPicker" class="save-button light round">
+                        <Label text="Select Sport"/>
+                    </StackLayout>
+                </StackLayout>
+            </FlexboxLayout>
+            <Label text="" width="20" height="20" textWrap="true" />
+            
+            <FlexboxLayout width="200" flexDirection="column" justifyContent="center" alignItems="center" class="gmc-detail-picker">
+                <FlexboxLayout width="120" justifyContent="center" alignItems="center" background="rgba(0,0,0,0.5)" borderRadius="60" height="120">
+                    <FlexboxLayout touch="onTouch" tap="openRolePicker" visibility="{{ newGame.role === null ? 'visible' : 'collapsed' }}" justifyContent="center" alignItems="center" width="80" height="80" borderRadius="40" background="#fff">
+                        <Image class="Ionicons size14" tintColor="#000" src="{{addIcon}}" row="1" col="1" stretch="none" />
+                    </FlexboxLayout>
+                    <FlexboxLayout touch="onTouch" tap="openRolePicker" visibility="{{ newGame.role !== null ? 'visible' : 'collapsed' }}" justifyContent="center" alignItems="center" width="80" height="80" borderRadius="40" background="#fff">
+                        <i:ImageCacheIt stretch="Fill" height="80" width="80" borderRadius="40" tintColor="#000" src="{{you.image}}" row="1" col="1" />
+                    </FlexboxLayout>
+                </FlexboxLayout>
+                <StackLayout margin="10">
+                    <Label fontSize="14" color="#fff" textAlignment="center" margin="0 0 8" fontSize="14" text="{{ newGame.role || '' }}"/>
+                    <StackLayout touch="onTouch" tap="openRolePicker" class="save-button light round">
+                        <Label text="Select Role"/>
+                    </StackLayout>
+                </StackLayout>
+            </FlexboxLayout>
+        </FlexboxLayout>
+    </GridLayout>
+</Page>

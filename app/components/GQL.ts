@@ -1,0 +1,2023 @@
+import gql from 'graphql-tag';
+
+export const AsyncPostUserFragment = gql`
+	fragment AsyncPostUserFragment on CommonUser {
+		_id
+		type
+		F{
+			_id
+			name
+			image
+			type
+      roles{
+        _id
+        role
+        user{
+          _id
+          name
+          image
+          type
+        }
+      }
+		}
+		C{
+			_id
+			name
+			image
+			type
+      roles{
+        _id
+        role
+        user{
+          _id
+          name
+          image
+          type
+        }
+      }
+		}
+		T{
+			_id
+			name
+			image
+			type
+      roles{
+        _id
+        role
+        user{
+          _id
+          name
+          image
+          type
+        }
+      }
+		}
+		I{
+			_id
+			name
+			image
+			type
+      roles{
+        _id
+        role
+        user{
+          _id
+          name
+          image
+          type
+        }
+      }
+		}
+		E{
+			_id
+			name
+			type
+		}
+		G{
+			_id
+		}
+		L{
+			_id
+			name
+			image
+			type
+      roles{
+        _id
+        role
+        user{
+          _id
+          name
+          image
+          type
+        }
+      }
+		}
+		Q{
+			_id
+			type
+		}
+	}
+`
+
+export const AsyncPostFrag = gql`
+  fragment AsyncPostFrag on Post {
+    _id
+		content
+		rawContent
+		user{
+			...AsyncPostUserFragment
+		}
+		owner{
+			...AsyncPostUserFragment
+		}
+		userTo{
+			...AsyncPostUserFragment
+		}
+		type
+		sport{
+			_id
+			image
+			name
+		}
+		video{
+			name
+			src
+		}
+		video_id
+		is_live
+		isEvent
+		isGMC
+		minute
+		skills
+		hashtags
+		isGAME
+		hasLink
+		links{
+			_id
+			title
+			description
+			url
+			images
+			status
+			date
+			user{
+				...AsyncPostUserFragment
+			}
+		}
+		isLiked
+		isTagged
+		media{
+			_id
+			status
+			date
+			url
+			name
+      type
+			object_type
+			height
+			width
+			orientation
+			user{
+				...AsyncPostUserFragment
+			}
+			userTo{
+				...AsyncPostUserFragment
+			}
+			tags{
+				...AsyncPostUserFragment
+			}
+		}
+		timeAgo
+		status
+		date
+		pages
+		commentType
+		file{
+			_id
+			status
+			date
+			url
+			name
+      type
+			object_type
+			height
+			width
+			orientation
+			user{
+				...AsyncPostUserFragment
+			}
+			userTo{
+				...AsyncPostUserFragment
+			}
+			tags{
+				...AsyncPostUserFragment
+			}
+		}
+    likes{
+      _id
+      type
+      user{
+				...AsyncPostUserFragment
+			}
+    }
+    views{
+      _id
+      type
+      user{
+				...AsyncPostUserFragment
+			}
+    }
+    shares{
+      _id
+      type
+      user{
+				...AsyncPostUserFragment
+			}
+    }
+    comments{
+      _id
+      user{
+				...AsyncPostUserFragment
+			}
+      content
+      rawContent
+      owner{
+				...AsyncPostUserFragment
+			}
+      userTo{
+				...AsyncPostUserFragment
+			}
+      contentUsers{
+				...AsyncPostUserFragment
+			}
+      replies{
+        _id
+        content
+        rawContent
+        user{
+          ...AsyncPostUserFragment
+        }
+        owner{
+          ...AsyncPostUserFragment
+        }
+        userTo{
+          ...AsyncPostUserFragment
+        }
+        contentUsers{
+          ...AsyncPostUserFragment
+        }
+        media {
+          _id
+          status
+          date
+          url
+          name
+        }
+      }
+      tag
+      team{
+        _id
+        name
+        image
+      }
+      media{
+        _id
+        status
+        date
+        url
+        name
+      }
+    }
+    shareType
+    isShared
+  }
+`;
+
+
+export const AsyncPost = gql`
+  ${AsyncPostFrag}
+	${AsyncPostUserFragment}
+	query posts($user:String, $ids: [PostUserType], $limit:Int, $page:Int ){
+		posts(user:$user, ids:$ids, limit: $limit, page:$page){
+			...AsyncPostFrag
+      sharedObject{
+        _id
+        type
+        POST{
+          ...AsyncPostFrag
+        }
+        SESSIONFILE{
+          _id
+          status
+          date
+          commentCount
+          commentType
+          description
+          link
+          isFavoured
+          isOwner
+        }
+      }
+		}
+	}
+`
+
+export const POST_UPDATE = gql`
+  subscription POST_UPDATE($_id: String) {
+    postUpdate(_id: $_id){
+      ...AsyncPostFrag
+      sharedObject{
+        _id
+        type
+        POST{
+          ...AsyncPostFrag
+        }
+        SESSIONFILE{
+          _id
+          status
+          date
+          commentCount
+          commentType
+          description
+          link
+          isFavoured
+          isOwner
+        }
+      }
+    }
+  }
+`;
+
+export const sports = gql`
+  query getSports{
+    sports{
+      _id
+      image
+      name
+      color
+      id
+      date
+      halves
+      positions
+    }
+  }
+`;
+
+export const userFrag = gql`
+  fragment UserFrag on User {
+    _id
+    name
+    username
+    image
+    id
+    first_name
+    last_name
+    phone
+    email
+  }
+`;
+
+export const user = gql`
+  ${userFrag}
+  query getUser($_id:String){
+    user(_id:$_id){
+      ...UserFrag
+    }
+  }
+`;
+
+export const users = gql`
+  ${userFrag}
+  query getUsers{
+    users{
+      ...UserFrag
+    }
+  }
+`;
+
+const CommonUserFrag = gql`
+  fragment commonUserFrag on CommonUser{
+    _id
+    name
+    image
+    type
+  }
+`;
+
+const PostFrag = gql`
+  fragment postFrag on Post{
+    _id
+    user{
+      _id
+      type
+      F{
+        _id
+        name
+        image
+        type
+      }
+      C{
+        _id
+        name
+        image
+        type
+      }
+      L{
+        _id
+        name
+        image
+        type
+      }
+      I{
+        _id
+        name
+        image
+        type
+      }
+      T{
+        _id
+        name
+        image
+        type
+      }
+      Q{
+        _id
+        type
+      }
+      E{
+        _id
+        name
+        type
+      }
+    }
+    userTo{
+      _id
+      type
+      F{
+        _id
+        name
+        image
+        type
+      }
+      C{
+        _id
+        name
+        image
+        type
+      }
+      L{
+        _id
+        name
+        image
+        type
+      }
+      I{
+        _id
+        name
+        image
+        type
+      }
+      T{
+        _id
+        name
+        image
+        type
+      }
+      Q{
+        _id
+        type
+      }
+      E{
+        _id
+        name
+        type
+      }
+    }
+    owner{
+      _id
+      type
+      F{
+        _id
+        name
+        image
+        type
+      }
+      C{
+        _id
+        name
+        image
+        type
+      }
+      L{
+        _id
+        name
+        image
+        type
+      }
+      I{
+        _id
+        name
+        image
+        type
+      }
+      T{
+        _id
+        name
+        image
+        type
+      }
+      Q{
+        _id
+        type
+      }
+      E{
+        _id
+        name
+        type
+      }
+    }
+    content
+    rawContent
+    users{
+      _id
+      type
+      F{
+        _id
+        name
+        image
+        type
+      }
+      C{
+        _id
+        name
+        image
+        type
+      }
+      L{
+        _id
+        name
+        image
+        type
+      }
+      I{
+        _id
+        name
+        image
+        type
+      }
+      T{
+        _id
+        name
+        image
+        type
+      }
+      Q{
+        _id
+        type
+      }
+      E{
+        _id
+        name
+        type
+      }
+    }
+    timeAgo
+    hasLink
+    isGMC
+    isGAME
+    is_live
+    isEvent
+    isShared
+    sport{
+      _id
+      name
+      image
+      color
+    }
+    hashtags
+    links{
+      _id
+      title
+      description
+      images
+      url
+    }
+    media{
+      _id
+      date
+      url
+      name
+      type
+      object_type
+      height
+      width
+      orientation
+      tags{
+        _id
+      }
+    }
+    likes{
+      _id
+      type
+      user{
+        _id
+        type
+        F{
+          _id
+          name
+          image
+          type
+        }
+        C{
+          _id
+          name
+          image
+          type
+        }
+        L{
+          _id
+          name
+          image
+          type
+        }
+        I{
+          _id
+          name
+          image
+          type
+        }
+        T{
+          _id
+          name
+          image
+          type
+        }
+        Q{
+          _id
+          type
+        }
+        E{
+          _id
+          name
+          type
+        }
+      }
+    }
+    shares{
+      _id
+      type
+      user{
+        _id
+        type
+        F{
+          _id
+          name
+          image
+          type
+        }
+        C{
+          _id
+          name
+          image
+          type
+        }
+        L{
+          _id
+          name
+          image
+          type
+        }
+        I{
+          _id
+          name
+          image
+          type
+        }
+        T{
+          _id
+          name
+          image
+          type
+        }
+        Q{
+          _id
+          type
+        }
+        E{
+          _id
+          name
+          type
+        }
+      }
+    }
+    comments{
+      _id
+      user{
+        _id
+        type
+        F{
+          _id
+          name
+          image
+          type
+        }
+        C{
+          _id
+          name
+          image
+          type
+        }
+        L{
+          _id
+          name
+          image
+          type
+        }
+        I{
+          _id
+          name
+          image
+          type
+        }
+        T{
+          _id
+          name
+          image
+          type
+        }
+        Q{
+          _id
+          type
+        }
+        E{
+          _id
+          name
+          type
+        }
+      }
+      users{_id
+        type
+        F{
+          _id
+          name
+          image
+          type
+        }
+        C{
+          _id
+          name
+          image
+          type
+        }
+        L{
+          _id
+          name
+          image
+          type
+        }
+        I{
+          _id
+          name
+          image
+          type
+        }
+        T{
+          _id
+          name
+          image
+          type
+        }
+        Q{
+          _id
+          type
+        }
+        E{
+          _id
+          name
+          type
+        }
+      }
+      user{
+        _id
+        type
+        F{
+          _id
+          name
+          image
+          type
+        }
+        C{
+          _id
+          name
+          image
+          type
+        }
+        L{
+          _id
+          name
+          image
+          type
+        }
+        I{
+          _id
+          name
+          image
+          type
+        }
+        T{
+          _id
+          name
+          image
+          type
+        }
+        Q{
+          _id
+          type
+        }
+        E{
+          _id
+          name
+          type
+        }
+      }
+      owner{
+        _id
+        type
+        F{
+          _id
+          name
+          image
+          type
+        }
+        C{
+          _id
+          name
+          image
+          type
+        }
+        L{
+          _id
+          name
+          image
+          type
+        }
+        I{
+          _id
+          name
+          image
+          type
+        }
+        T{
+          _id
+          name
+          image
+          type
+        }
+        Q{
+          _id
+          type
+        }
+        E{
+          _id
+          name
+          type
+        }
+      }
+      type
+      status
+      date
+      timeAgo
+      content
+      rawContent
+      contentUsers{
+        _id
+        type
+        F{
+          _id
+          name
+          image
+          type
+        }
+        C{
+          _id
+          name
+          image
+          type
+        }
+        L{
+          _id
+          name
+          image
+          type
+        }
+        I{
+          _id
+          name
+          image
+          type
+        }
+        T{
+          _id
+          name
+          image
+          type
+        }
+        Q{
+          _id
+          type
+        }
+        E{
+          _id
+          name
+          type
+        }
+      }
+      hasLink
+      media{
+        _id
+        status
+        date
+        url
+        name
+        object_type
+        type
+        height
+        width
+        user{
+          _id
+        type
+        F{
+          _id
+          name
+          image
+          type
+        }
+        C{
+          _id
+          name
+          image
+          type
+        }
+        L{
+          _id
+          name
+          image
+          type
+        }
+        I{
+          _id
+          name
+          image
+          type
+        }
+        T{
+          _id
+          name
+          image
+          type
+        }
+        Q{
+          _id
+          type
+        }
+        E{
+          _id
+          name
+          type
+        }
+        }
+        userTo{
+          _id
+        type
+        F{
+          _id
+          name
+          image
+          type
+        }
+        C{
+          _id
+          name
+          image
+          type
+        }
+        L{
+          _id
+          name
+          image
+          type
+        }
+        I{
+          _id
+          name
+          image
+          type
+        }
+        T{
+          _id
+          name
+          image
+          type
+        }
+        Q{
+          _id
+          type
+        }
+        E{
+          _id
+          name
+          type
+        }
+        }
+        tags{
+        	_id
+        type
+        F{
+          _id
+          name
+          image
+          type
+        }
+        C{
+          _id
+          name
+          image
+          type
+        }
+        L{
+          _id
+          name
+          image
+          type
+        }
+        I{
+          _id
+          name
+          image
+          type
+        }
+        T{
+          _id
+          name
+          image
+          type
+        }
+        Q{
+          _id
+          type
+        }
+        E{
+          _id
+          name
+          type
+        }
+        }
+      }
+      links{
+        _id
+        title
+        description
+        images
+        url
+      }
+    }
+  }
+`
+
+export const PostQueryMin = gql`
+  ${PostFrag}
+  query getPosts($user:String, $ids: [PostUserType], $limit:Int, $page:Int){
+    posts(user:$user, ids:$ids, limit:$limit, page: $page){
+      _id
+    }
+  }
+`
+
+export const PostQuery = gql`
+  ${PostFrag}
+  query getPosts($user:String, $ids: [PostUserType], $limit:Int, $page:Int){
+    posts(user:$user, ids:$ids, limit:$limit, page: $page){
+      ...postFrag
+    }
+  }
+`
+const clubIntsiFragString = `
+_id
+name
+image
+website
+email
+contactMain
+color
+isLiked
+likes {
+  _id
+  user {
+    ...AsyncPostUserFragment
+  }
+}
+followers {
+  _id
+  user {
+    ...AsyncPostUserFragment
+  }
+}
+fans {
+  _id
+  user {
+    ...AsyncPostUserFragment
+  }
+}
+socials {
+  _id
+  key
+  value
+  icon
+  date
+}
+country
+address
+state
+suburb
+postal
+manager {
+  name
+  id
+  _id
+  image
+}
+secretary {
+  name
+  id
+  _id
+  image
+}
+captain {
+  name
+  id
+  _id
+  image
+}
+about
+type
+level
+roles {
+  _id
+  role
+  user {
+    _id
+    name
+    image
+  }
+}
+establishMonth
+establishYear
+ground {
+  _id
+  name
+}
+sports {
+  _id
+  status
+  date
+  sport {
+    _id
+    image
+    name
+  }
+  headOfDept {
+    _id
+    name
+    image
+  }
+  assHeadOfDept {
+    _id
+    name
+    image
+  }
+  headCoach {
+    _id
+    name
+    image
+  }
+  assCoach {
+    _id
+    name
+    image
+  }
+  rawId
+}
+teams {
+  current {
+    _id
+    name
+    image
+  }
+  past {
+    _id
+    image
+    name
+  }
+}
+`
+
+export const ALL_CLUB_FRAG = gql`
+  ${AsyncPostUserFragment}
+  fragment AllClubFrag on Club {
+    ${clubIntsiFragString}
+  }
+`
+
+export const CLUBS = gql`
+    ${ALL_CLUB_FRAG}
+    query getClubs{
+        clubs{
+            ...AllClubFrag
+        }
+    }
+`;
+
+export const CLUB = gql`
+    ${ALL_CLUB_FRAG}
+    query getClub($_id: String){
+        club(_id: $_id){
+            ...AllClubFrag
+        }
+    }
+`;
+
+export const ALL_INST_FRAG = gql`
+  ${AsyncPostUserFragment}
+  fragment AllInstFrag on Institution {
+    ${clubIntsiFragString}
+  }
+`
+
+export const INSTITUTIONS = gql`
+    ${ALL_INST_FRAG}
+    query getInstitutions{
+        institutions{
+            ...AllInstFrag
+        }
+    }
+`;
+
+export const INSTITUTION = gql`
+    ${ALL_INST_FRAG}
+    query getInstitution($_id: String){
+        institution(_id: $_id){
+            ...AllInstFrag
+        }
+    }
+`;
+
+export const ALL_TEAMS_FRAG = gql`
+    ${AsyncPostUserFragment}
+    fragment AllTeamFrag on Team {
+        _id
+        name
+        image
+        website
+        email
+        contactMain
+        color
+        isLiked
+        isFan
+        isFollowed
+        likes {
+          _id
+          user {
+            ...AsyncPostUserFragment
+          }
+        }
+        fans {
+          _id
+          user {
+            ...AsyncPostUserFragment
+          }
+        }
+        followers {
+          _id
+          user {
+            ...AsyncPostUserFragment
+          }
+        }
+        socials {
+          _id
+          key
+          value
+          icon
+          date
+        }
+        country
+        address
+        state
+        suburb
+        postal
+        about
+        type
+        contactOther
+        roles {
+          _id
+          role
+          user {
+            _id
+            name
+            image
+          }
+        }
+        establishMonth
+        establishYear
+        ground {
+          _id
+          name
+        }
+        manager {
+          name
+          id
+          image
+        }
+        secretary {
+          name
+          id
+          _id
+          image
+        }
+        captain {
+          name
+          id
+          _id
+          image
+        }
+        activeSquad {
+        _id
+          name
+          gender
+          age
+        players{
+            _id
+            name
+          number
+          position
+          user{
+                _id
+                name
+                image
+              }
+            }
+        }
+        squads{
+        current {
+          name
+          gender
+          age
+            _id
+            players{
+            _id
+            name
+              number
+          position
+              user{
+                _id
+                name
+                image
+              }
+            }
+        }
+        past{
+            _id
+          name
+          gender
+          age
+            players{
+            _id
+            name
+              number
+          position
+              user{
+                _id
+                name
+                image
+              }
+            }
+        }
+        }
+    }
+`;
+
+export const TEAMS = gql`
+    ${ALL_TEAMS_FRAG}
+    query getTeams{
+        teams{
+            ...AllTeamFrag
+        }
+    }
+`;
+
+export const TEAM = gql`
+  ${ALL_TEAMS_FRAG}
+  query team($_id: String){
+    team(_id: $_id){
+      ...AllTeamFrag
+    }
+  }
+`
+
+export const GAME_FRAG = gql`
+${ALL_TEAMS_FRAG}
+${AsyncPostUserFragment}
+fragment GameFrag on Game {
+    _id
+    status
+    state
+    quarter
+    endDate
+    currentQuarter
+    sport{
+      _id
+      name
+      color
+      halves
+      image
+    }
+    ref{
+        _id
+        name
+        image
+    }
+    ref_left{
+        _id
+        name
+        image
+    }
+    ref_right{
+        _id
+        name
+        image
+    }
+    matchPlace{
+        _id
+        name
+    }
+    matchDate
+    matchExtra
+    matchHalf
+    isEnded
+    currentTime
+    teamOneActs{
+        _id
+        label
+        type
+        player{
+            _id
+            name
+            user{
+            _id
+            name
+            image
+            }
+        }
+        second_player{
+            _id
+            name
+            user{
+            _id
+            name
+            image
+            }
+        }
+        game{
+            _id
+        }
+        time
+        squad{
+            _id
+            name
+        }
+        team{
+            _id
+            name
+            image
+        }
+        comments{
+          _id
+          user{
+            ...AsyncPostUserFragment
+          }
+          content
+          rawContent
+          owner{
+            ...AsyncPostUserFragment
+          }
+          userTo{
+            ...AsyncPostUserFragment
+          }
+          contentUsers{
+            ...AsyncPostUserFragment
+          }
+          replies{
+            _id
+            content
+            rawContent
+            user{
+              ...AsyncPostUserFragment
+            }
+            owner{
+              ...AsyncPostUserFragment
+            }
+            userTo{
+              ...AsyncPostUserFragment
+            }
+            contentUsers{
+              ...AsyncPostUserFragment
+            }
+            media {
+              _id
+              status
+              date
+              url
+              name
+            }
+          }
+          tag
+          team{
+            _id
+            name
+            image
+          }
+          media{
+            _id
+            status
+            date
+            url
+            name
+          }
+        }
+    }
+    teamTwoActs{
+        _id
+        label
+        type
+        player{
+            _id
+            name
+            user{
+            _id
+            name
+            image
+            }
+        }
+        second_player{
+            _id
+            name
+            user{
+            _id
+            name
+            image
+            }
+        }
+        game{
+            _id
+        }
+        time
+        squad{
+            _id
+            name
+        }
+        team{
+            _id
+            name
+            image
+        }
+        comments{
+          _id
+          user{
+            ...AsyncPostUserFragment
+          }
+          content
+          rawContent
+          owner{
+            ...AsyncPostUserFragment
+          }
+          userTo{
+            ...AsyncPostUserFragment
+          }
+          contentUsers{
+            ...AsyncPostUserFragment
+          }
+          replies{
+            _id
+            content
+            rawContent
+            user{
+              ...AsyncPostUserFragment
+            }
+            owner{
+              ...AsyncPostUserFragment
+            }
+            userTo{
+              ...AsyncPostUserFragment
+            }
+            contentUsers{
+              ...AsyncPostUserFragment
+            }
+            media {
+              _id
+              status
+              date
+              url
+              name
+            }
+          }
+          tag
+          team{
+            _id
+            name
+            image
+          }
+          media{
+            _id
+            status
+            date
+            url
+            name
+          }
+        }
+    }
+    teamOneShootouts{
+        _id
+        isGoal
+        player{
+            _id
+            name
+            user{
+            _id
+            name
+            image
+            }
+        }
+        game{
+            _id
+        }
+        squad{
+            _id
+            name
+        }
+        team{
+            _id
+            name
+            image
+        }
+    }
+    teamTwoShootouts{
+        _id
+        isGoal
+        player{
+            _id
+            name
+            user{
+            _id
+            name
+            image
+            }
+        }
+        game{
+            _id
+        }
+        squad{
+            _id
+            name
+        }
+        team{
+            _id
+            name
+            image
+        }
+    }
+    teamOne{
+        ...AllTeamFrag
+    }
+    homeTeam{
+        ...AllTeamFrag
+    }
+    teamTwo{
+        ...AllTeamFrag
+    }
+    squadOne{
+        _id
+        name
+    }
+    squadTwo{
+        _id
+        name
+    }
+    players{
+        _id
+        teamOne{
+            _id
+            lineup{
+                _id
+                number
+                position
+                name
+                user{
+                    _id
+                    name
+                    image
+                }
+            }
+            subs{
+                _id
+                number
+                position
+                name
+                user{
+                    _id
+                    name
+                    image
+                }
+            }
+        }
+        teamTwo{
+            lineup{
+                _id
+                number
+                position
+                name
+                user{
+                    _id
+                    name
+                    image
+                }
+            }
+            subs{
+                _id
+                number
+                position
+                name
+                user{
+                    _id
+                    name
+                    image
+                }
+            }
+        }
+    }
+}
+`;
+
+export const GAMES_QRY = gql`
+${GAME_FRAG}
+query games($user:String, $gameIds: [String]){
+    games(user:$user, gameIds: $gameIds){
+        ...GameFrag
+    }
+}
+`;
+
+export const EDIT_GAME = gql`
+${GAME_FRAG}
+mutation saveGame($_id:String, $data:GameEditinput){
+    saveGame(_id: $_id,data: $data){
+        ...GameFrag
+    }
+}
+`;
+
+export const EDIT_SQUAD_GAME = gql`
+${GAME_FRAG}
+mutation setGameSquad($_id:String, $data:GameSquadInput){
+    setGameSquad(_id: $_id,data: $data){
+        ...GameFrag
+    }
+}
+`;
+
+export const PlayerQL = gql`
+query squadPlayers($_id:String){
+    squadPlayers(_id:$_id){
+        _id
+        number
+        position
+        name
+        user{
+            _id
+            name
+            image
+        }
+    }
+}
+`;
+
+export const generateSqd = gql`
+mutation generateDefaultSquad($team_id: String!){
+    generateDefaultSquad(team_id:$team_id){
+        _id
+        status
+        date
+        name
+        age
+        gender
+        players{
+            _id
+            userId
+            number
+            position
+            name
+            origin
+            user{
+                _id
+                name
+                image
+            }
+        }
+    }
+}
+`;
+
+export const CREATE_PLYR = gql`
+mutation addPlayer($player:PlayerAddInput!, $team_id: String!, $squad_id: String){
+    addPlayer(player:$player, team_id:$team_id, squad_id: $squad_id){
+        _id
+        name
+        user {
+            username
+            _id
+            last_name
+            name
+            first_name
+            image
+        }
+    }
+}
+`;
+
+export const CREATE_GAME = gql`
+    ${GAME_FRAG}
+    mutation createGame($game:GameInput){
+        createGame(game: $game){
+            ...GameFrag
+        }
+    }
+`;
+
+export const GMC_STATUS_SUBSCRIPTION = gql`
+    ${GAME_FRAG}
+    subscription gameUpdate($_id:String){
+        game(_id:$_id){
+            ...GameFrag
+        }
+    }
+`;
+
+export const GMC_STREAM_SUBSCRIPTION = gql`
+    subscription gameStreamUpdate($_id:String){
+        gameLive(_id:$_id){
+            ended
+            started
+        }
+    }
+`;
+
+export const GMC_UPDATER = gql`
+    ${GAME_FRAG}
+    mutation updateGameTime($_id:String, $time: Int){
+        updateGameTime(_id:$_id, time:$time){
+            ...GameFrag
+        }
+    }
+`
+
+export const GMC_STARTER = gql`
+    ${GAME_FRAG}
+    mutation startGame($_id:String, $time: Int){
+        startGame(_id:$_id, time:$time){
+            ...GameFrag
+        }
+    }
+`
+
+export const GMC_ENDER = gql`
+    ${GAME_FRAG}
+    mutation endGame($_id:String, $time: Int){
+        endGame(_id:$_id, time:$time){
+            ...GameFrag
+        }
+    }
+`
+
+export const GMC_PAUSE = gql`
+    ${GAME_FRAG}
+    mutation pauseGame($_id:String, $time: Int){
+        pauseGame(_id:$_id, time:$time){
+            ...GameFrag
+        }
+    }
+`
+
+export const SET_GAME_PLAYERS = gql`
+${GAME_FRAG}
+mutation setGamePlayers($_id:String, $teamOne: GamePlayerTeamInput, $teamTwo: GamePlayerTeamInput){
+    setGamePlayers(_id:$_id, teamOne: $teamOne, teamTwo: $teamTwo){
+        ...GameFrag
+    }
+}
+`
+
+export const ADD_ACTION = gql`
+    ${GAME_FRAG}
+    mutation addGameAction($action: GameActionInput, $teamOne:Boolean){
+        addGameAction(action: $action, teamOne:$teamOne){
+            ...GameFrag
+        }
+    }
+`;
+
+export const ADD_SHOOTOUT_ACTION = gql`
+    ${GAME_FRAG}
+    mutation addShootout($shootouts:[GameShootoutActionInput], $teamOne:Boolean, $game:String){
+      addShootout(shootouts: $shootouts, teamOne:$teamOne, game:$game){
+            ...GameFrag
+        }
+    }
+`;
+
+export const GET_GAME = gql`
+    ${GAME_FRAG}
+    query game($_id: String){
+      game(_id: $_id){
+        ...GameFrag
+      }
+    }
+`;
+
+export const REMOVE_ACT = gql`
+${GAME_FRAG}
+mutation removeAct($_id:String, $game_id:String){
+    removeAct(_id:$_id, game_id:$game_id){
+        ...GameFrag
+    }
+}
+`;
+
+const EVENTS_FRAG = gql`
+  ${AsyncPostUserFragment}
+  fragment EVENTS_FRAG on Event {
+    _id
+    status
+    created_at
+    type
+    likes{
+      _id
+    }
+    user{
+      ...AsyncPostUserFragment
+    }
+    managers{
+      _id
+      type
+      name
+      image
+    }
+    color
+    event_type
+    fullTimestamp
+    endFullTimestamp
+    team{
+      _id
+      name
+      image
+      type
+      sport{
+        _id
+        image
+        name
+      }
+    }
+    teams{
+      _id
+      name
+      image
+      type
+      sport{
+        _id
+        image
+        name
+      }
+    }
+    name
+    desc
+    isOneDay
+    invites{
+      _id
+      status
+      date
+      user{
+        _id
+        name
+        image
+        type
+      }
+    }
+    place{
+      _id
+      name
+      coord{
+        lat
+        lng
+      }
+    }
+    coord{
+      lon
+      lat
+    }
+  }
+`
+export const EVENTS = gql`
+  ${EVENTS_FRAG}
+  query events($_id: String, $type: String){
+    events(_id: $_id, type: $type){
+      ...EVENTS_FRAG
+    }
+  }
+`;

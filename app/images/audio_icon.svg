@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="99.999" height="105.832" viewBox="0 0 15 15.875">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #9b59b6;
+        fill-rule: evenodd;
+      }
+    </style>
+  </defs>
+  <path id="audio_icon" data-name="audio icon" class="cls-1" d="M492.086,691.73v5.86a2.534,2.534,0,0,0,2.5,2.5h2.5v-6.68h-3.32v-1.68a5.82,5.82,0,1,1,11.64,0v1.68h-3.32v6.68h2.5a2.534,2.534,0,0,0,2.5-2.5v-5.86a7.5,7.5,0,0,0-15,0h0Z" transform="translate(-492.094 -684.219)"/>
+</svg>

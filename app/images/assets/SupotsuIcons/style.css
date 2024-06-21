@@ -1,0 +1,3573 @@
+@font-face {
+  font-family: 'SupotsuIcons';
+  src:  url('fonts/SupotsuIcons.eot?y59qtk');
+  src:  url('fonts/SupotsuIcons.eot?y59qtk#iefix') format('embedded-opentype'),
+    url('fonts/SupotsuIcons.ttf?y59qtk') format('truetype'),
+    url('fonts/SupotsuIcons.woff?y59qtk') format('woff'),
+    url('fonts/SupotsuIcons.svg?y59qtk#SupotsuIcons') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'SupotsuIcons' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-add_blu:before {
+  content: "\e900";
+  color: #4ea3c9;
+}
+.icon-add_circle_drk .path1:before {
+  content: "\e901";
+  color: rgb(56, 67, 83);
+}
+.icon-add_circle_drk .path2:before {
+  content: "\e902";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-add_circle_wht:before {
+  content: "\e903";
+  color: #fff;
+}
+.icon-add_circle .path1:before {
+  content: "\e904";
+  color: rgb(77, 163, 201);
+}
+.icon-add_circle .path2:before {
+  content: "\e905";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-add_event_icon:before {
+  content: "\e906";
+  color: #4ea3c9;
+}
+.icon-add_friend-1:before {
+  content: "\e907";
+  color: #ccc;
+}
+.icon-add_friend:before {
+  content: "\e908";
+  color: #ccc;
+}
+.icon-add_hover:before {
+  content: "\e909";
+  color: #4da3c9;
+}
+.icon-add_image:before {
+  content: "\e90a";
+  color: #4ea3c9;
+}
+.icon-add_photo_icon_drk:before {
+  content: "\e90b";
+  color: #384353;
+}
+.icon-add_photo_icon:before {
+  content: "\e90c";
+  color: #bbb;
+}
+.icon-add_wht:before {
+  content: "\e90d";
+  color: #fff;
+}
+.icon-add:before {
+  content: "\e90e";
+  color: #384353;
+}
+.icon-album_icon_gry:before {
+  content: "\e90f";
+  color: #999;
+}
+.icon-album_icon_red:before {
+  content: "\e910";
+  color: #d70003;
+}
+.icon-american_football_icon_drk:before {
+  content: "\e911";
+  color: #394454;
+}
+.icon-american_football_icon_wht:before {
+  content: "\e912";
+  color: #fff;
+}
+.icon-american_football_icon:before {
+  content: "\e913";
+  color: #4da3c9;
+}
+.icon-archery_icon_drk:before {
+  content: "\e914";
+  color: #394454;
+}
+.icon-archery_icon_wht:before {
+  content: "\e915";
+  color: #fff;
+}
+.icon-archery_icon:before {
+  content: "\e916";
+  color: #4da3c9;
+}
+.icon-athletics_icon_drk:before {
+  content: "\e917";
+  color: #394454;
+}
+.icon-athletics_icon_wht:before {
+  content: "\e918";
+  color: #fff;
+}
+.icon-athletics_icon:before {
+  content: "\e919";
+  color: #4da3c9;
+}
+.icon-audio_icon:before {
+  content: "\e91a";
+  color: #9b59b6;
+}
+.icon-aussie_rules_football_icon_drk:before {
+  content: "\e91b";
+  color: #394454;
+}
+.icon-aussie_rules_football_icon_wht:before {
+  content: "\e91c";
+  color: #fff;
+}
+.icon-aussie_rules_football_icon:before {
+  content: "\e91d";
+  color: #4da3c9;
+}
+.icon-back_arrow_icon:before {
+  content: "\e91e";
+  color: #fff;
+}
+.icon-badmington_icon_drk:before {
+  content: "\e91f";
+  color: #394454;
+}
+.icon-badmington_icon_wht:before {
+  content: "\e920";
+  color: #394454;
+}
+.icon-badmington_icon:before {
+  content: "\e921";
+  color: #4da3c9;
+}
+.icon-baseball_icon_drk:before {
+  content: "\e922";
+  color: #394454;
+}
+.icon-baseball_icon_wht:before {
+  content: "\e923";
+  color: #fff;
+}
+.icon-baseball_icon:before {
+  content: "\e924";
+  color: #4da3c9;
+}
+.icon-basketball_icon_drk:before {
+  content: "\e925";
+  color: #394454;
+}
+.icon-basketball_icon_wht:before {
+  content: "\e926";
+  color: #fff;
+}
+.icon-basketball_icon:before {
+  content: "\e927";
+  color: #4da3c9;
+}
+.icon-beach_volleyball_icon_drk:before {
+  content: "\e928";
+  color: #394454;
+}
+.icon-beach_volleyball_icon_wht:before {
+  content: "\e929";
+  color: #fff;
+}
+.icon-beach_volleyball_icon:before {
+  content: "\e92a";
+  color: #4da3c9;
+}
+.icon-blue_vert_line:before {
+  content: "\e92b";
+  color: #4ea3c9;
+}
+.icon-bodybuilding_icon_drk:before {
+  content: "\e92c";
+  color: #394454;
+}
+.icon-bodybuilding_icon_wht:before {
+  content: "\e92d";
+  color: #fff;
+}
+.icon-bodybuilding_icon:before {
+  content: "\e92e";
+  color: #4da3c9;
+}
+.icon-bowling_icon_drk:before {
+  content: "\e92f";
+  color: #394454;
+}
+.icon-bowling_icon_wht:before {
+  content: "\e930";
+  color: #fff;
+}
+.icon-bowling_icon:before {
+  content: "\e931";
+  color: #4da3c9;
+}
+.icon-boxing_icon_drk:before {
+  content: "\e932";
+  color: #394353;
+}
+.icon-boxing_icon_wht:before {
+  content: "\e933";
+  color: #fff;
+}
+.icon-boxing_icon:before {
+  content: "\e934";
+  color: #4ea3c9;
+}
+.icon-bullet:before {
+  content: "\e935";
+  color: #fff;
+}
+.icon-calendar_icon_grn:before {
+  content: "\e936";
+  color: #00a519;
+}
+.icon-calendar_icon_gry:before {
+  content: "\e937";
+  color: #ccc;
+}
+.icon-calendar_icon_wht:before {
+  content: "\e938";
+  color: #fff;
+}
+.icon-canoeing_icon_drk:before {
+  content: "\e939";
+  color: #394454;
+}
+.icon-canoeing_icon_wht:before {
+  content: "\e93a";
+  color: #fff;
+}
+.icon-canoeing_icon:before {
+  content: "\e93b";
+  color: #4da3c9;
+}
+.icon-category_icon:before {
+  content: "\e93c";
+  color: #fff;
+}
+.icon-certificate_icon_active:before {
+  content: "\e93d";
+  color: #fff;
+}
+.icon-certificate_icon:before {
+  content: "\e93e";
+  color: #ccc;
+}
+.icon-checkin_gry:before {
+  content: "\e93f";
+  color: #394453;
+}
+.icon-checkin_icon_wht:before {
+  content: "\e940";
+  color: #fff;
+}
+.icon-checkin_icon:before {
+  content: "\e941";
+  color: #fff;
+}
+.icon-checkin_pink:before {
+  content: "\e942";
+  color: #fb0a7c;
+}
+.icon-checkin:before {
+  content: "\e943";
+  color: #999;
+}
+.icon-cheerleading_icon_drk:before {
+  content: "\e944";
+  color: #394454;
+}
+.icon-cheerleading_icon_wht:before {
+  content: "\e945";
+  color: #fff;
+}
+.icon-cheerleading_icon:before {
+  content: "\e946";
+  color: #4da3c9;
+}
+.icon-club:before {
+  content: "\e947";
+  color: #fff;
+}
+.icon-clubs_wht:before {
+  content: "\e948";
+  color: #fff;
+}
+.icon-color_picker:before {
+  content: "\e949";
+  color: #ccc;
+}
+.icon-comment_icon_wht:before {
+  content: "\e94a";
+  color: #fff;
+}
+.icon-comment_icon:before {
+  content: "\e94b";
+  color: #4ea3c9;
+}
+.icon-compose-message:before {
+  content: "\e94c";
+  color: #4ac;
+}
+.icon-console:before {
+  content: "\e94d";
+  color: #fff;
+}
+.icon-contact_icon_active:before {
+  content: "\e94e";
+  color: #fff;
+}
+.icon-contact_icon:before {
+  content: "\e94f";
+  color: #ccc;
+}
+.icon-corner_me:before {
+  content: "\e950";
+  color: #fff;
+}
+.icon-corner_you:before {
+  content: "\e951";
+  color: #fff;
+}
+.icon-cricket_icon_drk .path1:before {
+  content: "\e952";
+  color: none;
+}
+.icon-cricket_icon_drk .path2:before {
+  content: "\e953";
+  margin-left: -1em;
+  color: none;
+}
+.icon-cricket_icon_drk .path3:before {
+  content: "\e954";
+  margin-left: -1em;
+  color: rgb(57, 68, 83);
+}
+.icon-cricket_icon_drk .path4:before {
+  content: "\e955";
+  margin-left: -1em;
+  color: rgb(77, 163, 201);
+}
+.icon-cricket_icon_wht:before {
+  content: "\e956";
+}
+.icon-cricket_icon:before {
+  content: "\e957";
+}
+.icon-cross_country_icon_drk:before {
+  content: "\e958";
+  color: #394454;
+}
+.icon-cross_country_icon_wht:before {
+  content: "\e959";
+  color: #fff;
+}
+.icon-cross_country_icon:before {
+  content: "\e95a";
+  color: #4da3c9;
+}
+.icon-cross_country_running_icon_drk:before {
+  content: "\e95b";
+  color: #384353;
+}
+.icon-cross_country_running_icon_wht:before {
+  content: "\e95c";
+  color: #fff;
+}
+.icon-cross_country_running_icon:before {
+  content: "\e95d";
+  color: #4ea3c9;
+}
+.icon-crossfit_icon_drk:before {
+  content: "\e95e";
+  color: #394454;
+}
+.icon-crossfit_icon_wht:before {
+  content: "\e95f";
+  color: #fff;
+}
+.icon-crossfit_icon:before {
+  content: "\e960";
+  color: #4da3c9;
+}
+.icon-cycling_icon_drk:before {
+  content: "\e961";
+  color: #394353;
+}
+.icon-cycling_icon_wht:before {
+  content: "\e962";
+  color: #fff;
+}
+.icon-cycling_icon:before {
+  content: "\e963";
+  color: #4ea3c9;
+}
+.icon-dance_icon_drk:before {
+  content: "\e964";
+  color: #394454;
+}
+.icon-dance_icon_wht:before {
+  content: "\e965";
+  color: #fff;
+}
+.icon-dance_icon:before {
+  content: "\e966";
+  color: #4da3c9;
+}
+.icon-dancing_icon_drk:before {
+  content: "\e967";
+  color: #394454;
+}
+.icon-dancing_icon_wht:before {
+  content: "\e968";
+  color: #fff;
+}
+.icon-dancing_icon:before {
+  content: "\e969";
+  color: #4da3c9;
+}
+.icon-decathlon_icon_drk .path1:before {
+  content: "\e96a";
+  color: rgb(57, 68, 84);
+}
+.icon-decathlon_icon_drk .path2:before {
+  content: "\e96b";
+  margin-left: -1em;
+  color: rgb(57, 68, 84);
+}
+.icon-decathlon_icon_drk .path3:before {
+  content: "\e96c";
+  margin-left: -1em;
+  color: rgb(57, 68, 84);
+  opacity: 0.5;
+}
+.icon-decathlon_icon_drk .path4:before {
+  content: "\e96d";
+  margin-left: -1em;
+  color: rgb(57, 68, 84);
+  opacity: 0.5;
+}
+.icon-decathlon_icon_drk .path5:before {
+  content: "\e96e";
+  margin-left: -1em;
+  color: rgb(57, 68, 84);
+  opacity: 0.5;
+}
+.icon-decathlon_icon_drk .path6:before {
+  content: "\e96f";
+  margin-left: -1em;
+  color: rgb(57, 68, 84);
+  opacity: 0.5;
+}
+.icon-decathlon_icon_drk .path7:before {
+  content: "\e970";
+  margin-left: -1em;
+  color: rgb(57, 68, 84);
+  opacity: 0.5;
+}
+.icon-decathlon_icon_drk .path8:before {
+  content: "\e971";
+  margin-left: -1em;
+  color: rgb(57, 68, 84);
+  opacity: 0.5;
+}
+.icon-decathlon_icon_drk .path9:before {
+  content: "\e972";
+  margin-left: -1em;
+  color: rgb(57, 68, 84);
+  opacity: 0.5;
+}
+.icon-decathlon_icon_wht .path1:before {
+  content: "\e973";
+  color: rgb(57, 68, 84);
+}
+.icon-decathlon_icon_wht .path2:before {
+  content: "\e974";
+  margin-left: -1em;
+  color: rgb(57, 68, 84);
+}
+.icon-decathlon_icon_wht .path3:before {
+  content: "\e975";
+  margin-left: -1em;
+  color: rgb(57, 68, 84);
+  opacity: 0.5;
+}
+.icon-decathlon_icon_wht .path4:before {
+  content: "\e976";
+  margin-left: -1em;
+  color: rgb(57, 68, 84);
+  opacity: 0.5;
+}
+.icon-decathlon_icon_wht .path5:before {
+  content: "\e977";
+  margin-left: -1em;
+  color: rgb(57, 68, 84);
+  opacity: 0.5;
+}
+.icon-decathlon_icon_wht .path6:before {
+  content: "\e978";
+  margin-left: -1em;
+  color: rgb(57, 68, 84);
+  opacity: 0.5;
+}
+.icon-decathlon_icon_wht .path7:before {
+  content: "\e979";
+  margin-left: -1em;
+  color: rgb(57, 68, 84);
+  opacity: 0.5;
+}
+.icon-decathlon_icon_wht .path8:before {
+  content: "\e97a";
+  margin-left: -1em;
+  color: rgb(57, 68, 84);
+  opacity: 0.5;
+}
+.icon-decathlon_icon_wht .path9:before {
+  content: "\e97b";
+  margin-left: -1em;
+  color: rgb(57, 68, 84);
+  opacity: 0.5;
+}
+.icon-decathlon_icon .path1:before {
+  content: "\e97c";
+  color: rgb(77, 163, 201);
+}
+.icon-decathlon_icon .path2:before {
+  content: "\e97d";
+  margin-left: -1em;
+  color: rgb(77, 163, 201);
+}
+.icon-decathlon_icon .path3:before {
+  content: "\e97e";
+  margin-left: -1em;
+  color: rgb(77, 163, 201);
+  opacity: 0.5;
+}
+.icon-decathlon_icon .path4:before {
+  content: "\e97f";
+  margin-left: -1em;
+  color: rgb(77, 163, 201);
+  opacity: 0.5;
+}
+.icon-decathlon_icon .path5:before {
+  content: "\e980";
+  margin-left: -1em;
+  color: rgb(77, 163, 201);
+  opacity: 0.5;
+}
+.icon-decathlon_icon .path6:before {
+  content: "\e981";
+  margin-left: -1em;
+  color: rgb(77, 163, 201);
+  opacity: 0.5;
+}
+.icon-decathlon_icon .path7:before {
+  content: "\e982";
+  margin-left: -1em;
+  color: rgb(77, 163, 201);
+  opacity: 0.5;
+}
+.icon-decathlon_icon .path8:before {
+  content: "\e983";
+  margin-left: -1em;
+  color: rgb(77, 163, 201);
+  opacity: 0.5;
+}
+.icon-decathlon_icon .path9:before {
+  content: "\e984";
+  margin-left: -1em;
+  color: rgb(77, 163, 201);
+  opacity: 0.5;
+}
+.icon-default_avatar .path1:before {
+  content: "\e985";
+  color: rgb(255, 255, 255);
+}
+.icon-default_avatar .path2:before {
+  content: "\e986";
+  margin-left: -1em;
+  color: rgb(204, 204, 204);
+  opacity: 0.4;
+}
+.icon-default_avatar .path3:before {
+  content: "\e987";
+  margin-left: -1em;
+  color: rgb(207, 207, 207);
+}
+.icon-delete_icon_blu_drk .path1:before {
+  content: "\e988";
+  color: rgb(56, 67, 83);
+}
+.icon-delete_icon_blu_drk .path2:before {
+  content: "\e989";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-delete_icon_blu_drk .path3:before {
+  content: "\e98a";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-delete_icon_blu .path1:before {
+  content: "\e98b";
+  color: rgb(78, 163, 201);
+}
+.icon-delete_icon_blu .path2:before {
+  content: "\e98c";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-delete_icon_blu .path3:before {
+  content: "\e98d";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-delete_icon_gry .path1:before {
+  content: "\e98e";
+  color: rgb(204, 204, 204);
+}
+.icon-delete_icon_gry .path2:before {
+  content: "\e98f";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-delete_icon_gry .path3:before {
+  content: "\e990";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-delete_icon_wht:before {
+  content: "\e991";
+  color: #fff;
+}
+.icon-delete:before {
+  content: "\e992";
+}
+.icon-dislike_icon:before {
+  content: "\e993";
+  color: #4ea3c9;
+}
+.icon-diving_icon_drk:before {
+  content: "\e994";
+  color: #394454;
+}
+.icon-diving_icon_wht:before {
+  content: "\e995";
+  color: #fff;
+}
+.icon-diving_icon:before {
+  content: "\e996";
+  color: #4da3c9;
+}
+.icon-doc_icon_training .path1:before {
+  content: "\e997";
+  color: rgb(255, 255, 255);
+}
+.icon-doc_icon_training .path2:before {
+  content: "\e998";
+  margin-left: -1em;
+  color: rgb(27, 117, 188);
+}
+.icon-doc_icon_training .path3:before {
+  content: "\e999";
+  margin-left: -1em;
+  color: rgb(27, 117, 188);
+}
+.icon-doc_icon_training .path4:before {
+  content: "\e99a";
+  margin-left: -1em;
+  color: rgb(27, 117, 188);
+}
+.icon-doc_icon_training .path5:before {
+  content: "\e99b";
+  margin-left: -1em;
+  color: rgb(27, 117, 188);
+}
+.icon-doc_icon_training .path6:before {
+  content: "\e99c";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-doc_icon_training .path7:before {
+  content: "\e99d";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-doc_icon_training .path8:before {
+  content: "\e99e";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-doc_icon_training .path9:before {
+  content: "\e99f";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-doc_icon .path1:before {
+  content: "\e9a0";
+  color: rgb(255, 255, 255);
+}
+.icon-doc_icon .path2:before {
+  content: "\e9a1";
+  margin-left: -1em;
+  color: rgb(27, 117, 188);
+}
+.icon-doc_icon .path3:before {
+  content: "\e9a2";
+  margin-left: -1em;
+  color: rgb(27, 117, 188);
+}
+.icon-doc_icon .path4:before {
+  content: "\e9a3";
+  margin-left: -1em;
+  color: rgb(27, 117, 188);
+}
+.icon-doc_icon .path5:before {
+  content: "\e9a4";
+  margin-left: -1em;
+  color: rgb(27, 117, 188);
+}
+.icon-doc_icon .path6:before {
+  content: "\e9a5";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-document_icon_drk:before {
+  content: "\e9a6";
+  color: #384353;
+}
+.icon-document_icon:before {
+  content: "\e9a7";
+  color: #bbb;
+}
+.icon-dots:before {
+  content: "\e9a8";
+  color: #384353;
+}
+.icon-down_arrow_wht:before {
+  content: "\e9a9";
+  color: #fff;
+}
+.icon-down_arrow:before {
+  content: "\e9aa";
+  color: #4ca2c8;
+}
+.icon-email_icon_blu:before {
+  content: "\e9ab";
+  color: #4ea3c9;
+}
+.icon-email_icon_wht_send:before {
+  content: "\e9ac";
+  color: #fff;
+}
+.icon-email_icon_wht:before {
+  content: "\e9ad";
+  color: #fff;
+}
+.icon-email_icon:before {
+  content: "\e9ae";
+  color: #394453;
+}
+.icon-emoticon_wht:before {
+  content: "\e9af";
+  color: #fff;
+}
+.icon-emoticon:before {
+  content: "\e9b0";
+  color: #999;
+}
+.icon-event_icon_gry:before {
+  content: "\e9b1";
+  color: #ccc;
+}
+.icon-event_icon_org:before {
+  content: "\e9b2";
+  color: #ff5a00;
+}
+.icon-event_icon_wht:before {
+  content: "\e9b3";
+  color: #fff;
+}
+.icon-export_icon_blu_drk:before {
+  content: "\e9b4";
+  color: #384353;
+}
+.icon-export_icon_wht:before {
+  content: "\e9b5";
+  color: #fff;
+}
+.icon-extreme_sport_icon_drk:before {
+  content: "\e9b6";
+  color: #394454;
+}
+.icon-extreme_sport_icon_wht:before {
+  content: "\e9b7";
+  color: #fff;
+}
+.icon-extreme_sport_icon:before {
+  content: "\e9b8";
+  color: #4da3c9;
+}
+.icon-facebook_icon_wht:before {
+  content: "\e9b9";
+  color: #fff;
+}
+.icon-facebook_icon:before {
+  content: "\e9ba";
+  color: #3b5998;
+}
+.icon-facebook-group:before {
+  content: "\e9bb";
+  color: #fff;
+}
+.icon-facts:before {
+  content: "\e9bc";
+  color: #fff;
+}
+.icon-fan_wht:before {
+  content: "\e9bd";
+  color: #fff;
+}
+.icon-fencing_icon_drk:before {
+  content: "\e9be";
+  color: #394454;
+}
+.icon-fencing_icon_wht:before {
+  content: "\e9bf";
+  color: #fff;
+}
+.icon-fencing_icon:before {
+  content: "\e9c0";
+  color: #4da3c9;
+}
+.icon-field_hockey_icon_drk:before {
+  content: "\e9c1";
+  color: #394454;
+}
+.icon-field_hockey_icon_wht:before {
+  content: "\e9c2";
+  color: #fff;
+}
+.icon-field_hockey_icon:before {
+  content: "\e9c3";
+  color: #4da3c9;
+}
+.icon-figure_skating_icon_drk:before {
+  content: "\e9c4";
+  color: #394454;
+}
+.icon-figure_skating_icon_wht:before {
+  content: "\e9c5";
+  color: #fff;
+}
+.icon-figure_skating_icon:before {
+  content: "\e9c6";
+  color: #4da3c9;
+}
+.icon-first_half_hover:before {
+  content: "\e9c7";
+  color: #4ea3c9;
+}
+.icon-first_half:before {
+  content: "\e9c8";
+  color: #384353;
+}
+.icon-foosball_icon_drk:before {
+  content: "\e9c9";
+  color: #394454;
+}
+.icon-foosball_icon_wht:before {
+  content: "\e9ca";
+  color: #fff;
+}
+.icon-foosball_icon:before {
+  content: "\e9cb";
+  color: #4da3c9;
+}
+.icon-Football_pitch_v2 .path1:before {
+  content: "\e9cc";
+  color: rgb(0, 128, 0);
+  opacity: 0.75;
+}
+.icon-Football_pitch_v2 .path2:before {
+  content: "\e9cd";
+  margin-left: -1em;
+  color: rgb(0, 128, 0);
+  opacity: 0.125;
+}
+.icon-Football_pitch_v2 .path3:before {
+  content: "\e9ce";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-formula_one_icon_drk:before {
+  content: "\e9cf";
+  color: #394454;
+}
+.icon-formula_one_icon_wht:before {
+  content: "\e9d0";
+  color: #fff;
+}
+.icon-formula_one_icon:before {
+  content: "\e9d1";
+  color: #4da3c9;
+}
+.icon-friend_icon_gry:before {
+  content: "\e9d2";
+  color: #ccc;
+}
+.icon-friend_icon_wht:before {
+  content: "\e9d3";
+  color: #fff;
+}
+.icon-friends_icon_active:before {
+  content: "\e9d4";
+  color: #fff;
+}
+.icon-friends_icon:before {
+  content: "\e9d5";
+  color: #ccc;
+}
+.icon-game_icon:before {
+  content: "\e9d6";
+  color: #fff;
+}
+.icon-gaming_icon_drk:before {
+  content: "\e9d7";
+  color: #394454;
+}
+.icon-gaming_icon_wht:before {
+  content: "\e9d8";
+  color: #fff;
+}
+.icon-gaming_icon:before {
+  content: "\e9d9";
+  color: #4da3c9;
+}
+.icon-gmc:before {
+  content: "\e9da";
+  color: #fff;
+}
+.icon-goal_icon_drk:before {
+  content: "\e9db";
+  color: #384353;
+}
+.icon-goal_icon:before {
+  content: "\e9dc";
+}
+.icon-golf_icon_drk:before {
+  content: "\e9dd";
+  color: #384353;
+}
+.icon-golf_icon_wht:before {
+  content: "\e9de";
+  color: #fff;
+}
+.icon-golf_icon:before {
+  content: "\e9df";
+  color: #4ea3c9;
+}
+.icon-google_icon_2 .path1:before {
+  content: "\e9e0";
+  color: rgb(251, 188, 5);
+}
+.icon-google_icon_2 .path2:before {
+  content: "\e9e1";
+  margin-left: -1em;
+  color: rgb(234, 67, 53);
+}
+.icon-google_icon_2 .path3:before {
+  content: "\e9e2";
+  margin-left: -1em;
+  color: rgb(52, 168, 83);
+}
+.icon-google_icon_2 .path4:before {
+  content: "\e9e3";
+  margin-left: -1em;
+  color: rgb(66, 133, 244);
+}
+.icon-google_icon .path1:before {
+  content: "\e9e4";
+  color: rgb(251, 188, 5);
+}
+.icon-google_icon .path2:before {
+  content: "\e9e5";
+  margin-left: -1em;
+  color: rgb(234, 67, 53);
+}
+.icon-google_icon .path3:before {
+  content: "\e9e6";
+  margin-left: -1em;
+  color: rgb(52, 168, 83);
+}
+.icon-google_icon .path4:before {
+  content: "\e9e7";
+  margin-left: -1em;
+  color: rgb(66, 133, 244);
+}
+.icon-grey_horizontal_line:before {
+  content: "\e9e8";
+  color: #ccc;
+}
+.icon-group_icon .path1:before {
+  content: "\e9e9";
+  color: rgb(88, 204, 102);
+}
+.icon-group_icon .path2:before {
+  content: "\e9ea";
+  margin-left: -1em;
+  color: rgb(88, 204, 102);
+}
+.icon-group_icon .path3:before {
+  content: "\e9eb";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-group_icon .path4:before {
+  content: "\e9ec";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-gym_icon_drk:before {
+  content: "\e9ed";
+  color: #394454;
+}
+.icon-gym_icon_wht:before {
+  content: "\e9ee";
+  color: #fff;
+}
+.icon-gym_icon:before {
+  content: "\e9ef";
+  color: #4da3c9;
+}
+.icon-hammer_throw-icon_drk:before {
+  content: "\e9f0";
+  color: #394454;
+}
+.icon-hammer_throw-icon_wht:before {
+  content: "\e9f1";
+  color: #fff;
+}
+.icon-hammer_throw-icon:before {
+  content: "\e9f2";
+  color: #4da3c9;
+}
+.icon-handball_icon_drk:before {
+  content: "\e9f3";
+  color: #394454;
+}
+.icon-handball_icon_wht:before {
+  content: "\e9f4";
+  color: #fff;
+}
+.icon-handball_icon:before {
+  content: "\e9f5";
+  color: #4da3c9;
+}
+.icon-header_grad_drk:before {
+  content: "\e9f6";
+}
+.icon-header_grad:before {
+  content: "\e9f7";
+}
+.icon-hide_icon_dwn_lt_blu:before {
+  content: "\e9f8";
+  color: #4ea3c9;
+}
+.icon-hide_icon_dwn_wht:before {
+  content: "\e9f9";
+  color: #fff;
+}
+.icon-hide_icon_up_lt_blu:before {
+  content: "\e9fa";
+  color: #4ea3c9;
+}
+.icon-high_jump_icon_drk:before {
+  content: "\e9fb";
+  color: #394454;
+}
+.icon-high_jump_icon_wht:before {
+  content: "\e9fc";
+  color: #fff;
+}
+.icon-high_jump_icon:before {
+  content: "\e9fd";
+  color: #4da3c9;
+}
+.icon-hockey_icon_drk:before {
+  content: "\e9fe";
+  color: #384353;
+}
+.icon-hockey_icon_wht:before {
+  content: "\e9ff";
+  color: #fff;
+}
+.icon-hockey_icon:before {
+  content: "\ea00";
+  color: #4ea3c9;
+}
+.icon-home_icon_active:before {
+  content: "\ea01";
+  color: #fff;
+}
+.icon-home_icon:before {
+  content: "\ea02";
+  color: #ccc;
+}
+.icon-ice_hockey_icon_drk:before {
+  content: "\ea03";
+  color: #394454;
+}
+.icon-ice_hockey_icon_wht:before {
+  content: "\ea04";
+  color: #fff;
+}
+.icon-ice_hockey_icon:before {
+  content: "\ea05";
+  color: #4da3c9;
+}
+.icon-instagram_icon-1:before {
+  content: "\ea06";
+  color: #3f729b;
+}
+.icon-instagram_icon:before {
+  content: "\ea07";
+  color: #3f729b;
+}
+.icon-institution_icon:before {
+  content: "\ea08";
+  color: #fff;
+}
+.icon-javelin_throw_icon_drk:before {
+  content: "\ea09";
+  color: #394454;
+}
+.icon-javelin_throw_icon_wht:before {
+  content: "\ea0a";
+  color: #fff;
+}
+.icon-javelin_throw_icon:before {
+  content: "\ea0b";
+  color: #4da3c9;
+}
+.icon-lacrosse_icon_drk:before {
+  content: "\ea0c";
+  color: #394454;
+}
+.icon-lacrosse_icon_wht:before {
+  content: "\ea0d";
+  color: #fff;
+}
+.icon-lacrosse_icon:before {
+  content: "\ea0e";
+  color: #4da3c9;
+}
+.icon-landline_icon_blu:before {
+  content: "\ea0f";
+  color: #4da3c9;
+}
+.icon-landline_icon:before {
+  content: "\ea10";
+  color: #394453;
+}
+.icon-league:before {
+  content: "\ea11";
+  color: #fff;
+}
+.icon-left_arrow:before {
+  content: "\ea12";
+  color: #4ca2c8;
+}
+.icon-like_icon_wht-1:before {
+  content: "\ea13";
+  color: #fff;
+}
+.icon-like_icon_wht:before {
+  content: "\ea14";
+  color: #fff;
+}
+.icon-like_icon:before {
+  content: "\ea15";
+  color: #4ea3c9;
+}
+.icon-link_icon:before {
+  content: "\ea16";
+  color: #1abc9c;
+}
+.icon-location_icon:before {
+  content: "\ea17";
+  color: #4ea3c9;
+}
+.icon-mark_no:before {
+  content: "\ea18";
+  color: #f00;
+}
+.icon-mark_yes:before {
+  content: "\ea19";
+  color: #008000;
+}
+.icon-martial_arts_icon_drk:before {
+  content: "\ea1a";
+  color: #384353;
+}
+.icon-martial_arts_icon_wht:before {
+  content: "\ea1b";
+  color: #fff;
+}
+.icon-martial_arts_icon:before {
+  content: "\ea1c";
+  color: #4ea3c9;
+}
+.icon-message_icon_blu_drk:before {
+  content: "\ea1d";
+  color: #384353;
+}
+.icon-message_icon_gry:before {
+  content: "\ea1e";
+  color: #ccc;
+}
+.icon-message_icon_wht:before {
+  content: "\ea1f";
+  color: #fff;
+}
+.icon-mijsports_logo .path1:before {
+  content: "\ea20";
+  color: rgb(255, 255, 255);
+}
+.icon-mijsports_logo .path2:before {
+  content: "\ea21";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-mijsports_logo .path3:before {
+  content: "\ea22";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-mijsports_logo .path4:before {
+  content: "\ea23";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-mijsports_logo .path5:before {
+  content: "\ea24";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-mijsports_logo .path6:before {
+  content: "\ea25";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-mijsports_logo .path7:before {
+  content: "\ea26";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-mijsports_logo .path8:before {
+  content: "\ea27";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-mijsports_logo .path9:before {
+  content: "\ea28";
+  margin-left: -1em;
+  color: rgb(210, 30, 65);
+}
+.icon-mijsports_logo .path10:before {
+  content: "\ea29";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-minus_icon_blu:before {
+  content: "\ea2a";
+  color: #4ea3c9;
+}
+.icon-minus_icon_wht:before {
+  content: "\ea2b";
+  color: #fff;
+}
+.icon-mobile_icon_blu:before {
+  content: "\ea2c";
+  color: #4da3c9;
+}
+.icon-mobile_icon_wht:before {
+  content: "\ea2d";
+  color: #fff;
+}
+.icon-mobile_icon:before {
+  content: "\ea2e";
+  color: #394453;
+}
+.icon-moment_icon .path1:before {
+  content: "\ea2f";
+  color: rgb(57, 68, 83);
+}
+.icon-moment_icon .path2:before {
+  content: "\ea30";
+  margin-left: -1em;
+  color: rgb(57, 68, 83);
+}
+.icon-moment_icon .path3:before {
+  content: "\ea31";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-moment_icon .path4:before {
+  content: "\ea32";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-moment_icon .path5:before {
+  content: "\ea33";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-moment_icon .path6:before {
+  content: "\ea34";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-moment_icon .path7:before {
+  content: "\ea35";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-moment_icon .path8:before {
+  content: "\ea36";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-moment_icon .path9:before {
+  content: "\ea37";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-moment_icon .path10:before {
+  content: "\ea38";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-motorsport_icon_drk:before {
+  content: "\ea39";
+  color: #384353;
+}
+.icon-motorsport_icon_wht:before {
+  content: "\ea3a";
+  color: #fff;
+}
+.icon-motorsport_icon:before {
+  content: "\ea3b";
+  color: #4ea3c9;
+}
+.icon-mountaineering_climbing_icon_drk:before {
+  content: "\ea3c";
+  color: #394454;
+}
+.icon-mountaineering_climbing_icon_wht:before {
+  content: "\ea3d";
+  color: #fff;
+}
+.icon-mountaineering_climbing_icon:before {
+  content: "\ea3e";
+  color: #4da3c9;
+}
+.icon-multi_even_marker_dwn:before {
+  content: "\ea3f";
+  color: #fff;
+}
+.icon-multi_even_marker_up:before {
+  content: "\ea40";
+  color: #fff;
+}
+.icon-netball_icon_drk:before {
+  content: "\ea41";
+  color: #394454;
+}
+.icon-netball_icon_wht:before {
+  content: "\ea42";
+  color: #fff;
+}
+.icon-netball_icon:before {
+  content: "\ea43";
+  color: #4da3c9;
+}
+.icon-Netball-edit2 .path1:before {
+  content: "\ea44";
+  color: rgb(204, 151, 37);
+}
+.icon-Netball-edit2 .path2:before {
+  content: "\ea45";
+  margin-left: -1em;
+  color: rgb(0, 0, 255);
+}
+.icon-Netball-edit2 .path3:before {
+  content: "\ea46";
+  margin-left: -1em;
+  color: rgb(0, 0, 255);
+}
+.icon-Netball-edit2 .path4:before {
+  content: "\ea47";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-Netball-edit2 .path5:before {
+  content: "\ea48";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-Netball-edit2 .path6:before {
+  content: "\ea49";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-Netball-edit2 .path7:before {
+  content: "\ea4a";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-Netball-edit2 .path8:before {
+  content: "\ea4b";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-Netball-edit2 .path9:before {
+  content: "\ea4c";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-Netball-edit2 .path10:before {
+  content: "\ea4d";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-Netball-edit2 .path11:before {
+  content: "\ea4e";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-Netball-edit2 .path12:before {
+  content: "\ea4f";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-Netball-edit2 .path13:before {
+  content: "\ea50";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-Netball-edit2 .path14:before {
+  content: "\ea51";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-Netball-edit2 .path15:before {
+  content: "\ea52";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-Netball-edit2 .path16:before {
+  content: "\ea53";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-Netball-edit2 .path17:before {
+  content: "\ea54";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-next_arrow_blu:before {
+  content: "\ea55";
+  color: #384353;
+}
+.icon-next_arrow:before {
+  content: "\ea56";
+  color: #fff;
+}
+.icon-next_game:before {
+  content: "\ea57";
+}
+.icon-notice_icon_gray:before {
+  content: "\ea58";
+  color: #ccc;
+}
+.icon-notice_icon:before {
+  content: "\ea59";
+  color: #fff;
+}
+.icon-notification_icon_drk .path1:before {
+  content: "\ea5a";
+  color: rgb(56, 67, 83);
+}
+.icon-notification_icon_drk .path2:before {
+  content: "\ea5b";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-notification_icon_drk .path3:before {
+  content: "\ea5c";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-notification_icon_gray:before {
+  content: "\ea5d";
+  color: #d21f42;
+}
+.icon-notification_icon .path1:before {
+  content: "\ea5e";
+  color: rgb(78, 163, 201);
+}
+.icon-notification_icon .path2:before {
+  content: "\ea5f";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-notification_icon .path3:before {
+  content: "\ea60";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-or_hr:before {
+  content: "\ea61";
+  color: #ccc;
+}
+.icon-pause-1:before {
+  content: "\ea62";
+  color: #384353;
+}
+.icon-pause_hover:before {
+  content: "\ea63";
+  color: #4ea3c9;
+}
+.icon-pause:before {
+  content: "\ea64";
+  color: #384353;
+}
+.icon-pdf_icon_training .path1:before {
+  content: "\ea65";
+  color: rgb(255, 255, 255);
+}
+.icon-pdf_icon_training .path2:before {
+  content: "\ea66";
+  margin-left: -1em;
+  color: rgb(190, 30, 45);
+}
+.icon-pdf_icon_training .path3:before {
+  content: "\ea67";
+  margin-left: -1em;
+  color: rgb(190, 30, 45);
+}
+.icon-pdf_icon_training .path4:before {
+  content: "\ea68";
+  margin-left: -1em;
+  color: rgb(190, 30, 45);
+}
+.icon-pdf_icon_training .path5:before {
+  content: "\ea69";
+  margin-left: -1em;
+  color: rgb(190, 30, 45);
+}
+.icon-pdf_icon_training .path6:before {
+  content: "\ea6a";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-pdf_icon .path1:before {
+  content: "\ea6b";
+  color: rgb(255, 255, 255);
+}
+.icon-pdf_icon .path2:before {
+  content: "\ea6c";
+  margin-left: -1em;
+  color: rgb(190, 30, 45);
+}
+.icon-pdf_icon .path3:before {
+  content: "\ea6d";
+  margin-left: -1em;
+  color: rgb(190, 30, 45);
+}
+.icon-pdf_icon .path4:before {
+  content: "\ea6e";
+  margin-left: -1em;
+  color: rgb(190, 30, 45);
+}
+.icon-pdf_icon .path5:before {
+  content: "\ea6f";
+  margin-left: -1em;
+  color: rgb(190, 30, 45);
+}
+.icon-pdf_icon .path6:before {
+  content: "\ea70";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-pen_icon_blu .path1:before {
+  content: "\ea71";
+  color: rgb(78, 163, 201);
+}
+.icon-pen_icon_blu .path2:before {
+  content: "\ea72";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-pen_icon_gry:before {
+  content: "\ea73";
+  color: #999;
+}
+.icon-pen_icon_wht:before {
+  content: "\ea74";
+  color: #fff;
+}
+.icon-pen_icon:before {
+  content: "\ea75";
+}
+.icon-penalty_icon_drk:before {
+  content: "\ea76";
+  color: #384353;
+}
+.icon-penalty_icon:before {
+  content: "\ea77";
+  color: #fff;
+}
+.icon-personal_profile:before {
+  content: "\ea78";
+  color: #fff;
+}
+.icon-photo_icon_change:before {
+  content: "\ea79";
+  color: #fff;
+}
+.icon-photo_icon_green:before {
+  content: "\ea7a";
+  color: #5ec94c;
+}
+.icon-photo_icon_gry:before {
+  content: "\ea7b";
+  color: #999;
+}
+.icon-photo_icon_wht:before {
+  content: "\ea7c";
+  color: #fff;
+}
+.icon-photo_icon:before {
+  content: "\ea7d";
+  color: #d21e41;
+}
+.icon-photos_icon_active:before {
+  content: "\ea7e";
+  color: #fff;
+}
+.icon-photos_icon:before {
+  content: "\ea7f";
+  color: #ccc;
+}
+.icon-pilates_icon_drk:before {
+  content: "\ea80";
+  color: #394454;
+}
+.icon-pilates_icon_wht:before {
+  content: "\ea81";
+  color: #fff;
+}
+.icon-pilates_icon:before {
+  content: "\ea82";
+  color: #4da3c9;
+}
+.icon-placeholder .path1:before {
+  content: "\ea83";
+  color: rgb(0, 0, 0);
+}
+.icon-placeholder .path2:before {
+  content: "\ea84";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-placeholder .path3:before {
+  content: "\ea85";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-placeholder .path4:before {
+  content: "\ea86";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-plus_icon:before {
+  content: "\ea87";
+  color: #fff;
+}
+.icon-plus-square-button:before {
+  content: "\ea88";
+  color: #fff;
+}
+.icon-pole_vault_icon_drk:before {
+  content: "\ea89";
+  color: #394454;
+}
+.icon-pole_vault_icon_wht:before {
+  content: "\ea8a";
+  color: #fff;
+}
+.icon-pole_vault_icon:before {
+  content: "\ea8b";
+  color: #4da3c9;
+}
+.icon-polo_icon_drk:before {
+  content: "\ea8c";
+  color: #394454;
+}
+.icon-polo_icon_wht:before {
+  content: "\ea8d";
+  color: #fff;
+}
+.icon-polo_icon:before {
+  content: "\ea8e";
+  color: #4da3c9;
+}
+.icon-power_lifting_icon_drk:before {
+  content: "\ea8f";
+  color: #394454;
+}
+.icon-power_lifting_icon_wht:before {
+  content: "\ea90";
+  color: #fff;
+}
+.icon-power_lifting_icon:before {
+  content: "\ea91";
+  color: #4da3c9;
+}
+.icon-ppt_icon .path1:before {
+  content: "\ea92";
+  color: rgb(255, 255, 255);
+}
+.icon-ppt_icon .path2:before {
+  content: "\ea93";
+  margin-left: -1em;
+  color: rgb(241, 90, 41);
+}
+.icon-ppt_icon .path3:before {
+  content: "\ea94";
+  margin-left: -1em;
+  color: rgb(241, 90, 41);
+}
+.icon-ppt_icon .path4:before {
+  content: "\ea95";
+  margin-left: -1em;
+  color: rgb(241, 90, 41);
+}
+.icon-ppt_icon .path5:before {
+  content: "\ea96";
+  margin-left: -1em;
+  color: rgb(241, 90, 41);
+}
+.icon-ppt_icon .path6:before {
+  content: "\ea97";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-privacy_icon:before {
+  content: "\ea98";
+  color: #4ea3c9;
+}
+.icon-quote_icon:before {
+  content: "\ea99";
+  color: #4ea3c9;
+}
+.icon-react_angry .path1:before {
+  content: "\ea9a";
+  color: rgb(255, 0, 0);
+}
+.icon-react_angry .path2:before {
+  content: "\ea9b";
+  margin-left: -1em;
+  color: rgb(232, 51, 42);
+}
+.icon-react_angry .path3:before {
+  content: "\ea9c";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-react_angry .path4:before {
+  content: "\ea9d";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-react_angry .path5:before {
+  content: "\ea9e";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-react_angry .path6:before {
+  content: "\ea9f";
+  margin-left: -1em;
+  color: rgb(232, 51, 42);
+}
+.icon-react_dislike .path1:before {
+  content: "\eaa0";
+  color: rgb(57, 68, 83);
+}
+.icon-react_dislike .path2:before {
+  content: "\eaa1";
+  margin-left: -1em;
+  color: rgb(57, 68, 83);
+}
+.icon-react_dislike .path3:before {
+  content: "\eaa2";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-react_laugh .path1:before {
+  content: "\eaa3";
+  color: rgb(88, 204, 102);
+}
+.icon-react_laugh .path2:before {
+  content: "\eaa4";
+  margin-left: -1em;
+  color: rgb(88, 204, 102);
+}
+.icon-react_laugh .path3:before {
+  content: "\eaa5";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-react_laugh .path4:before {
+  content: "\eaa6";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-react_laugh .path5:before {
+  content: "\eaa7";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-react_like .path1:before {
+  content: "\eaa8";
+  color: rgb(57, 68, 83);
+}
+.icon-react_like .path2:before {
+  content: "\eaa9";
+  margin-left: -1em;
+  color: rgb(57, 68, 83);
+}
+.icon-react_like .path3:before {
+  content: "\eaaa";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-react_sad .path1:before {
+  content: "\eaab";
+  color: rgb(78, 163, 201);
+}
+.icon-react_sad .path2:before {
+  content: "\eaac";
+  margin-left: -1em;
+  color: rgb(78, 163, 201);
+}
+.icon-react_sad .path3:before {
+  content: "\eaad";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-react_sad .path4:before {
+  content: "\eaae";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-react_sad .path5:before {
+  content: "\eaaf";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-react_wow .path1:before {
+  content: "\eab0";
+  color: rgb(253, 185, 36);
+}
+.icon-react_wow .path2:before {
+  content: "\eab1";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-react_wow .path3:before {
+  content: "\eab2";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-react_wow .path4:before {
+  content: "\eab3";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-realtime_timeline_bg:before {
+  content: "\eab4";
+}
+.icon-realtime_timeline_solid:before {
+  content: "\eab5";
+  color: #4da3c9;
+}
+.icon-realtime_timeline:before {
+  content: "\eab6";
+  color: #4da3c9;
+}
+.icon-red_card_icon:before {
+  content: "\eab7";
+  color: #d71920;
+}
+.icon-reset_hover:before {
+  content: "\eab8";
+  color: #4ea3c9;
+}
+.icon-reset:before {
+  content: "\eab9";
+  color: #384353;
+}
+.icon-right_arrow:before {
+  content: "\eaba";
+  color: #4ca2c8;
+}
+.icon-ring:before {
+  content: "\eabb";
+  color: #4ea3c9;
+}
+.icon-rowing_icon_drk:before {
+  content: "\eabc";
+  color: #394454;
+}
+.icon-rowing_icon_wht:before {
+  content: "\eabd";
+  color: #fff;
+}
+.icon-rowing_icon:before {
+  content: "\eabe";
+  color: #4da3c9;
+}
+.icon-rugby_icon_drk:before {
+  content: "\eabf";
+  color: #384353;
+}
+.icon-rugby_icon_wht:before {
+  content: "\eac0";
+  color: #fff;
+}
+.icon-rugby_icon:before {
+  content: "\eac1";
+  color: #4ea3c9;
+}
+.icon-rugby_pitch:before {
+  content: "\eac2";
+}
+.icon-Rugby_union_pitch .path1:before {
+  content: "\eac3";
+  color: rgb(28, 150, 27);
+}
+.icon-Rugby_union_pitch .path2:before {
+  content: "\eac4";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-Rugby_union_pitch .path3:before {
+  content: "\eac5";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-Rugby_union_pitch .path4:before {
+  content: "\eac6";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-Rugby_union_pitch .path5:before {
+  content: "\eac7";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-Rugby_union_pitch .path6:before {
+  content: "\eac8";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-Rugby_union_pitch .path7:before {
+  content: "\eac9";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-Rugby_union_pitch .path8:before {
+  content: "\eaca";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path9:before {
+  content: "\eacb";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path10:before {
+  content: "\eacc";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path11:before {
+  content: "\eacd";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path12:before {
+  content: "\eace";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path13:before {
+  content: "\eacf";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path14:before {
+  content: "\ead0";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path15:before {
+  content: "\ead1";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path16:before {
+  content: "\ead2";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path17:before {
+  content: "\ead3";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path18:before {
+  content: "\ead4";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path19:before {
+  content: "\ead5";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path20:before {
+  content: "\ead6";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path21:before {
+  content: "\ead7";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path22:before {
+  content: "\ead8";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path23:before {
+  content: "\ead9";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path24:before {
+  content: "\eada";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path25:before {
+  content: "\eadb";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path26:before {
+  content: "\eadc";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path27:before {
+  content: "\eadd";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path28:before {
+  content: "\eade";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path29:before {
+  content: "\eadf";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path30:before {
+  content: "\eae0";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path31:before {
+  content: "\eae1";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path32:before {
+  content: "\eae2";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path33:before {
+  content: "\eae3";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path34:before {
+  content: "\eae4";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path35:before {
+  content: "\eae5";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path36:before {
+  content: "\eae6";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path37:before {
+  content: "\eae7";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path38:before {
+  content: "\eae8";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path39:before {
+  content: "\eae9";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path40:before {
+  content: "\eaea";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path41:before {
+  content: "\eaeb";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path42:before {
+  content: "\eaec";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path43:before {
+  content: "\eaed";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path44:before {
+  content: "\eaee";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path45:before {
+  content: "\eaef";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path46:before {
+  content: "\eaf0";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path47:before {
+  content: "\eaf1";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path48:before {
+  content: "\eaf2";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path49:before {
+  content: "\eaf3";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path50:before {
+  content: "\eaf4";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path51:before {
+  content: "\eaf5";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-Rugby_union_pitch .path52:before {
+  content: "\eaf6";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-Rugby_union_pitch .path53:before {
+  content: "\eaf7";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path54:before {
+  content: "\eaf8";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-Rugby_union_pitch .path55:before {
+  content: "\eaf9";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-Rugby_union_pitch .path56:before {
+  content: "\eafa";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-Rugby_union_pitch .path57:before {
+  content: "\eafb";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-Rugby_union_pitch .path58:before {
+  content: "\eafc";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-Rugby_union_pitch .path59:before {
+  content: "\eafd";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-Rugby_union_pitch .path60:before {
+  content: "\eafe";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-Rugby_union_pitch .path61:before {
+  content: "\eaff";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-Rugby_union_pitch .path62:before {
+  content: "\eb00";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-Rugby_union_pitch .path63:before {
+  content: "\eb01";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-Rugby_union_pitch .path64:before {
+  content: "\eb02";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-Rugby_union_pitch .path65:before {
+  content: "\eb03";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-Rugby_union_pitch .path66:before {
+  content: "\eb04";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-Rugby_union_pitch .path67:before {
+  content: "\eb05";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-Rugby_union_pitch .path68:before {
+  content: "\eb06";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-Rugby_union_pitch .path69:before {
+  content: "\eb07";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-Rugby_union_pitch .path70:before {
+  content: "\eb08";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-Rugby_union_pitch .path71:before {
+  content: "\eb09";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-Rugby_union_pitch .path72:before {
+  content: "\eb0a";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-Rugby_union_pitch .path73:before {
+  content: "\eb0b";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-Rugby_union_pitch .path74:before {
+  content: "\eb0c";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-Rugby_union_pitch .path75:before {
+  content: "\eb0d";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-Rugby_union_pitch .path76:before {
+  content: "\eb0e";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-Rugby_union_pitch .path77:before {
+  content: "\eb0f";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-Rugby_union_pitch .path78:before {
+  content: "\eb10";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-Rugby_union_pitch .path79:before {
+  content: "\eb11";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-Rugby_union_pitch .path80:before {
+  content: "\eb12";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-Rugby_union_pitch .path81:before {
+  content: "\eb13";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-Rugby_union_pitch .path82:before {
+  content: "\eb14";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-Rugby_union_pitch .path83:before {
+  content: "\eb15";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-Rugby_union_pitch .path84:before {
+  content: "\eb16";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-Rugby_union_pitch .path85:before {
+  content: "\eb17";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-Rugby_union_pitch .path86:before {
+  content: "\eb18";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-Rugby_union_pitch .path87:before {
+  content: "\eb19";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-Rugby_union_pitch .path88:before {
+  content: "\eb1a";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-Rugby_union_pitch .path89:before {
+  content: "\eb1b";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-Rugby_union_pitch .path90:before {
+  content: "\eb1c";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-Rugby_union_pitch .path91:before {
+  content: "\eb1d";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-Rugby_union_pitch .path92:before {
+  content: "\eb1e";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-Rugby_union_pitch .path93:before {
+  content: "\eb1f";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-Rugby_union_pitch .path94:before {
+  content: "\eb20";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-Rugby_union_pitch .path95:before {
+  content: "\eb21";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-Rugby_union_pitch .path96:before {
+  content: "\eb22";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-Rugby_union_pitch .path97:before {
+  content: "\eb23";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-Rugby_union_pitch .path98:before {
+  content: "\eb24";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-Rugby_union_pitch .path99:before {
+  content: "\eb25";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-Rugby_union_pitch .path100:before {
+  content: "\eb26";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-Rugby_union_pitch .path101:before {
+  content: "\eb27";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path102:before {
+  content: "\eb28";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path103:before {
+  content: "\eb29";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path104:before {
+  content: "\eb2a";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path105:before {
+  content: "\eb2b";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path106:before {
+  content: "\eb2c";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path107:before {
+  content: "\eb2d";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path108:before {
+  content: "\eb2e";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path109:before {
+  content: "\eb2f";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path110:before {
+  content: "\eb30";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path111:before {
+  content: "\eb31";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path112:before {
+  content: "\eb32";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path113:before {
+  content: "\eb33";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path114:before {
+  content: "\eb34";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path115:before {
+  content: "\eb35";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path116:before {
+  content: "\eb36";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path117:before {
+  content: "\eb37";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path118:before {
+  content: "\eb38";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path119:before {
+  content: "\eb39";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path120:before {
+  content: "\eb3a";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path121:before {
+  content: "\eb3b";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path122:before {
+  content: "\eb3c";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path123:before {
+  content: "\eb3d";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path124:before {
+  content: "\eb3e";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path125:before {
+  content: "\eb3f";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path126:before {
+  content: "\eb40";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path127:before {
+  content: "\eb41";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path128:before {
+  content: "\eb42";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path129:before {
+  content: "\eb43";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path130:before {
+  content: "\eb44";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path131:before {
+  content: "\eb45";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path132:before {
+  content: "\eb46";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path133:before {
+  content: "\eb47";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path134:before {
+  content: "\eb48";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path135:before {
+  content: "\eb49";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path136:before {
+  content: "\eb4a";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path137:before {
+  content: "\eb4b";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path138:before {
+  content: "\eb4c";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path139:before {
+  content: "\eb4d";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path140:before {
+  content: "\eb4e";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path141:before {
+  content: "\eb4f";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path142:before {
+  content: "\eb50";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path143:before {
+  content: "\eb51";
+  margin-left: -1em;
+  color: none;
+}
+.icon-Rugby_union_pitch .path144:before {
+  content: "\eb52";
+  margin-left: -1em;
+  color: none;
+}
+.icon-RugbyUnionPitch .path1:before {
+  content: "\eb53";
+  color: rgb(71, 126, 25);
+}
+.icon-RugbyUnionPitch .path2:before {
+  content: "\eb54";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-RugbyUnionPitch .path3:before {
+  content: "\eb55";
+  margin-left: -1em;
+  color: rgb(73, 73, 73);
+}
+.icon-RugbyUnionPitch .path4:before {
+  content: "\eb56";
+  margin-left: -1em;
+  color: rgb(73, 73, 73);
+}
+.icon-RugbyUnionPitch .path5:before {
+  content: "\eb57";
+  margin-left: -1em;
+  color: rgb(73, 73, 73);
+}
+.icon-RugbyUnionPitch .path6:before {
+  content: "\eb58";
+  margin-left: -1em;
+  color: rgb(73, 73, 73);
+}
+.icon-RugbyUnionPitch .path7:before {
+  content: "\eb59";
+  margin-left: -1em;
+  color: rgb(73, 73, 73);
+}
+.icon-RugbyUnionPitch .path8:before {
+  content: "\eb5a";
+  margin-left: -1em;
+  color: rgb(73, 73, 73);
+}
+.icon-running_icon_drk:before {
+  content: "\eb5b";
+  color: #384353;
+}
+.icon-running_icon_wht:before {
+  content: "\eb5c";
+  color: #fff;
+}
+.icon-running_icon:before {
+  content: "\eb5d";
+  color: #4ea3c9;
+}
+.icon-sailing_icon_drk:before {
+  content: "\eb5e";
+  color: #394454;
+}
+.icon-sailing_icon_wht:before {
+  content: "\eb5f";
+  color: #fff;
+}
+.icon-sailing_icon:before {
+  content: "\eb60";
+  color: #4da3c9;
+}
+.icon-scuba_diving_icon_drk:before {
+  content: "\eb61";
+  color: #394454;
+}
+.icon-scuba_diving_icon_wht:before {
+  content: "\eb62";
+  color: #fff;
+}
+.icon-scuba_diving_icon:before {
+  content: "\eb63";
+  color: #4da3c9;
+}
+.icon-search_friend_drk:before {
+  content: "\eb64";
+  color: #384353;
+}
+.icon-search_friend:before {
+  content: "\eb65";
+  color: #ccc;
+}
+.icon-search_sport_hover:before {
+  content: "\eb66";
+  color: #ccc;
+}
+.icon-second_half-1:before {
+  content: "\eb67";
+  color: #384353;
+}
+.icon-second_half_hover:before {
+  content: "\eb68";
+  color: #4ea3c9;
+}
+.icon-second_half:before {
+  content: "\eb69";
+  color: #384353;
+}
+.icon-select_sport_hover_drk:before {
+  content: "\eb6a";
+  color: #384353;
+}
+.icon-select_sport_hover:before {
+  content: "\eb6b";
+  color: #4da3c9;
+}
+.icon-select-bx-bg .path1:before {
+  content: "\eb6c";
+  color: rgb(68, 170, 204);
+}
+.icon-select-bx-bg .path2:before {
+  content: "\eb6d";
+  margin-left: -0.9990234375em;
+  color: rgb(255, 255, 255);
+}
+.icon-settings_blue_hover:before {
+  content: "\eb6e";
+  color: #4da3c9;
+}
+.icon-settings_blue:before {
+  content: "\eb6f";
+  color: #384353;
+}
+.icon-settings_circle_drk .path1:before {
+  content: "\eb70";
+  color: rgb(56, 67, 83);
+}
+.icon-settings_circle_drk .path2:before {
+  content: "\eb71";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-settings_circle .path1:before {
+  content: "\eb72";
+  color: rgb(77, 163, 201);
+}
+.icon-settings_circle .path2:before {
+  content: "\eb73";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-settings:before {
+  content: "\eb74";
+  color: #ccc;
+}
+.icon-share_circle_drk .path1:before {
+  content: "\eb75";
+  color: rgb(255, 255, 255);
+}
+.icon-share_circle_drk .path2:before {
+  content: "\eb76";
+  margin-left: -1em;
+  color: rgb(56, 67, 83);
+}
+.icon-share_circle .path1:before {
+  content: "\eb77";
+  color: rgb(255, 255, 255);
+}
+.icon-share_circle .path2:before {
+  content: "\eb78";
+  margin-left: -1em;
+  color: rgb(78, 163, 201);
+}
+.icon-share_icon_wht:before {
+  content: "\eb79";
+  color: #fff;
+}
+.icon-share_icon:before {
+  content: "\eb7a";
+  color: #4ea3c9;
+}
+.icon-skateboarding_icon_drk:before {
+  content: "\eb7b";
+  color: #394454;
+}
+.icon-skateboarding_icon_wht:before {
+  content: "\eb7c";
+  color: #fff;
+}
+.icon-skateboarding_icon:before {
+  content: "\eb7d";
+  color: #4da3c9;
+}
+.icon-skiiing_icon_drk:before {
+  content: "\eb7e";
+  color: #394454;
+}
+.icon-skiiing_icon_wht:before {
+  content: "\eb7f";
+  color: #fff;
+}
+.icon-skiiing_icon:before {
+  content: "\eb80";
+  color: #4da3c9;
+}
+.icon-snooker_icon_drk:before {
+  content: "\eb81";
+  color: #394454;
+}
+.icon-snooker_icon_wht:before {
+  content: "\eb82";
+  color: #fff;
+}
+.icon-snooker_icon:before {
+  content: "\eb83";
+  color: #4da3c9;
+}
+.icon-snowboarding_icon_drk:before {
+  content: "\eb84";
+  color: #394454;
+}
+.icon-snowboarding_icon_wht:before {
+  content: "\eb85";
+  color: #fff;
+}
+.icon-snowboarding_icon:before {
+  content: "\eb86";
+  color: #4da3c9;
+}
+.icon-soccer_field .path1:before {
+  content: "\eb87";
+  color: rgb(0, 128, 0);
+}
+.icon-soccer_field .path2:before {
+  content: "\eb88";
+  margin-left: -1em;
+  color: rgb(0, 128, 0);
+}
+.icon-soccer_field .path3:before {
+  content: "\eb89";
+  margin-left: -1em;
+  color: none;
+}
+.icon-soccer_field .path4:before {
+  content: "\eb8a";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-soccer_field .path5:before {
+  content: "\eb8b";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-soccer_field .path6:before {
+  content: "\eb8c";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-soccer_field .path7:before {
+  content: "\eb8d";
+  margin-left: -1em;
+  color: none;
+}
+.icon-soccer_field .path8:before {
+  content: "\eb8e";
+  margin-left: -1em;
+  color: none;
+}
+.icon-soccer_field .path9:before {
+  content: "\eb8f";
+  margin-left: -1em;
+  color: none;
+}
+.icon-soccer_field .path10:before {
+  content: "\eb90";
+  margin-left: -1em;
+  color: none;
+}
+.icon-soccer_field .path11:before {
+  content: "\eb91";
+  margin-left: -1em;
+  color: none;
+}
+.icon-soccer_field .path12:before {
+  content: "\eb92";
+  margin-left: -1em;
+  color: none;
+}
+.icon-soccer_field .path13:before {
+  content: "\eb93";
+  margin-left: -1em;
+  color: rgb(0, 128, 0);
+}
+.icon-soccer_field .path14:before {
+  content: "\eb94";
+  margin-left: -1em;
+  color: rgb(0, 128, 0);
+}
+.icon-soccer_field .path15:before {
+  content: "\eb95";
+  margin-left: -1em;
+  color: none;
+}
+.icon-soccer_field .path16:before {
+  content: "\eb96";
+  margin-left: -1em;
+  color: none;
+}
+.icon-soccer_field .path17:before {
+  content: "\eb97";
+  margin-left: -1em;
+  color: none;
+}
+.icon-soccer_field .path18:before {
+  content: "\eb98";
+  margin-left: -1em;
+  color: none;
+}
+.icon-soccer_icon_drk:before {
+  content: "\eb99";
+  color: #384353;
+}
+.icon-soccer_icon_wht:before {
+  content: "\eb9a";
+  color: #fff;
+}
+.icon-soccer_icon:before {
+  content: "\eb9b";
+  color: #4ea3c9;
+}
+.icon-softball_icon_drk:before {
+  content: "\eb9c";
+  color: #394454;
+}
+.icon-softball_icon_wht:before {
+  content: "\eb9d";
+  color: #fff;
+}
+.icon-softball_icon:before {
+  content: "\eb9e";
+  color: #4da3c9;
+}
+.icon-sprint_icon_drk:before {
+  content: "\eb9f";
+  color: #394454;
+}
+.icon-sprint_icon_wht:before {
+  content: "\eba0";
+  color: #fff;
+}
+.icon-sprint_icon:before {
+  content: "\eba1";
+  color: #4da3c9;
+}
+.icon-sqaush_icon_drk:before {
+  content: "\eba2";
+  color: #394454;
+}
+.icon-sqaush_icon_wht:before {
+  content: "\eba3";
+  color: #fff;
+}
+.icon-sqaush_icon:before {
+  content: "\eba4";
+  color: #4da3c9;
+}
+.icon-star_blu:before {
+  content: "\eba5";
+  color: #4ca3c9;
+}
+.icon-star_grn:before {
+  content: "\eba6";
+  color: #009444;
+}
+.icon-star_wht:before {
+  content: "\eba7";
+  color: #ccc;
+}
+.icon-star_yel:before {
+  content: "\eba8";
+  color: #ffde17;
+}
+.icon-start:before {
+  content: "\eba9";
+  color: #fafeff;
+}
+.icon-substitution_icon_drk:before {
+  content: "\ebaa";
+  color: #384353;
+}
+.icon-substitution_icon:before {
+  content: "\ebab";
+  color: #fff;
+}
+.icon-supotsu_logo .path1:before {
+  content: "\ebac";
+  color: rgb(255, 255, 255);
+}
+.icon-supotsu_logo .path2:before {
+  content: "\ebad";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-supotsu_logo .path3:before {
+  content: "\ebae";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-supotsu_logo .path4:before {
+  content: "\ebaf";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-supotsu_logo .path5:before {
+  content: "\ebb0";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-supotsu_logo .path6:before {
+  content: "\ebb1";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-supotsu_logo .path7:before {
+  content: "\ebb2";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-supotsu_logo .path8:before {
+  content: "\ebb3";
+  margin-left: -1em;
+  color: rgb(210, 30, 65);
+}
+.icon-surfing_icon_drk:before {
+  content: "\ebb4";
+  color: #394454;
+}
+.icon-surfing_icon_wht:before {
+  content: "\ebb5";
+  color: #fff;
+}
+.icon-surfing_icon:before {
+  content: "\ebb6";
+  color: #4da3c9;
+}
+.icon-swimming_icon_drk:before {
+  content: "\ebb7";
+  color: #394454;
+}
+.icon-swimming_icon_wht:before {
+  content: "\ebb8";
+  color: #fff;
+}
+.icon-swimming_icon:before {
+  content: "\ebb9";
+  color: #4da3c9;
+}
+.icon-switch_toggle:before {
+  content: "\ebba";
+  color: #fff;
+}
+.icon-table_tennis_icon_drk:before {
+  content: "\ebbb";
+  color: #394454;
+}
+.icon-table_tennis_icon_wht:before {
+  content: "\ebbc";
+  color: #fff;
+}
+.icon-table_tennis_icon:before {
+  content: "\ebbd";
+  color: #4da3c9;
+}
+.icon-tag_icon_blu:before {
+  content: "\ebbe";
+  color: #4ea3c9;
+}
+.icon-tag_icon_gry:before {
+  content: "\ebbf";
+  color: #999;
+}
+.icon-tag_icon:before {
+  content: "\ebc0";
+}
+.icon-team:before {
+  content: "\ebc1";
+  color: #fff;
+}
+.icon-tennis_icon_drk:before {
+  content: "\ebc2";
+  color: #384353;
+}
+.icon-tennis_icon_wht:before {
+  content: "\ebc3";
+  color: #fff;
+}
+.icon-tennis_icon:before {
+  content: "\ebc4";
+  color: #4ea3c9;
+}
+.icon-thumbs_down_icon:before {
+  content: "\ebc5";
+  color: #999;
+}
+.icon-thumbs_icon .path1:before {
+  content: "\ebc6";
+  color: rgb(57, 68, 83);
+}
+.icon-thumbs_icon .path2:before {
+  content: "\ebc7";
+  margin-left: -1em;
+  color: rgb(57, 68, 83);
+}
+.icon-thumbs_icon .path3:before {
+  content: "\ebc8";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-thumbs_icon .path4:before {
+  content: "\ebc9";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-thumbs_up_icon:before {
+  content: "\ebca";
+  color: #999;
+}
+.icon-tick_circle_wht:before {
+  content: "\ebcb";
+  color: #fff;
+}
+.icon-timeline_dotted:before {
+  content: "\ebcc";
+  color: #fff;
+}
+.icon-timeline_indicator:before {
+  content: "\ebcd";
+  color: #f7941e;
+}
+.icon-timeline_minute:before {
+  content: "\ebce";
+  color: #fff;
+}
+.icon-timeline_solid:before {
+  content: "\ebcf";
+  color: #fff;
+}
+.icon-triathalon_icon_drk:before {
+  content: "\ebd0";
+  color: #394454;
+}
+.icon-triathalon_icon_wht:before {
+  content: "\ebd1";
+  color: #fff;
+}
+.icon-triathalon_icon:before {
+  content: "\ebd2";
+  color: #4da3c9;
+}
+.icon-twitter_icon_wht:before {
+  content: "\ebd3";
+  color: #fff;
+}
+.icon-twitter_icon:before {
+  content: "\ebd4";
+  color: #55acee;
+}
+.icon-university:before {
+  content: "\ebd5";
+  color: #fff;
+}
+.icon-unverified_icon_hover:before {
+  content: "\ebd6";
+  color: #4ea3c9;
+}
+.icon-unverified_icon:before {
+  content: "\ebd7";
+  color: #ccc;
+}
+.icon-unverified_team:before {
+  content: "\ebd8";
+  color: #ccc;
+}
+.icon-user-picture:before {
+  content: "\ebd9";
+  color: #fff;
+}
+.icon-verified_icon:before {
+  content: "\ebda";
+  color: #4ea3c9;
+}
+.icon-verified_team:before {
+  content: "\ebdb";
+  color: #4ea3c9;
+}
+.icon-video_icon:before {
+  content: "\ebdc";
+  color: #f1c40f;
+}
+.icon-volleyball_icon_drk:before {
+  content: "\ebdd";
+  color: #394454;
+}
+.icon-volleyball_icon_wht:before {
+  content: "\ebde";
+  color: #fff;
+}
+.icon-volleyball_icon:before {
+  content: "\ebdf";
+  color: #4da3c9;
+}
+.icon-water_skiing_icon_drk:before {
+  content: "\ebe0";
+  color: #394454;
+}
+.icon-water_skiing_icon_wht:before {
+  content: "\ebe1";
+  color: #fff;
+}
+.icon-water_skiing_icon:before {
+  content: "\ebe2";
+  color: #4da3c9;
+}
+.icon-waterpolo_icon_drk:before {
+  content: "\ebe3";
+  color: #394454;
+}
+.icon-waterpolo_icon_wht:before {
+  content: "\ebe4";
+  color: #fff;
+}
+.icon-waterpolo_icon:before {
+  content: "\ebe5";
+  color: #4da3c9;
+}
+.icon-Wave_Dash:before {
+  content: "\ebe6";
+  color: #374353;
+}
+.icon-Wave_Dash1:before {
+  content: "\ebe7";
+  color: #374353;
+}
+.icon-website_icon_blk:before {
+  content: "\ebe8";
+  color: #fff;
+}
+.icon-website_icon_blu:before {
+  content: "\ebe9";
+  color: #4ea3c9;
+}
+.icon-website_icon_wht:before {
+  content: "\ebea";
+  color: #fff;
+}
+.icon-website_icon:before {
+  content: "\ebeb";
+  color: #394453;
+}
+.icon-who_sees_friends .path1:before {
+  content: "\ebec";
+  color: rgb(57, 68, 83);
+}
+.icon-who_sees_friends .path2:before {
+  content: "\ebed";
+  margin-left: -1em;
+  color: rgb(57, 68, 83);
+}
+.icon-who_sees_friends .path3:before {
+  content: "\ebee";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-who_sees_friends .path4:before {
+  content: "\ebef";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-who_sees_game .path1:before {
+  content: "\ebf0";
+  color: rgb(253, 185, 36);
+}
+.icon-who_sees_game .path2:before {
+  content: "\ebf1";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-who_sees_game .path3:before {
+  content: "\ebf2";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-who_sees_game .path4:before {
+  content: "\ebf3";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-who_sees_game .path5:before {
+  content: "\ebf4";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-who_sees_game .path6:before {
+  content: "\ebf5";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-who_sees_game .path7:before {
+  content: "\ebf6";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-who_sees_game .path8:before {
+  content: "\ebf7";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-who_sees_game .path9:before {
+  content: "\ebf8";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-who_sees_league .path1:before {
+  content: "\ebf9";
+  color: rgb(68, 170, 204);
+}
+.icon-who_sees_league .path2:before {
+  content: "\ebfa";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-who_sees_team .path1:before {
+  content: "\ebfb";
+  color: rgb(88, 204, 102);
+}
+.icon-who_sees_team .path2:before {
+  content: "\ebfc";
+  margin-left: -1em;
+  color: rgb(88, 204, 102);
+}
+.icon-who_sees_team .path3:before {
+  content: "\ebfd";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-who_sees_team .path4:before {
+  content: "\ebfe";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-wind_surfing_icon_drk:before {
+  content: "\ebff";
+  color: #394454;
+}
+.icon-wind_surfing_icon_wht:before {
+  content: "\ec00";
+  color: #fff;
+}
+.icon-wind_surfing_icon:before {
+  content: "\ec01";
+  color: #4da3c9;
+}
+.icon-works:before {
+  content: "\ec02";
+  color: #fff;
+}
+.icon-wrestling_icon_drk:before {
+  content: "\ec03";
+  color: #394454;
+}
+.icon-wrestling_icon_wht:before {
+  content: "\ec04";
+  color: #fff;
+}
+.icon-wrestling_icon:before {
+  content: "\ec05";
+  color: #4da3c9;
+}
+.icon-xls_icon_training .path1:before {
+  content: "\ec06";
+  color: rgb(255, 255, 255);
+}
+.icon-xls_icon_training .path2:before {
+  content: "\ec07";
+  margin-left: -1em;
+  color: rgb(57, 181, 74);
+}
+.icon-xls_icon_training .path3:before {
+  content: "\ec08";
+  margin-left: -1em;
+  color: rgb(57, 181, 74);
+}
+.icon-xls_icon_training .path4:before {
+  content: "\ec09";
+  margin-left: -1em;
+  color: rgb(57, 181, 74);
+}
+.icon-xls_icon_training .path5:before {
+  content: "\ec0a";
+  margin-left: -1em;
+  color: rgb(57, 181, 74);
+}
+.icon-xls_icon_training .path6:before {
+  content: "\ec0b";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-xls_icon .path1:before {
+  content: "\ec0c";
+  color: rgb(255, 255, 255);
+}
+.icon-xls_icon .path2:before {
+  content: "\ec0d";
+  margin-left: -1em;
+  color: rgb(57, 181, 74);
+}
+.icon-xls_icon .path3:before {
+  content: "\ec0e";
+  margin-left: -1em;
+  color: rgb(57, 181, 74);
+}
+.icon-xls_icon .path4:before {
+  content: "\ec0f";
+  margin-left: -1em;
+  color: rgb(57, 181, 74);
+}
+.icon-xls_icon .path5:before {
+  content: "\ec10";
+  margin-left: -1em;
+  color: rgb(57, 181, 74);
+}
+.icon-xls_icon .path6:before {
+  content: "\ec11";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-yellow_card_icon_ptn .path1:before {
+  content: "\ec12";
+  color: rgb(255, 212, 0);
+}
+.icon-yellow_card_icon_ptn .path2:before {
+  content: "\ec13";
+  margin-left: -1.001953125em;
+  color: rgb(215, 25, 32);
+}
+.icon-yellow_card_icon_ptn .path3:before {
+  content: "\ec14";
+  margin-left: -1.001953125em;
+  color: rgb(215, 25, 32);
+}
+.icon-yellow_card_icon_ptn .path4:before {
+  content: "\ec15";
+  margin-left: -1.001953125em;
+  color: rgb(215, 25, 32);
+}
+.icon-yellow_card_icon_ptn .path5:before {
+  content: "\ec16";
+  margin-left: -1.001953125em;
+  color: rgb(215, 25, 32);
+}
+.icon-yellow_card_icon_ptn .path6:before {
+  content: "\ec17";
+  margin-left: -1.001953125em;
+  color: rgb(215, 25, 32);
+}
+.icon-yellow_card_icon:before {
+  content: "\ec18";
+  color: #ffd400;
+}
+.icon-yoga_icon_drk:before {
+  content: "\ec19";
+  color: #394454;
+}
+.icon-yoga_icon_wht:before {
+  content: "\ec1a";
+  color: #fff;
+}
+.icon-yoga_icon:before {
+  content: "\ec1b";
+  color: #4da3c9;
+}

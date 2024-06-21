@@ -1,0 +1,39 @@
+import gql from 'graphql-tag';
+export const GameActionsFragment = gql`
+  fragment GameActionsFragment on GameAction{
+    _id
+    label
+    type
+    player{
+      _id
+      name
+      user{
+        _id
+        name
+        image
+      }
+    }
+    second_player{
+      _id
+      name
+      user{
+        _id
+        name
+        image
+      }
+    }
+    game{
+      _id
+    }
+    time
+    squad{
+      _id
+      name
+    }
+    team{
+      _id
+      name
+      image
+    }
+  }
+`

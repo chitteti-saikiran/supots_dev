@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="2211 10510.001 24.001 23.999">
+  <defs>
+    <style>
+      .cls-1 {
+        fill-rule: evenodd;
+      }
+      #Group_5321{
+        fill:#4ac;
+      }
+    </style>
+  </defs>
+  <g id="Symbol_1" data-name="Symbol 1" transform="translate(-30 5124)">
+    <g id="Group_5321" data-name="Group 5321">
+      <path id="Fill-1" class="cls-1" d="M19.054,7.318V18.007a1,1,0,0,1-1,1H3.009a1,1,0,0,1-1-1V3.045a1,1,0,0,1,1-1H13.471L15.492.052H3.009A3,3,0,0,0,0,3.045V18.007A3,3,0,0,0,3.009,21H18.052a3,3,0,0,0,3.008-2.993V5.338Z" transform="translate(2241 5389)"/>
+      <path id="Fill-4" class="cls-1" d="M9.225,12.6l-.769,2.863,2.9-.753L22.3,3.806,20.167,1.694Z" transform="translate(2241 5386)"/>
+      <path id="Fill-6" class="cls-1" d="M3.711,2.4a.983.983,0,0,0,0-1.4L2.984.287a1,1,0,0,0-1.409,0l0,0C1.188.678.88.993.88.993L3.014,3.105s.307-.315.693-.7Z" transform="translate(2261 5386)"/>
+    </g>
+  </g>
+</svg>

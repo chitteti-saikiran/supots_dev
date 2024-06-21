@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="12" viewBox="0 0 10 6">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #4ea3c9;
+        fill-rule: evenodd;
+      }
+    </style>
+  </defs>
+  <path id="hide_icon" data-name="hide icon" class="cls-1" d="M1424.01,1977.86l-5-4.87-5,4.87,1.17,1.14,3.83-3.73,3.83,3.73Z" transform="translate(-1414 -1973)"/>
+</svg>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 19.2.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="111px" height="100px" viewBox="0 0 111 100" style="enable-background:new 0 0 111 100;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#FFFFFF;filter:url(#drop-shadow);}
+</style>
+<filter  id="drop-shadow">
+	<feGaussianBlur  in="SourceAlpha" stdDeviation="2.2"></feGaussianBlur>
+	<feOffset  dx="2" dy="2" result="offsetblur"></feOffset>
+	<feFlood  flood-color="rgba(0,0,0,0.5)"></feFlood>
+	<feComposite  in2="offsetblur" operator="in"></feComposite>
+	<feMerge>
+		<feMergeNode></feMergeNode>
+		<feMergeNode  in="SourceGraphic"></feMergeNode>
+	</feMerge>
+</filter>
+<path id="photo_icon" class="st0" d="M30.9,54.8C30.8,41.2,41.8,30,55.5,30c13.7-0.1,24.8,10.9,24.9,24.6
+	c0.1,13.7-10.9,24.8-24.6,24.9c-6.6,0-12.9-2.6-17.6-7.2C33.4,67.7,30.8,61.4,30.9,54.8z M31.8,15.5H16.2c-2.6,0-5,1.1-6.8,3
+	c-1.8,1.8-2.9,4.3-2.9,6.9v58.9c0,2.6,1,5.1,2.9,6.9c1.7,1.9,4.2,3,6.8,3h78.7c2.6,0,5-1.1,6.8-3c1.8-1.8,2.9-4.3,2.9-6.9V25.4
+	c0-2.6-1-5.1-2.9-6.9c-1.7-1.9-4.2-3-6.8-3H79.2l-9-9.7H40.8L31.8,15.5z M55.5,70.5c8.7,0,15.7-7,15.8-15.6c0-8.7-7-15.7-15.6-15.8
+	c-8.7,0-15.7,7-15.8,15.6c0,4.2,1.6,8.2,4.6,11.2C47.4,68.9,51.4,70.5,55.5,70.5z"/>
+</svg>

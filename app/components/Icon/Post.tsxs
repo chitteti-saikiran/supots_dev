@@ -1,0 +1,3381 @@
+import * as React from 'react';
+import {Component} from 'react';
+import Methods from '../../Methods';
+import {SocketIO as io, SocketIO} from 'nativescript-socketio'
+import * as AppSettings from 'tns-core-modules/application-settings';
+import { $ScrollView, $StackLayout, $ActivityIndicator, $FlexboxLayout, $Image, $Label, $GridLayout } from 'react-nativescript';
+import { screen, platformNames } from 'tns-core-modules/platform/platform';
+import { Color } from 'tns-core-modules/color/color';
+import { Theme2 } from '../../Theme';
+import { isAndroid } from 'tns-core-modules/ui/frame/frame';
+import Icon from '~/components/Icon';
+import {TimeLinePlaceHolder, TimeLinePlaceHolderDiveder} from '~/components/AppContainer';
+
+const Platform = {
+    OS: !isAndroid?"ios":"android"
+};
+
+const ActivityIndicator = (props:any) => <$ActivityIndicator color={new Color(props.color)} />
+const TouchableOpacity = (props:any) => {
+    return(
+        <$StackLayout onTap={props.onPress}>
+            {props.children}
+        </$StackLayout>
+    )
+}
+
+const ShimmerView = (props:any) => <TimeLinePlaceHolder style={{
+    ...props.isTopMarginNull?{marginTop:10}:{marginTop:0}
+}} />;
+
+const Empty = (props:any) => {
+    return(
+        <$FlexboxLayout flexDirection={'column'} alignItems={'center'} justifyContent={'center'} style={{
+            //height: 50,
+            padding: 20,
+            background: '#fff'
+        }}>
+            <$Label fontSize={24} color={new Color('#888')} text={props.title||`Error`} />
+            <$Label textWrap fontSize={15} color={new Color('#999')} text={props.text||`Something went wrong`} />
+        </$FlexboxLayout>
+    )
+}
+
+export const LoadingState = ({ onTap = () => {},text, textStyle = {}, style, ...props }) => {
+    return (
+        <$StackLayout style={{
+            backgroundColor: '#fff',
+            marginTop: 15,
+            marginBottom: 15,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            paddingVertical: 20,
+            ...style
+        }} onTap={onTap}>
+            <$FlexboxLayout style={{
+                alignItems: 'center',
+                justifyContent: 'center'
+            }}>
+                {text &&
+                    <$Label
+                    style={{
+                        marginBottom: 10,
+                        ...textStyle
+                    }} text={text}/>
+                }
+                <ActivityIndicator color={"#4ac"} />
+
+            </$FlexboxLayout>
+        </$StackLayout>
+    )
+}
+
+export const ms = (int:any) => int;
+const {widthDIPs:width, heightDIPs:height} = screen.mainScreen;
+
+const CameraRoll = (props:any) => {
+    return(
+        <$ScrollView height={screen.mainScreen.heightDIPs}/>
+    )
+}
+const PostContext = React.createContext({
+    props:{},
+    post: {
+        isLoading: true,
+        isError: false,
+        body: {id:null}
+    }
+});
+
+const PostActions = React.createContext({
+    io: false,
+    commentActions: {},
+    replyActions: {}
+});
+
+export class PostItem extends Component<{
+    isNew?:boolean,
+    isPageView?:boolean,
+    post:any,
+    isShared?:boolean,
+    user?:any,
+    onError?(_id?:any):void,
+    isView?:any,
+    isHome?:boolean,
+    editorData:any,
+    userType?:any,
+    postToType?:any,
+    isAdmin?:boolean,
+    postToId?:boolean
+} & any,
+{
+    isShowingComments: boolean,
+    isShowingMore: boolean,
+    showCommentBox: boolean,
+    commentsLimit: number,
+    isReplyComment: any,
+    isReplyToComment: boolean,
+    isReplyToCommentUser: boolean,
+    hasContent: boolean,
+    hasComments: boolean,
+    isCameraOpen: boolean,
+    isBlocked: boolean,
+    isTypingReply: boolean,
+    isLiked: boolean,
+    isPostingComment: boolean,
+    rawContent: string,
+    rawComment:any,
+    hasExternalTextInput?:boolean,
+    isCommentBoxExpanded?:boolean,
+    postEditToken: string,
+    postToken: number,
+    isEditting: boolean,
+    content: string,
+    comment: string,
+    rawEditContent: string,
+    value: string,
+    isError?:boolean,
+    removed: boolean,
+    media: boolean,
+    file: any,
+    friends: any[],
+    settings: any[],
+    isDeleting: boolean,
+    errorComments: any[],
+    isSharing: boolean,
+    post: any,
+    error: any,
+    updated: number,
+    isLoading?:boolean
+} & any>{
+    constructor(props) {
+		super(props);
+		const _list = Methods.listify(Methods.getBlocked({ props: {} }, false, ["post"]));
+        const _isBlocked = _list.length===0?false:(Methods.inArray(props.post._id, _list)) ? true : false;
+        const isShared = props.isShared?true:false;
+        const item = props.post;
+        if(this.props.isNew){
+            //item['user'] = item['user'][item['user']['type']]
+            //item['owner'] = item['owner'][item['owner']['type']]
+            //item['userTo'] = item['userTo'][item['userTo']['type']]
+        }
+		this.state = {
+            isShowingComments: false,
+            isShowingMore: false,
+            showCommentBox: false,
+            commentsLimit : 5,
+            isReplyComment: false,
+            isReplyToComment: false,
+            isReplyToCommentUser: false,
+            hasContent: this.props.isPageView && this.props.post.content?true:false,
+            hasComments: false,
+            isCameraOpen: false,
+            isBlocked: false,
+            isTypingReply: false,
+            isLiked:undefined,
+            isPostingComment: false,
+			rawContent: "",
+			postEditToken: Date.now() + "-edit",
+			postToken: Date.now(),
+			isEditting: false,
+            content: "",
+            comment:"",
+			rawEditContent: "",
+			value: "",
+			removed: _isBlocked,
+			media: false,
+            file: {},
+            friends: Methods.you().friends,
+			settings: [],
+            isDeleting: false,
+            errorComments: [],
+			isSharing: false,
+            post: item?item:this.props.post,
+            updated: 0
+		};
+    }
+
+    private _isMounted:boolean = false;
+    private io:SocketIO;
+    private comments:any;
+
+    componentDidCatch = () => {
+        //this.props.onError(this.props.post._id)
+    }
+
+	componentWillMount = () => {
+        this.getBlockState();
+	}
+
+	componentDidMount = () => {
+        this._isMounted = true;
+
+        if(!this.props.isShared){
+            if(!this.props.isNew) this.getSettings();
+        }
+
+        this.comments = {
+
+        }
+
+        if(this.props.isPageView){
+            Methods.shared(`full-${this.props.post._id}`, this);
+        } else if(!this.props.isShared){
+            Methods.shared(this.props.post._id, this);
+        }
+        //this.initSocket();
+        Methods.io.emit('join_post', this.props.post._id);
+
+        this.getContent();
+	}
+
+	componentWillUnmount = () => {
+        this._isMounted = false;
+        Methods.shared(this.props.post._id, false);
+    }
+
+    getContent = () => {
+        const _that = this;
+        const _data = {
+            _id : _that.props.post._id
+        }
+
+        //Methods.io.emit('join_post', _that.props.post._id);
+        /*
+        Methods.post(`https://supotsu.com/api/feed/view`, _data, {
+            headers: {
+                'Content-Type':'application/json'
+            },
+            success(res){
+                if(res.error){
+                    _that.props.onError(_that.props.post._id)
+                } else{
+                    _that.setState({ post: res, hasContent: true, hasComments: true  }, ()=>{
+                        if(!_that.props.isPageView){
+                            return;
+                        } else{
+                            setTimeout(()=>{
+                                _that.getContent();
+                            }, 2000)
+                        }
+                    });
+                }
+            },
+            error(err){
+                _that.props.onError(_that.props.post._id)
+            }
+        });
+
+        */
+    }
+
+    emit = ({event = '', payload}) => {
+        switch (event) {
+            case 'like':
+                //alert('like action?')
+                this.setState({
+                    post: payload,
+                    //hasContent: true,
+                    //hasComments: true
+                })
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    initSocket = () => {
+        const _that = this;
+        this.io = new io("https://supotsu.com/post", { transports: ['websocket', 'polling'] });
+        this.io.connect();
+        this.io.on('get_user', (data) => {
+            this.io.emit('user_join', {
+                _id: this.props.post._id,
+                user: Methods.you()
+            })
+        });
+
+        this.io.on('disconnect', (reason) => {
+            if (_that._isMounted) {
+                _that.io.connect();
+            }
+        });
+
+
+        this.io.on('update', (post) => {
+            const isLiked = post.likes.filter((item, i)=>{
+                if(item.type){
+                    const _user = Methods.getUser(item.user);
+                    return _user._id === Methods.you()._id
+                } else{
+                    return false
+                }
+            }).length> 0?true:false;
+
+            post.comments.forEach((comment, i)=>{
+                _that.onCommentConnectToSocket(comment._id);
+                comment.replies.forEach((reply, i)=>{
+                    _that.onReplyConnectToSocket(reply._id);
+                });
+            });
+
+            _that.setState({
+                post,
+                isLiked,
+                hasContent: true,
+                hasComments: true
+            });
+        });
+
+        this.io.on('comment_update', (comment)=>{
+            const post = this.state.post;
+            post.comments.forEach((_comment, i)=>{
+                if(_comment._id===comment._id){
+                    const isLiked = comment.likes.filter((item, i)=>{
+                        if(item.type){
+                            const _user = Methods.getUser(item.user);
+                            return _user._id === Methods.you()._id
+                        } else{
+                            return false
+                        }
+                    }).length> 0?true:false;
+
+                    comment['isLiked'] = isLiked;
+                    post.comments[i] = comment;
+                }
+            });
+
+            if(this.comments[comment._id]) this.comments[comment._id].update(comment);
+
+            _that.setState({
+                post
+            });
+        })
+
+        this.io.on('reply_update', ({comment_id, reply})=>{
+            if(this.comments[comment_id] && this.comments[comment_id].replies[reply._id]) this.comments[comment_id].replies[reply._id].update(reply);
+        })
+
+        this.io.on('like', (post) => {
+            const isLiked = post.likes.filter((item, i)=>{
+                if(item.type){
+                    const _user = Methods.getUser(item.user);
+                    return _user._id === Methods.you()._id
+                } else{
+                    return false
+                }
+            }).length> 0?true:false;
+
+            _that.setState({
+                post,
+                isLiked
+            });
+        });
+    }
+
+    onCommentConnectToSocket = (comment_id) => {
+        this.io.emit('comment_connect', {
+            _id: comment_id,
+            user: Methods.you()
+        });
+    }
+
+    onReplyConnectToSocket = (reply_id) => {
+        this.io.emit('reply_connect', {
+            _id: reply_id,
+            user: Methods.you()
+        })
+    }
+
+	getSettings = () => {
+		const _that = this;
+
+		Methods.post('https://supotsu.com/api/settings/get', {
+			id: this.props.post.user._id,
+			type: this.props.post.user.type
+		}, {
+				headers: {
+					'Content-Type': 'application/json'
+                },
+                method: 'POST',
+				success(settings:any) {
+					_that.setState({ settings });
+                },
+                error(e:any){
+                    _that.props.onError(_that.props.post._id)
+                }
+			})
+	}
+
+	getBlockState = () => {
+		const _that = this;
+
+		const dataTo = {
+			userId: this.props.post._id,
+			userType: "post",
+			userToType: this.props.user.type,
+			userToId: this.props.user._id
+		}
+
+		Methods.post("https://supotsu.com/admin/block/get", dataTo, {
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			method: "POST",
+			success(res:any) {
+				const { isBlocked, data } = res;
+
+				_that.setState({
+					error: isBlocked,
+					isBlocked,
+					removed: isBlocked
+                })
+
+                if(isBlocked){
+                    _that.props.onError(_that.props.post._id)
+                }
+			},
+			error(e){
+                _that.props.onError(_that.props.post._id)
+            }
+		});
+    }
+
+	getPost = () => {
+		const _that = this;
+		const data = {
+			type: "post",
+			id: this.props.post._id,
+			user: {
+				id: Methods.you()._id,
+				type: "F"
+			}
+		};
+
+		//console.log(data)
+
+		Methods.post("/getPost.php?auth0", data, {
+			success(res) {
+				_that.setPost({res, cb: () => _that.getPost()})
+			},
+			error(e) {
+                _that.setState({ error: _that.state.post.content?false:true, isLoading: false, hasContent: true, });
+                 _that.props.onError(_that.props.post._id)
+
+			}
+		});
+    };
+
+    setPost = ({res, cb = () => {}}) => {
+        const _that = this;
+        if (!_that._isMounted || _that.state.isBlocked || _that.state.removed) {
+            return;
+        }
+
+        if (res === null || _that.state.isBlocked) {
+            _that.setState({ error: true, isLoading: false, hasContent: true, });
+        } else if ((res.user.isBlocked || res.userTo.isBlocked || _that.state.isBlocked) && _that.props.isView) {
+            _that.setState({ error: true, isLoading: false, hasContent: true, });
+        } else {
+            _that.setState({ post: res, isLiked: typeof _that.state.isLiked === 'undefined'?res.isLiked:res.isLiked?res.isLiked:_that.state.isLiked, hasContent: true, content: (_that.state.content === "") ? res.content : _that.state.content, rawEditContent: (_that.state.rawEditContent !== "") ? _that.state.rawEditContent : res.rawContent });
+            //if(res._id) _that.cachePost({id:_that.props.post._id, data: res});
+            setTimeout(() => {
+                if ((res.user.isBlocked || res.userTo.isBlocked || _that.state.isBlocked) && _that.props.isView) {
+
+                } else {
+                    cb();
+                }
+            }, 1000);
+        }
+    }
+
+    cachePost = ({id, data}) => {
+        const _that = this;
+        AppSettings.setString(`post-${_that.props.post._id}`, JSON.stringify(data));
+    }
+
+    getCachedPost = (id) => {
+        const _that = this;
+        const _data = AppSettings.getString(`post-${_that.props.post._id}`, undefined);
+        const _post = _data?JSON.parse(_data):false;
+        if(_post) _that.setState({post: _post, hasContent: true});
+    }
+
+    like = () => {
+        const item = this.state.post;
+        const inRoles = this.inRoleIds((Methods.getUser(item.user).roles ? Methods.getUser(item.user).roles : []), (!Methods.getUser(item.user).roles ? false : item.user));
+        //const _user = inRoles ? item.user : this.props.user;
+        if(this.props.isNew){
+            if(Methods.io){
+                Methods.io.emit('like_post', {
+                    user: Methods.you(),
+                    post_id: item._id
+                })
+            }
+            return;
+        } else{
+            Methods.io.emit('like_post', {
+                user: Methods.you(),
+                post_id: item._id
+            })
+        }
+    }
+
+    reply = ( user = Methods.you(),cb = () => {}) => {
+        const item = this.state.post;
+        const inRoles = this.inRoleIds((Methods.getUser(item.user).roles ? Methods.getUser(item.user).roles : []), (!Methods.getUser(item.user).roles ? false : item.user));
+        //const _user = inRoles ? item.user : this.props.user;
+
+        if(!this.state.isReplyComment) return;
+
+        const reply = {
+            //user: _user,
+            post_id: item._id,
+            comment_id: this.state.isReplyComment._id,
+            content: this.state.comment,
+            rawContent: this.state.rawComment,
+            ...this.state.media?{
+                media: this.state.media
+            }:{}
+        };
+
+        const _that = this;
+
+        this.setState({ isPostingComment: true },()=>{
+            if(Methods.shared('HomeScreen') && this.props.isHome){
+                if(_that.state.hasExternalTextInput){
+                    Methods.shared('HomeScreen')._setTimelineState(false);
+                    _that.setState({ hasExternalTextInput: false });
+                }
+            }
+        });
+
+        Methods.post(`https://supotsu.com/api/feed/comment/reply`, {
+            reply,
+            user
+        }, {
+            headers: {
+                'Content-Type':'application/json'
+            },
+            success(res){
+                _that.setState({
+                    value: "",
+                    isError: false,
+                    isReplyComment: false,
+                    isReplyToComment: false,
+                    isReplyToCommentUser: false,
+                    rawComment: "",
+                    comment: "",
+                    isPostingComment: false,
+                    postToken: Date.now(),
+                    media: false,
+                    file: {},
+                    isCommentBoxExpanded: false
+                });
+                if(cb) cb()
+            },
+            error(err){
+                if(cb) cb()
+                _that.setState({ isPostingComment: false });
+            }
+        })
+    }
+
+    comment = ( user = Methods.you(),cb = () => {}) => {
+        const item = this.state.post;
+        const inRoles = this.inRoleIds((Methods.getUser(item.user).roles ? Methods.getUser(item.user).roles : []), (!Methods.getUser(item.user).roles ? false : item.user));
+        //const _user = inRoles ? item.user : this.props.user;
+
+        const comment = {
+            user: user,
+            postId: item._id,
+            content: this.state.comment,
+            rawContent: this.state.rawComment,
+            type: this.state.post.commentType,
+            ...this.state.media?{
+                media: this.state.media
+            }:{}
+        };
+        const _that = this;
+
+        this.setState({ isPostingComment: true },()=>{
+            if(Methods.shared('HomeScreen') && this.props.isHome){
+                if(_that.state.hasExternalTextInput){
+                    Methods.shared('HomeScreen')._setTimelineState(false);
+                    _that.setState({ hasExternalTextInput: false });
+                }
+            }
+        });
+
+        Methods.post(`https://supotsu.com/api/feed/comment`, {
+            comment,
+            user
+        }, {
+            headers: {
+                'Content-Type':'application/json'
+            },
+            success(res){
+                _that.setState({
+                    value: "",
+                    isError: false,
+                    rawComment: "",
+                    comment: "",
+                    isPostingComment: false,
+                    postToken: Date.now(),
+                    media: false,
+                    file: {},
+                    isCommentBoxExpanded: false
+                });
+                if(cb) cb();
+            },
+            error(err){
+                if(cb) cb()
+                _that.setState({ isPostingComment: false });
+            }
+        })
+
+        return;
+    }
+
+    onCommentInit = (id, comment) => {
+        this.comments[id] = comment;
+    }
+
+    alert = (text = '') => {
+        alert(text);
+    }
+
+    edit = (content = '', rawContent = '') => {
+        const _that = this;
+        const data = {
+            _id: this.state.post._id,
+            content,
+            rawContent
+        }
+
+        _that.props.editorData.actions.post()
+
+        Methods.post(`https://supotsu.com/api/feed/edit`, data, {
+            headers: {
+                'Content-Type':'application/json'
+            },
+            success(res){
+                if(res.error){
+                    Methods.alert('Edit failed!')
+                } else{
+                    _that.setState({ post: res }, ()=>{
+                        _that.props.editorData.actions.close()
+                    });
+                }
+            },
+            error(err){
+                _that.props.onError(_that.props.post._id)
+            }
+        })
+    }
+
+    remove = () => {
+        const cb = () => {
+            if(this.props.isPageView){
+                //this.props.navigation.goBack();
+            } else{
+                this.props.onError(this.props.post._id)
+            }
+        }
+
+        const _that = this;
+        const data = {
+            _id: this.state.post._id
+        }
+
+        Methods.post(`https://supotsu.com/api/feed/remove`, data, {
+            headers: {
+                'Content-Type':'application/json'
+            },
+            success(res){
+                if(res.error){
+                    Methods.alert('Remove failed!')
+                } else{
+                    _that.setState({ post: res }, ()=>{
+                        cb();
+                    });
+                }
+            },
+            error(e){
+            }
+        })
+    }
+
+	inRoleIds = (arr = [], user = false) => {
+		let _c = arr.filter((item, i) => {
+			return Methods.getUser(item.user)._id = Methods.you()._id;
+		});
+
+		return _c.length > 0 ? true : false;
+    }
+
+    renderCamera = () => {
+        const { location, navigation, NativeBase, MaterialIcon, SvgUri, isFab, Fab } = this.props;
+        const { Toast } = NativeBase;
+        const { isCameraOpen } = this.state;
+        const _that = this
+        return (
+            <CameraRoll isSingle={true} fileType="none" pickerType={"Photos"} url={"http://supotsu.com/server/uploadMedia.php?auth0&userType=" + (this.props.isAdmin ? this.props.postToType : "F") + "&userId=" + this.props.postToId} onCancel={() => {
+                this.setState({ isCameraOpen: false });
+            }} onAction={(media = []) => {
+                const cb = () => {
+                    _that.setState({ isCameraOpen: false, media: media[0]['_id'] }, ()=>{
+                        this.comment();
+                    });
+                    //_that.onSendMedia(media[0])
+                }
+                cb()
+            }} hasAction={true} actionBtnText={"DONE"} closeBtnText={"CANCEL"} animationType={"slide"} presentationStyle={'formSheet'} visible={isCameraOpen} {...this.props} toId={this.props.postToId}
+                toType={this.props.postToType} />
+        )
+    }
+
+    renderPhotos = (photos = []) => {
+        const {Swipper} = this.props;
+        const _isFive = photos.length >= 5? true : false;
+
+        if(photos.length === 0){
+            return null;
+        }
+
+        if(photos.length === 1 && photos[0].type==="video"){
+            return(
+                <$StackLayout style={{
+                    height: 350,
+                    backgroundColor: new Color('#fff'),
+                    //flexDirection: (photos.length===2 || photos.length>=5)?'row':'column',
+                    marginBottom: 15
+                }}>
+                    <this.Video showPostControls containerStyle={{
+
+                    }} source={{ uri: `https://supotsu.com/${photos[0].url}` }} video={photos[0]} />
+                </$StackLayout>
+            )
+        }
+
+        if(photos.length === 1 && photos[0].type==="image"){
+            return(
+                <$StackLayout style={{
+                    height: 350,
+                    backgroundColor: new Color('#fff'),
+                    //flexDirection: (photos.length===2 || photos.length>=5)?'row':'column',
+                    marginBottom: 15
+                }}>
+                    <this.Photo source={{ uri: `https://supotsu.com/${photos[0].url}` }} />
+                </$StackLayout>
+            )
+        }
+
+        return(
+            <$StackLayout style={{
+                height: width>height?height:(width>600)?500:width,
+                backgroundColor: new Color('#fff'),
+                flexDirection: (photos.length===2 || photos.length>=5)?'row':'column',
+                marginBottom: 15
+            }}>
+                <Swipper style={{
+                    height: '100%',
+                    width
+                }} showsButtons={false} loadMinimal={true}>
+                    {
+                            photos.map((item, i)=>{
+                                return item.type === "video" ? (<this.Video key={i} source={{ uri: `https://supotsu.com/${item.url}` }} video={item} />) : (
+                                    <this.Photo key={i} source={{ uri: `https://supotsu.com/${item.url}` }} />
+                                )
+                            })
+                        }
+                </Swipper>
+            </$StackLayout>
+        )
+    }
+
+    getUser = (user = { type: 'F', F: Methods.you()}) => {
+        const {type} = user;
+        return user[type];
+    }
+
+    renderCommentBox = (commentProps:any) => {
+        const item = this.state.post;
+
+        const { isDeleting, isLiked, isReplyToComment, isSharing, isCommentBoxExpanded, hasContent, postToken, postEditToken, error, removed, settings, isShowingComments, isEditting, showCommentBox, commentUser = Methods.you() } = this.state;
+		const User = Methods.you();
+        const { style, hideSportLabel, shimmerStyle,  MaterialIcon, SvgUri, isFirstTwo } = this.props;
+        const {...RNRest} = this.props.NativeBase;
+
+		const inRoles = this.inRoleIds((Methods.getUser(item.user).roles ? Methods.getUser(item.user).roles : []), (!Methods.getUser(item.user).roles ? false : item.user));
+		let showPostOwner = (Methods.getUser(item.user)._id === this.props.user._id && Methods.getUser(item.user).type === this.props.userType && Methods.getUser(item.user).type !== "F") ? true : false
+		showPostOwner = inRoles ? inRoles : showPostOwner;
+		const _canComment = settings.filter((item) => {
+			return item.sub === 'can_comment'
+        })
+
+        const ICON_SIZE = 20;
+
+		let can_comment = _canComment.length === 0 ? true : _canComment[0]['value'];
+		can_comment = Methods.you()._id === Methods.getUser(item.user)._id || Methods.you()._id === Methods.getUser(item.userTo)._id ? true : can_comment;
+
+		const _canCommentLinks = settings.filter((item) => {
+			return item.sub === 'can_comment_link'
+		})
+
+		const can_comment_link = _canCommentLinks.length === 0 ? true : _canCommentLinks[0]['value'];
+
+
+
+        //if(item.media.length === 0) return null;
+
+        const _name = (item.sport && item.sport._id !== null)?item.sport.image.split("/")[1]:"";
+        const _icon = Methods.nullify(_name).replace(".svg", "");
+        const previewComments = this.inComments();
+
+        const _that = this;
+
+        if(this.state.isPostingComment && !this.state.isTypingReply){
+            return (
+                <$FlexboxLayout style={{
+                    padding: ms(10),
+                    minHeight: ms(50),
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    paddingBottom: 10
+                }}>
+                    <ActivityIndicator color={Theme2['500']}/>
+                </$FlexboxLayout>
+            )
+        }
+
+        if(commentProps.isGlobal){
+            return(
+                <React.Fragment>
+                    <$GridLayout style={{
+                        margin: 10,
+                        paddingHorizontal: 10,
+                        //marginTop: previewComments.length>0?0:10,
+                        height: 40,
+                        //paddingHorizontal: 10,
+                        //backgroundColor: '#eee',
+                        flexDirection: 'row',
+                        //borderColor: '#ddd',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        //borderWidth: 1,
+                        borderRadius: 40 / 2
+                    }}>
+                        {(!this.props.isPageView && !this.state.isCommentBoxExpanded) &&
+                            <Methods.Avatar
+                                url={inRoles?Methods.getUser(item.user).image:Methods.you().image}
+                                height={30}
+                                hasStroke={false}
+                                hasRadius={true}
+                                resizeMode={"contain"}
+                                {...this.props}
+                            />
+                        }
+                        {(this.props.isPageView || this.state.isCommentBoxExpanded) &&
+                            <TouchableOpacity onPress={() => {
+                                this.setState({ isCameraOpen: true });
+                            }}>
+                                <Icon name={"md-camera"} type={"Ionicons"} style={{
+                                    color: 'green',
+                                    fontSize: 30
+                                }} />
+                            </TouchableOpacity>
+                        }
+
+                        {!this.state.isCommentBoxExpanded &&
+                            <$FlexboxLayout onTap={()=>{
+                                if(!this.props.isPageView  && Platform.OS!=="web"){
+                                    if(Methods.shared('globalTextView')){
+                                        //this.setState({ isCommentBoxExpanded: true  });
+                                        Methods.shared('globalTextView')._setView(({isGlobal = true,...args})=>this.renderCommentBox({...args}))
+                                    }
+                                } else{
+                                    this.setState({ isCommentBoxExpanded: true  });
+                                }
+                            }} style={{
+                                marginLeft: 10,
+                                marginRight: 10,
+                                height: 35,
+                                flexDirection: 'row',
+                                borderColor: '#ddd',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                borderWidth: this.props.isPageView?1:0,
+                                borderRadius: 35 / 2
+                            }}>
+                                <$Label style={{
+                                    paddingLeft: 10,
+                                    paddingRight: 10,
+                                    color: new Color("#999")
+                                }} text={'Write a comment...'}/>
+                            </$FlexboxLayout>
+                        }
+
+                        {this.state.isCommentBoxExpanded &&
+                            <MentionsTextInput
+                                style={[{
+                                    marginHorizontal: 10,
+                                    flex: 1,
+                                    flexDirection: 'column-reverse',
+                                    position: 'relative'
+                                }]}
+                                textInputStyle={{
+                                    minHeight: 35,
+                                    maxHeight: 75,
+                                    paddingVertical: 10,
+                                    paddingHorizontal: 10,
+                                    ...Platform.OS==="ios"?{
+                                        paddingTop: 13
+                                    }:{},
+                                    width: '100%',
+                                    //backgroundColor: '#eee',
+                                    display: 'flex',
+                                    flexDirection: 'row',
+                                    borderColor: '#ddd',
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    borderWidth: 1,
+                                    borderRadius: 35 / 2,
+                                    height: this.state.textInputHeight || 35
+                                }}
+                                ref={(textField)=>{
+                                    this.textField = textField;
+                                }}
+                                autoFocus={true}
+                                multiline={true}
+                                placeholder={'Write something...'}
+                                underlineColorAndroid={"rgba(0,0,0,0)"}
+                                onBlur={() => {
+                                    if (Platform.OS !== 'web') {
+                                        this.setState({ isKeyboardOnly: false, isCommentBoxExpanded: this.state.comment.length === 0?false:true });
+                                        Keyboard.dismiss()
+                                        if(commentProps.onBlur) commentProps.onBlur()
+                                    }
+                                }} onFocus={() => {
+                                    if (Platform.OS !== 'web') {
+                                        this.setState({ isKeyboardOnly: true });
+                                    }
+                                    this.setState({ isSelectingSport: false });
+                                }}
+                                suggestionsPanelStyle={{
+                                    backgroundColor: 'rgba(100,100,100,0.5)'
+                                }}
+                                loadingComponent={() => <View style={{ flex: 1, width, justifyContent: 'center', alignItems: 'center' }}><ActivityIndicator /></View>}
+                                textInputMinHeight={ms(40)}
+                                textInputMaxHeight={ms(75)}
+                                trigger={'@'}
+                                triggerLocation={'anywhere'} // 'new-word-only', 'anywhere'
+                                value={this.state.comment}
+                                onChangeText={(content) => {
+                                    const friends = Methods.you().friends;
+
+                                    let rawText = Methods.nullify(content);
+                                    Methods.listify(friends).forEach((item, i) => {
+                                        const _content = "%" + item._id + "^" + item.type + "%";
+                                        rawText = rawText.replace(item.name, _content);
+                                        rawText = rawText.replace("@", "");
+                                    })
+
+                                    this.setState({ comment: content, rawComment: rawText });
+                                }}
+                                triggerCallback={this.callback.bind(this)}
+                                renderSuggestionsRow={(item, hidePanel) => {
+                                    return Methods.renderSuggestionsRow(item, hidePanel, this.onSuggestionTap.bind(this))
+                                }}
+                                onContentSizeChange={(e) => {
+                                    this.setState({ textInputHeight: e.nativeEvent.contentSize.height });
+                                }}
+                                suggestionsData={Methods.you().friends.filter((item, i) => {
+                                    const _filter = Methods.nullify(this.state.keyword).replace("@", "");
+                                    return item.name.toLowerCase().indexOf(_filter.toLowerCase()) > -1;
+                                })} // array of objects
+                                keyExtractor={(item, index) => item._id}
+                                suggestionRowHeight={height/3}
+                                horizontal={false} // default is true, change the orientation of the list
+                                MaxVisibleRowCount={1}
+                            />
+                        }
+
+                        {(this.props.isPageView || this.state.isCommentBoxExpanded) &&
+                            <TouchableOpacity style={{
+                                height: 35,
+                                paddingHorizontal: 10,
+                                display: 'flex',
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                borderRadius: 35 / 2,
+                                backgroundColor: Theme2['500']
+                            }} onPress={()=>{
+                                if(this.state.comment.length === 0) return;
+
+                                this.comment((user:any)=>{
+                                    if(commentProps.onBlur) commentProps.onBlur()
+                                });
+                            }}>
+                                <$Label style={{
+                                    color: new Color('#fff'),
+                                    marginRight: 5
+                                }} text={"Post as"}/>
+                                {
+                                    <Methods.Avatar
+                                        url={commentUser.image}
+                                        height={25}
+                                        hasStroke={false}
+                                        hasRadius={true}
+                                        resizeMode={"contain"}
+                                        {...this.props}
+                                    />
+                                }
+                            </TouchableOpacity>
+                        }
+                    </$GridLayout>
+                    {this.state.isCameraOpen && this.renderCamera()}
+
+                </React.Fragment>
+            )
+        }
+
+        //if(!this.props.isPageView  && Platform.OS!=="web" && this.state.isCommentBoxExpanded) return null;
+
+        return(
+            <React.Fragment>
+                <View style={{
+                    margin: 10,
+                    paddingHorizontal: 10,
+                    //marginTop: previewComments.length>0?0:10,
+                    minHeight: 40,
+                    //paddingHorizontal: 10,
+                    //backgroundColor: '#eee',
+                    flexDirection: 'row',
+                    //borderColor: '#ddd',
+                    justifyContent: 'center',
+                    alignItems: 'flex-start',
+                    //borderWidth: 1,
+                    borderRadius: 40 / 2
+                }}>
+                    {(!this.props.isPageView && !this.state.isCommentBoxExpanded) &&
+                        <Methods.Avatar
+                            url={inRoles?Methods.getUser(item.user).image:Methods.you().image}
+                            height={30}
+                            hasStroke={false}
+                            hasRadius={true}
+                            resizeMode={"contain"}
+                            {...this.props}
+                        />
+                    }
+                    {(this.props.isPageView || this.state.isCommentBoxExpanded) &&
+                        <TouchableOpacity onPress={() => {
+                            this.setState({ isCameraOpen: true });
+                        }}>
+                            <Icon name={"md-camera"} style={{
+                                color: 'green',
+                                fontSize: 30
+                            }} />
+                        </TouchableOpacity>
+                    }
+
+                    {(!this.state.isCommentBoxExpanded && !this.props.isPageView) &&
+                        <TouchableOpacity onPress={()=>{
+                            if(!this.props.isPageView  && Platform.OS!=="web"){
+                                if(Methods.shared('HomeScreen') && this.props.isHome){
+                                    if(this.state.hasExternalTextInput){
+                                        Methods.shared('HomeScreen')._setTimelineState(false);
+                                        this.setState({ hasExternalTextInput: false });
+                                    } else{
+                                        Methods.shared('HomeScreen')._setTimelineState(this);
+                                        this.setState({ hasExternalTextInput: true });
+                                    }
+                                }
+                            } else{
+                                this.setState({ isCommentBoxExpanded: true  });
+                            }
+                        }} style={{
+                            marginHorizontal: 10,
+                            height: 35,
+                            flex: 1,
+                            //backgroundColor: '#eee',
+                            display: 'flex',
+                            flexDirection: 'row',
+                            borderColor: '#ddd',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            borderWidth: this.props.isPageView?1:0,
+                            borderRadius: 35 / 2
+                        }}>
+                            <Text style={{
+                                    flex: 1,
+                                    paddingHorizontal: 10,
+                                    color: "#999"
+                                }}>{isReplyToComment?"Write a reply...":"Write a comment..."}</Text>
+                        </TouchableOpacity>
+                    }
+
+                    {(this.state.isCommentBoxExpanded || this.props.isPageView) &&
+                        <RichInputField
+                            containerStyle={[{
+                                marginHorizontal: 10,
+                                flex: 1,
+                                borderColor: '#ddd',
+                                borderWidth: 1,
+                                borderRadius: 35 / 2,
+                            }]}
+                            isTop={false}
+                            textInputStyle={{
+                                minHeight: 35,
+                                maxHeight: 75,
+                                paddingVertical: 10,
+                                paddingHorizontal: 10,
+                                ...Platform.OS==="ios"?{
+                                    paddingTop: 13
+                                }:{},
+                                width: '100%',
+                                //backgroundColor: '#eee',
+                                display: 'flex',
+                                flexDirection: 'row',
+                                borderColor: '#ddd',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                borderWidth: 1,
+                                borderRadius: 35 / 2,
+                                height: this.state.textInputHeight || 35
+                            }}
+                            ref={(textField)=>{
+                                this.textField = textField;
+                            }}
+                            multiline={true}
+                            placeholder={isReplyToComment?"Write a reply...":"Write a comment..."}
+                            underlineColorAndroid={"rgba(0,0,0,0)"}
+                            onBlur={() => {
+                                if (Platform.OS !== 'web') {
+                                    this.setState({ isKeyboardOnly: false, isCommentBoxExpanded: this.state.comment.length === 0?false:true });
+                                    Keyboard.dismiss()
+                                }
+                            }} onFocus={() => {
+                                if (Platform.OS !== 'web') {
+                                    this.setState({ isKeyboardOnly: true });
+                                }
+                                this.setState({ isSelectingSport: false });
+                            }}
+                            suggestionsPanelStyle={{
+                                backgroundColor: 'rgba(100,100,100,0.5)'
+                            }}
+                            loadingComponent={() => <View style={{ flex: 1, width, justifyContent: 'center', alignItems: 'center' }}><ActivityIndicator /></View>}
+                            textInputMinHeight={ms(40)}
+                            textInputMaxHeight={ms(75)}
+                            trigger={'@'}
+                            triggerLocation={'anywhere'} // 'new-word-only', 'anywhere'
+                            value={this.state.comment}
+                            onChangeText={(content) => {
+                                const friends = Methods.you().friends;
+
+                                let rawText = Methods.nullify(content);
+                                Methods.getTaggableUsers().forEach((item, i) => {
+                                    const _content = "%" + item._id + "^" + item.type + "%";
+                                    rawText = rawText.replace(item.name, _content);
+                                    rawText = rawText.replace("@", "");
+                                })
+
+                                this.setState({ comment: content, content, rawComment: rawText });
+                            }}
+                            triggerCallback={this.callback.bind(this)}
+                            renderSuggestionsRow={(item, hidePanel) => {
+                                return Methods.renderSuggestionsRow(item, hidePanel, this.onSuggestionTap.bind(this))
+                            }}
+                            onContentSizeChange={(e) => {
+                                this.setState({ textInputHeight: e.nativeEvent.contentSize.height });
+                            }}
+                            suggestionsData={Methods.getTaggableUsers().filter((item, i) => {
+                                const _filter = Methods.nullify(this.state.keyword).replace("@", "");
+                                return item.name.toLowerCase().indexOf(_filter.toLowerCase()) > -1;
+                            })} // array of objects
+                            keyExtractor={(item, index) => item._id}
+                            suggestionRowHeight={height/3}
+                            horizontal={false} // default is true, change the orientation of the list
+                            MaxVisibleRowCount={1}
+                            textInputProps={{
+                                autoFocus:false
+                            }}
+                        />
+                    }
+
+                    {((this.props.isPageView || this.state.isCommentBoxExpanded) && this.props.user.pages.length === 0) &&
+                        <TouchableOpacity style={{
+                            height: 35,
+                            paddingHorizontal: 10,
+                            display: 'flex',
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            borderRadius: 35 / 2,
+                            backgroundColor: Theme2['500']
+                        }} onPress={()=>{
+                            //if(this.state.comment.length === 0) return;
+
+                            if(isReplyToComment){
+                                this.reply()
+                            } else{
+                                this.comment();
+                            }
+                        }}>
+                            <Text style={{
+                                color: '#fff',
+                                marginRight: 5
+                            }}>{isReplyToComment?"Reply as":"Post as"} </Text>
+                            {
+                                <Methods.Avatar
+                                    url={commentUser.image}
+                                    height={25}
+                                    hasStroke={false}
+                                    hasRadius={true}
+                                    resizeMode={"contain"}
+                                    {...this.props}
+                                />
+                            }
+                        </TouchableOpacity>
+                    }
+                    {((this.props.isPageView || this.state.isCommentBoxExpanded) && this.props.user.pages.length > 0) &&
+                        <WhoShouldSeeTapPopUp
+                            TriggerButton={({ label = false, ...props }) => {
+                                return (
+                                    <TouchableOpacity
+                                        style={{
+                                            height: 35,
+                                            paddingHorizontal: 10,
+                                            display: 'flex',
+                                            flexDirection: 'row',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            borderRadius: 35 / 2,
+                                            backgroundColor: Theme2['500']
+                                        }} {...props}>
+                                        <Text style={{
+                                            color: '#fff',
+                                            marginRight: 5
+                                        }}>{isReplyToComment?"Reply as":"Post as"} </Text>
+                                        {
+                                            <Methods.Avatar
+                                                url={commentUser.image}
+                                                height={25}
+                                                hasStroke={false}
+                                                hasRadius={true}
+                                                resizeMode={"contain"}
+                                                {...this.props}
+                                            />
+                                        }
+                                    </TouchableOpacity>
+                                )
+                            }}
+                        >
+                            <View style={{
+                                height: 50,
+                                borderRadius: 50 / 2,
+                                width: width - 60,
+                                marginHorizontal: 30,
+                                maxWidth: width,
+                                //backgroundColor: '#fff',
+                                position: 'absolute',
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                alignSelf: 'center',
+                                bottom: 0,
+                                paddingHorizontal: ms(10),
+                                marginBottom: Methods.getStatusBarHeight() + 20
+                            }}>
+                                {
+                                    Methods.whoToSeeIcons().map((icon, i) => {
+                                        return (
+                                            <TouchableOpacity key={icon.key} onPress={() => {
+                                                this.setState({ isSelectingUser: true, activeWhoToSeeTab: icon, activeIndex: i });
+                                            }} style={{
+                                                width: 35,
+                                                height: 35,
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                marginLeft: width < 340 ? 7 : 10,
+                                                justifyContent: 'center',
+                                                backgroundColor: icon.bg ? icon.bg : "transparent",
+                                                borderRadius: icon.withPadding ? 100 : 100,
+                                                overflow: icon.withPadding ? 'hidden' : 'visible'
+                                            }}>
+                                                <SvgUri height={icon.withPadding ? 25 : 35} width={icon.withPadding ? 25 : 35} source={{ uri: icon.img }} />
+                                            </TouchableOpacity>
+                                        )
+                                    })
+                                }
+                            </View>
+                        </WhoShouldSeeTapPopUp>
+                    }
+                </View>
+                {this.state.isCameraOpen && this.renderCamera()}
+                {this.state.isSelectingUser &&
+                        <WhoShouldSee {...this.props} activeIndex={this.state.activeIndex} active={this.state.activeWhoToSeeTab} onCancel={() => {
+                            this.setState({ isSelectingUser: false });
+                        }} onAction={(audience = []) => {
+                            const cb = () => {
+                                //post.audienceList = audience;
+                                this.setState({ isSelectingUser: false, audience, isWhoToSeeContent: false });
+                                if(isReplyToComment){
+                                    this.reply(audience[0])
+                                } else{
+                                    this.comment(audience[0]);
+                                }
+                            }
+                            cb()
+                        }} hasAction={true} actionBtnText={"DONE"} closeBtnText={"CANCEL"} animationType={"slide"} presentationStyle={'formSheet'} visible={this.state.isSelectingUser} single={true} />
+                    }
+            </React.Fragment>
+        )
+    }
+
+    renderBody = (hasHeader = true) => {
+        const item = this.state.post;
+
+        const { isDeleting, isSharing, isCommentBoxExpanded, hasContent, postToken, postEditToken, error, removed, settings, isShowingComments, isEditting, showCommentBox } = this.state;
+		const User = Methods.you();
+        const { style, hideSportLabel, shimmerStyle,  MaterialIcon, SvgUri, isFirstTwo, ReadMore, ViewOverflow } = this.props;
+        const {...RNRest} = this.props.NativeBase;
+
+        const isLiked = item.likes.filter((item, i)=>{
+            if(item.type){
+                const _user = Methods.getUser(item.user);
+                return _user._id === Methods.you()._id
+            } else{
+                return false
+            }
+        }).length> 0?true:false;
+
+		const inRoles = this.inRoleIds((Methods.getUser(item.user).roles ? Methods.getUser(item.user).roles : []), (!Methods.getUser(item.user).roles ? false : item.user));
+		let showPostOwner = (Methods.getUser(item.user)._id === this.props.user._id && Methods.getUser(item.user).type === this.props.userType && Methods.getUser(item.user).type !== "F") ? true : false
+		showPostOwner = inRoles ? inRoles : showPostOwner;
+		const _canComment = settings.filter((item) => {
+			return item.sub === 'can_comment'
+        })
+
+        const ICON_SIZE = 20;
+
+		let can_comment = _canComment.length === 0 ? true : _canComment[0]['value'];
+		can_comment = Methods.you()._id === Methods.getUser(item.user)._id || Methods.you()._id === Methods.getUser(item.userTo)._id ? true : can_comment;
+
+		const _canCommentLinks = settings.filter((item) => {
+			return item.sub === 'can_comment_link'
+		})
+
+		const can_comment_link = _canCommentLinks.length === 0 ? true : _canCommentLinks[0]['value'];
+
+
+
+        //if(item.media.length === 0) return null;
+
+        const measureText = (str, fontSize = 10) => {
+            const widths = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.2796875, 0.2765625, 0.3546875, 0.5546875, 0.5546875, 0.8890625, 0.665625, 0.190625, 0.3328125, 0.3328125, 0.3890625, 0.5828125, 0.2765625, 0.3328125, 0.2765625, 0.3015625, 0.5546875, 0.5546875, 0.5546875, 0.5546875, 0.5546875, 0.5546875, 0.5546875, 0.5546875, 0.5546875, 0.5546875, 0.2765625, 0.2765625, 0.584375, 0.5828125, 0.584375, 0.5546875, 1.0140625, 0.665625, 0.665625, 0.721875, 0.721875, 0.665625, 0.609375, 0.7765625, 0.721875, 0.2765625, 0.5, 0.665625, 0.5546875, 0.8328125, 0.721875, 0.7765625, 0.665625, 0.7765625, 0.721875, 0.665625, 0.609375, 0.721875, 0.665625, 0.94375, 0.665625, 0.665625, 0.609375, 0.2765625, 0.3546875, 0.2765625, 0.4765625, 0.5546875, 0.3328125, 0.5546875, 0.5546875, 0.5, 0.5546875, 0.5546875, 0.2765625, 0.5546875, 0.5546875, 0.221875, 0.240625, 0.5, 0.221875, 0.8328125, 0.5546875, 0.5546875, 0.5546875, 0.5546875, 0.3328125, 0.5, 0.2765625, 0.5546875, 0.5, 0.721875, 0.5, 0.5, 0.5, 0.3546875, 0.259375, 0.353125, 0.5890625]
+            const avg = 0.5279276315789471
+            return str
+                .split('')
+                .map(c => c.charCodeAt(0) < widths.length ? widths[c.charCodeAt(0)] : avg)
+                .reduce((cur, acc) => acc + cur) * fontSize
+        }
+
+        const _name = (item.sport && item.sport._id !== null)?item.sport.image.split("/")[1]:"";
+        const _icon = Methods.nullify(_name).replace(".svg", "");
+        const _width = width - 60;
+        const linkCrop = item.hasLink?30:8;
+        const stringLength = item.hasLink ?(measureText(Methods.nullify(item.content),15) / _width) * 10:(measureText(Methods.nullify(item.content),15) / _width) * 8;
+        const moreThan299 = Methods.nullify(item.content).length>=stringLength?true:false;
+        const moreThanTwoLines = moreThan299?[1,2,3,4,5,6,7,8,9]:Methods.nullify(item.content).split("\n");
+
+        const previewComments = this.inComments().filter((item)=>!this.state.errorComments.includes(item._id));
+
+        const _that = this;
+
+        const {renderCommentBox} = this
+
+        const filteredComments = previewComments;
+
+        const isSingleVideo = (item.media.length === 1 && (item.media[0] && item.media[0].type==="video"));
+
+        return(
+            <TouchableOpacity activeOpacity={0.9} onPress={()=>{
+                if(this.props.isPageView) {
+                    this.setState({ isReplyComment: false, isReplyToComment: false, isReplyToCommentUser: false, comment: '', rawComment: '', content: '' });
+                    return;
+                };
+                const _user = item.user;
+                const route = "Post";
+                NavigationService.navigate({routeName:route,params: {post:item, screenId: item._id}, key: item._id})
+            }} onLongPress={()=>{
+                this.setState({ isShowingComments: true });
+            }} style={{
+                borderColor: "#ddd",
+                ...(this.props.isShared && (item.media.length === 0 && !item.hasLink))?{
+                    paddingTop: 15,
+                }:{},
+                ...this.props.isShared?{
+                    paddingBottom: 5
+                }:{
+
+                },
+                borderWidth: this.props.isShared?1:0,
+                width
+            }}>
+                <ViewOverflow style={{/*minHeight:100, */ backgroundColor: '#fff', marginBottom: 10, ...(hasHeader)?{}:{
+                    marginTop: 10,
+                    paddingTop: this.props.isPageView?0:15,
+                    width
+                }}}>
+                    {(hasHeader && !this.props.isShared) &&
+                        <View style={{
+                            //height: 70,
+                            paddingVertical: 15,
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            paddingHorizontal: 15
+                        }}>
+                            <View style={{
+                                flex: 1,
+                                display: 'flex',
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                            }} activeOpacity={0.9}>
+                                <TouchableOpacity style={{
+                                    width: 40,
+                                    height: 40,
+                                    borderRadius: 20,
+                                }} onPress={() => {
+                                    const _user = item.user;
+                                    const route = Methods.getRouteName(_user.type).name;
+                                    NavigationService.navigate({ routeName: route, params: _user, key: _user.user })
+                                }}>
+                                    {Platform.OS === 'web' && <SvgUri width={40} resizeMode="contain" height={40} source={{ uri: Methods.getUser(item.user).image }} />}
+                                    {Platform.OS !== 'web' && Methods.renderAvatar({ url: Methods.getUser(item.user).image, withOnlineCheck:!Methods.isYou(Methods.getUser(item.user)._id, Methods.getUser(item.owner).type), hasRadius: true, resizeMode: "contain", height: 40, props: this.props, hasStroke: false })}
+                                </TouchableOpacity>
+
+                                <View style={{
+                                    marginHorizontal: 15,
+                                    alignItems: 'center',
+                                    flexDirection: 'row',
+                                    flexWrap: 'wrap',
+                                    flex: 1
+                                }}>
+                                    {!item.isShared &&
+                                        <Text numberOfLines={1} style={{
+                                            fontSize: 16
+                                        }}>{Methods.nullify(Methods.getUser(item.userTo).name).toLowerCase()}</Text>
+                                    }
+                                    {item.isShared &&
+                                        <Text numberOfLines={1} style={{
+                                            fontSize: 16
+                                        }}>
+                                            <Text style={{
+                                                fontSize: 16
+                                            }}>{Methods.nullify(Methods.getUser(item.userTo).name).toLowerCase()}</Text>
+                                            <Text style={{fontSize:16, color: "#888"}}> shared a </Text>
+                                            <Text style={{
+                                                fontSize: 16
+                                            }}>{Methods.nullify(item.shareType).toLowerCase()}</Text>
+                                        </Text>
+                                    }
+                                    <View className={"wordwrap"} style={{
+                                        width:'100%'
+                                    }}>
+                                        <Text numberOfLines={1} style={{fontSize:10, color: "#888"}}>{Methods.getDateFrom(item.timeAgo, true).toUpperCase()}</Text>
+                                    </View>
+                                </View>
+
+                                {item.sport && item.sport._id !== null &&
+                                !hideSportLabel &&
+                                !item.is_live &&
+                                !item.isShared && (
+                                    <View style={{ /*backgroundColor: item.sport.color,*/ flexDirection:'row', alignItems: 'center',paddingVertical:0,paddingHorizontal: 0 }}>
+
+                                        <SvgUri noLoader height={20} width={20} source={{uri:`https://supotsu.com/${item.sport.image.replace("_wht","_drk")}`}} />
+                                    </View>
+                                )}
+                            </View>
+                        </View>
+                    }
+                    <View>
+                        {this.renderPhotos(item.media)}
+                        {!this.props.isShared && this.renderSharedObject()}
+                        {!this.props.isShared && item.hasLink &&
+                             <LinkView {...this.props} link={item.links[0]}/>
+                        }
+                        {!item.content &&
+                            <Text style={{
+                                paddingHorizontal: 15,
+                                marginBottom: (isSingleVideo || this.props.isShared)?15:0,
+                                fontSize: ((!item.isShared || item.media.length === 0) && Methods.nullify(item.content).length <= 100)?15:15
+                            }}>{item.rawContent}</Text>
+                        }
+                        {this.props.isShared &&
+                            <View style={{
+                                //height: 70,
+                                paddingBottom: 15,
+                                paddingTop: 0,
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                paddingHorizontal: 15,
+
+                            }}>
+                                <View style={{
+                                    flex: 1,
+                                    display: 'flex',
+                                    flexDirection: 'row',
+                                    alignItems: 'center',
+
+                                }} activeOpacity={0.9}>
+                                    <TouchableOpacity style={{
+                                        width: 40,
+                                        height: 40,
+                                        borderRadius: 20,
+                                    }} onPress={() => {
+                                        const _user = item.user;
+                                        const route = Methods.getRouteName(_user.type).name;
+                                        NavigationService.navigate({ routeName: route, params: _user, key: _user.user })
+                                    }}>
+                                        {Platform.OS === 'web' && <SvgUri width={40} resizeMode="contain" height={40} source={{ uri: Methods.getUser(item.user).image }} />}
+                                        {Platform.OS !== 'web' && Methods.renderAvatar({ url: Methods.getUser(item.user).image, withOnlineCheck:!Methods.isYou(Methods.getUser(item.user)._id, Methods.getUser(item.owner).type), hasRadius: true, resizeMode: "contain", height: 40, props: this.props, hasStroke: false })}
+                                    </TouchableOpacity>
+
+                                    <View style={{
+                                        marginHorizontal: 15,
+                                        alignItems: 'center',
+                                        flexDirection: 'row',
+                                        flexWrap: 'wrap',
+                                        flex: 1
+                                    }}>
+                                        <Text numberOfLines={1} style={{
+                                            fontSize: 16
+                                        }}>{Methods.nullify(Methods.getUser(item.userTo).name).toLowerCase()}</Text>
+                                        <View className={"wordwrap"} style={{
+                                            width:'100%'
+                                        }}>
+                                            <Text numberOfLines={1} style={{fontSize:10, color: "#888"}}>{Methods.getDateFrom(item.timeAgo, true).toUpperCase()}</Text>
+                                        </View>
+                                    </View>
+
+                                    {item.sport && item.sport._id !== null &&
+                                    !hideSportLabel &&
+                                    !item.is_live &&
+                                    !item.isShared && (
+                                        <View style={{ /*backgroundColor: item.sport.color,*/ flexDirection:'row', alignItems: 'center',paddingVertical:0,paddingHorizontal: 0 }}>
+
+                                            <SvgUri noLoader height={20} width={20} source={{uri:`https://supotsu.com/${item.sport.image.replace("_wht","_drk")}`}} />
+                                        </View>
+                                    )}
+                                </View>
+
+                                <View style={item.media.length>0?{
+                                    height: 25,
+                                    width: 25,
+                                    //width: 50,
+                                    backgroundColor: '#fff',
+                                    borderColor: '#ccc',
+                                    borderWidth: 0.5,
+                                    position: 'absolute',
+                                    flexDirection: 'row',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    top: 0,
+                                    right: 0,
+                                    marginTop: -26.5,
+                                    //paddingHorizontal: 10,
+                                    borderRadius: 25/2,
+                                    marginRight: 15
+                                }:{
+                                    display: 'none'
+                                }}>
+                                    <Icon type={"Entypo"} name={"retweet"} style={{
+                                        fontSize: 25/2,
+                                        color: '#999'
+                                    }} />
+                                </View>
+                            </View>
+                        }
+                        {item.content &&
+                            <TouchableWithoutFeedback onPress={this.handleDoubleTap}>
+                                <View style={{
+                                    flexDirection: !this.props.isShared?'column':'row',
+                                    //alignItems: 'flex-end'
+                                    paddingHorizontal: 15,
+                                    marginTop: item.isShared?15:0,
+                                    marginBottom: isSingleVideo?15:0,
+                                }}>
+                                    {!this.props.isShared &&
+                                        <ReadMore
+                                            numberOfLines={4}
+                                            style={{
+                                                fontSize: ((!item.isShared || item.media.length === 0) && Methods.nullify(item.content).length <= 100)?15:15,
+                                                flex: 1
+                                            }}
+                                        >
+
+                                            <RichTextView style={{
+                                                paddingHorizontal: 15,
+                                                //flex: 1,linkCrop
+                                                marginBottom: (isSingleVideo || this.props.isShared)?15:0,
+                                                fontSize: ((!item.isShared || item.media.length === 0) && Methods.nullify(item.content).length <= 100)?15:15,
+                                            }}
+                                            //allowFont
+                                            onUserPress={(user)=>{
+                                                if(user){
+                                                    const route = Methods.getRouteName(user.type).name;
+                                                    NavigationService.navigate({routeName:route,params: user, key: user._id})
+                                                }
+                                            }} users={Methods.getTaggableUsers(item.contentUsers)} content={Methods.nullify(item.rawContent).length === 0 ? item.content.trim() : Methods.nullify(item.rawContent).trim()} userStyle={{}} hashStyle={{}} skillStyle={{}} linkStyle={{}} />
+
+                                        </ReadMore>
+                                    }
+
+                                    {this.props.isShared &&
+                                        <View style={{
+                                            flex: 1,
+                                            flexDirection: 'row',
+                                            paddingHorizontal: 0,
+                                            alignItems: 'center'
+                                        }}>
+                                            <ReadMore
+                                                numberOfLines={4}
+                                                style={{
+                                                    fontSize: ((!item.isShared || item.media.length === 0) && Methods.nullify(item.content).length <= 100)?15:15,
+                                                    flex: 1
+                                                }}
+                                            >
+
+                                                <RichTextView style={{
+                                                    paddingHorizontal: 15,
+                                                    //flex: 1,linkCrop
+                                                    fontSize: ((!item.isShared || item.media.length === 0) && Methods.nullify(item.content).length <= 100)?15:15,
+                                                }}
+                                                //allowFont
+                                                onUserPress={(user)=>{
+                                                    if(user){
+                                                        const route = Methods.getRouteName(user.type).name;
+                                                        NavigationService.navigate({routeName:route,params: user, key: user._id})
+                                                    }
+                                                }} users={Methods.getTaggableUsers(item.contentUsers)} content={Methods.nullify(item.rawContent).length === 0 ? item.content.trim() : Methods.nullify(item.rawContent).trim()} userStyle={{}} hashStyle={{}} skillStyle={{}} linkStyle={{}} />
+
+                                            </ReadMore>
+                                        </View>
+                                    }
+
+                                    {this.props.isShared &&
+                                    <View style={{
+                                        //flex: 1,
+                                        flexDirection: 'row',
+                                        paddingHorizontal: 0,
+                                        alignItems: 'center'
+                                    }}>
+                                        {item.likes.length > 0 && <Text style={{ color: '#999', marginRight: 5, fontSize: 12 }}>{Methods.shortDigit(item.likes.length, "Like").data}</Text>}
+                                        {item.comments.length > 0 && <Text style={{ color: '#999', marginRight: 5, fontSize: 12 }}>{Methods.shortDigit(item.comments.length, "Comment").data}</Text>}
+                                        {item.shares.length > 0 && <Text style={{ color: '#999', fontSize: 12 }}>{Methods.shortDigit(item.shares.length, "Share").data}</Text>}
+                                    </View>
+                                }
+                                </View>
+
+
+                            </TouchableWithoutFeedback>
+                        }
+                    </View>
+
+                    {/*Controls*/}
+
+                    {!this.props.isShared && !item.is_live && !(item.media.length === 1 && (item.media[0] && item.media[0].type==="video")) &&
+                        this.renderPostControls()
+                    }
+
+                    {this.is && !this.props.isShared && !props.isPageView && previewComments.length > 1 &&
+                        <View style={{
+                            //height: 50,
+                            //backgroundColor: '',
+                            padding: 15,
+                            paddingHorizontal: 15,
+                            paddingBottom: 0
+                        }}>
+                            <Text onPress={()=>{
+
+                            }} style={{color:'#999', marginBottom: 10}}>{`View all ${Methods.shortDigit(item.comments.length).text} comments`}</Text>
+                        </View>
+                    }
+                    {(!this.props.isShared && !this.props.isPageView ) && previewComments.length > 0 && !isFirstTwo &&
+                        <View style={{
+                            //height: 50,
+                            backgroundColor: 'rgb(241,241,241)',
+                            //padding: 15,
+                            //paddingHorizontal: 15,
+                            paddingBottom: 0
+                        }}>
+                            {
+                                previewComments.filter((comment, i)=>{
+                                    return comment.content.length === 0 && comment.length?false:true
+                                }).map((comment, i)=>{
+                                    if(i>=1) return null;
+                                    return(
+                                        <ContentEditor contentID={`comment-${comment._id}`} author={Methods.getUser(comment.user)} type={'comment'} comment={comment.content} content={comment.content} rawContent={comment.rawContent} {...this.props}>
+                                            {(data)=>{
+                                                return(
+                                                    <PostComment onReply={()=>{}} onCommentConnectToSocket={this.onCommentConnectToSocket} onReplyConnectToSocket={this.onReplyConnectToSocket} preview={true} onReplyFocus={()=>{
+                                                        this.setState({ isTypingReply: true });
+                                                    }}  onReplyBlur={()=>{
+                                                        this.setState({ isTypingReply: false });
+                                                    }}  comment={comment} key={comment._id} {...this.props} io={this.io} editorData={data} onError={()=>{
+                                                        this.state.errorComments.push(comment._id);
+                                                        this.setState({
+                                                            errorComments: this.state.errorComments
+                                                        })
+                                                    }}/>
+                                                )
+                                            }}
+                                        </ContentEditor>
+                                    )
+                                })
+                            }
+                        </View>
+                    }
+
+                    {!this.props.isShared && this.props.isPageView &&
+                        <View style={{
+                            //height: 50,
+                            //backgroundColor: '#eee',
+                            //padding: 15,
+                            //paddingHorizontal: 15,
+                            paddingBottom: 0,
+                            borderTopColor: '#ddd',
+                            borderTopWidth: 1
+                        }}>
+                            {this.state.hasComments &&
+                                item.comments.filter((item)=>!this.state.errorComments.includes(item._id)).filter((comment, i) => {
+                                    return comment.content.length === 0 && comment.length ? false : true
+                                }).map((comment, i) => {
+                                    //if (i >= 1) return null;
+                                    return (
+                                        <ContentEditor contentID={`comment-${comment._id}`} author={Methods.getUser(comment.user)} type={'comment'} comment={comment.content} content={comment.content} rawContent={comment.rawContent} {...this.props}>
+                                            {(data)=>{
+                                                return(
+                                                    <PostComment editorData={data} onReply={(user = false)=>{
+                                                        this.onReply(comment, user);
+                                                    }} onCommentConnectToSocket={this.onCommentConnectToSocket} onReplyConnectToSocket={this.onReplyConnectToSocket} preview={!true} onReplyFocus={() => {
+                                                        this.setState({ isTypingReply: true });
+                                                    }} onReplyBlur={() => {
+                                                        this.setState({ isTypingReply: false });
+                                                    }} comment={comment} key={comment._id} {...this.props} io={this.io} editorData={data} onError={()=>{
+                                                        this.state.errorComments.push(comment._id);
+                                                        this.setState({
+                                                            errorComments: this.state.errorComments
+                                                        })
+                                                    }} />
+                                                )
+                                            }}
+                                        </ContentEditor>
+
+                                    )
+                                })
+                            }
+                            {!this.state.hasComments &&
+                                <LoadingState style={{
+                                    height: 50,
+                                }}/>
+                            }
+                            {this.state.hasComments && item.comments.filter((comment, i) => {
+                                    return comment.content.length === 0 && comment.length ? false : true
+                                }).length === 0 &&
+                                <Empty text={"Be the first to comment!"}/>
+                            }
+                        </View>
+                    }
+
+
+                    {!this.props.isShared && previewComments.length > 0 && !this.props.isPageView &&
+                        renderCommentBox()
+                    }
+                    {!this.props.isShared && (previewComments.length === 0 && showCommentBox) && !this.props.isPageView &&
+                        renderCommentBox()
+                    }
+                    {isShowingComments && Platform.OS === "web" && this.renderComments()}
+                    {isEditting && this.renderEditor()}
+                    <ConfirmPopUp ref={(ref)=>this.confirmBox = ref} {...this.props} message={"Are sure you want to remove this post?"} positiveText={"Remove"} negativeText={"Cancel"} positiveAction={()=>{
+                        this.remove()
+                    }}>
+
+                    </ConfirmPopUp>
+                </ViewOverflow>
+            </TouchableOpacity>
+        )
+    }
+
+    /**
+     * SHARED OBJECTS
+     * 1. POST
+     * 2. SESSION FILE
+     * 3. SESSION
+     * 4. LIVE VIDEO
+     */
+
+    Post = () => {
+
+    }
+
+    PostSessionFile = () => {
+
+    }
+
+    PostSession = () => {
+
+    }
+
+    PostShared = ({props}) => {
+        return <$StackLayout />
+    }
+
+    renderSharedObject = () => {
+        //if(!this.state.post.isShared || !this.state.post.is_live) return null;
+        const item = this.state.post;
+
+        const getSharedObject = (obj = {type:'POST', post: {}}) => {
+            return obj[obj.type];
+        }
+
+        const sharedObject = getSharedObject(item.sharedObject);
+
+        return(
+            <React.Fragment>
+                {item.isShared &&
+                    item.shareType === "POST" &&
+                    !item.is_live && (
+                        <PostItem {...this.props} isShared={true} isPageView={false} post={sharedObject}/>
+                    )}
+                {item.isShared &&
+                    item.shareType === "SESSIONFILE" &&
+                    !item.is_live && (
+                        <EmbedMaterial {...this.props} isFile={true} file={sharedObject} isShared={true} />
+                    )}
+                {item.isShared &&
+                    item.shareType === "SESSION" &&
+                    !item.is_live && (
+                        <EmbedMaterial {...this.props} isFile={false} session={sharedObject} isShared={true} />
+                    )}
+                {item.is_live && (
+                    <Video isEmbed={true}
+                        video={false}
+                        videos={[]}
+                        id={item.video_id}
+                        {...this.props}
+                        key={item.video_id}
+                    >
+                        {({ video = false, videos = [], isLoading = false }) =>{
+                            if(isLoading){
+                                return(
+                                    <React.Fragment>
+                                        <LoadingState />
+                                        {this.renderPostControls({viewCount:-1})}
+                                    </React.Fragment>
+                                )
+                            }
+
+                            if(!video){
+                                return (
+                                    <React.Fragment>
+                                        {this.renderPostControls({viewCount:-1})}
+                                    </React.Fragment>
+                                );
+                            }
+
+                            return(
+                                <React.Fragment>
+                                    <GenericFile {...this.props} isShared={true} file={false} isVideo video={video} key={video._id?video._id:item.video_id} isGrid={false}/>
+                                    {this.renderPostControls({viewCount:video.views})}
+                                </React.Fragment>
+                            )
+                        }}
+                    </Video>
+                )}
+            </React.Fragment>
+        )
+    }
+
+    Photo = (props_:any) => {
+        const { SvgUri } = this.props;
+        const {source, containerStyle,...props} = props_;
+        return(
+            <TouchableOpacity activeOpacity={1} style={[{flex:1},containerStyle]}><SvgUri source={source} style={{flex:1, width}}/></TouchableOpacity>
+        )
+    }
+
+    Video = (p:any) => {
+        const {FancyVideo} = this.props;
+        const {source, video, oldView = false, showPostControls = false, containerStyle, ...props} = p;
+        if(!oldView){
+            return(
+                <TouchableOpacity activeOpacity={1} style={[{
+                    flex:1,
+                    backgroundColor: 'black',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                },containerStyle]} onPress={()=>{
+                    const route = `Video`;
+                    NavigationService.navigate({ routeName: route, params: {video : false, videos: []}, key: source.uri })
+                }}>
+                    <Video isEmbed={true}
+                        video={false}
+                        videos={[]}
+                        id={source.uri}
+                        {...this.props}
+                        key={source.uri}
+                    >
+                        {({ video = false, videos = [], isLoading = false }) =>{
+                            if(isLoading){
+                                return(
+                                    <View style={{
+                                        flex:1,
+                                        width
+                                    }}>
+                                        <LoadingState style={{backgroundColor: 'black', flex: 1}} />
+                                        {showPostControls && this.renderPostControls({viewCount:0})}
+                                    </View>
+                                )
+                            }
+
+                            if(!video){
+                                return (
+                                    <React.Fragment>
+                                        <FancyVideo inlineOnly={true} autoPlay={false} source={source} style={{flex:1, backgroundColor: '#000', width}}/>
+                                        {showPostControls && this.renderPostControls({viewCount:0})}
+                                    </React.Fragment>
+                                );
+                            }
+
+                            return(
+                                <React.Fragment>
+                                    <FancyVideo inlineOnly={true} autoPlay={false} source={{uri:video.src}} style={{flex:1, backgroundColor: '#000', width}}/>
+                                    {showPostControls && this.renderPostControls({viewCount:video.views})}
+                                </React.Fragment>
+                            )
+                        }}
+                    </Video>
+                </TouchableOpacity>
+            )
+        }
+        return(
+            <TouchableOpacity activeOpacity={1} style={[{
+                flex:1,
+                backgroundColor: 'black',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+            },containerStyle]} onPress={()=>{
+                const route = `Video`;
+                NavigationService.navigate({ routeName: route, params: {video : false, videos: []}, key: source.uri })
+            }}>
+
+                <FancyVideo inlineOnly={true} autoPlay={false} source={source} style={{flex:1, backgroundColor: '#000'}}/>
+            </TouchableOpacity>
+        )
+    }
+
+    renderAvatar = ({url = '', height = 50}) => {
+        const {...Props} = this.props;
+        return(
+            <$Image src={url} col={0} borderRadius={20} height={{ value: 40, unit: 'dip' }} width={{ value: 40, unit: 'dip' }} />
+        )
+    }
+
+    renderFullPage = () => {
+        const item = this.state.post;
+		const { isDeleting, isLiked, commentsLimit, isCommentBoxExpanded, isSharing, hasContent, postToken, postEditToken, error, removed, settings, isShowingComments, isEditting, showCommentBox } = this.state;
+		const User = Methods.you();
+        const { style, hideSportLabel, shimmerStyle,  MaterialIcon, SvgUri, isFirstTwo } = this.props;
+        const {...RNRest} = this.props.NativeBase;
+        if (removed) {
+			return null;
+        }
+
+        if (!hasContent && ShimmerView) {
+			return <React.Fragment>
+                <Container>
+                    <Header androidStatusBarColor={Theme['700']} iosBarStyle={'light-content'} style={{
+                        backgroundColor: Theme['500'],
+                        elevation: 0,
+                        borderBottomWidth: 0
+                    }}>
+                        <Button transparent onPress={() => {
+                            this.props.navigation.goBack()
+                        }}>
+                            <Icon name={"arrow-back"} style={{
+                                color: "#fff",
+                                fontSize: 25,
+                                marginLeft: 10,
+                                marginRight: 5
+                            }} />
+                        </Button>
+                        <Body style={{
+                            flex: 2,
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                        }} />
+                    </Header>
+                    <View>
+                        <ShimmerView style={shimmerStyle} isTopMarginNull={this.props.isView ? true : false} />
+                    </View>
+                </Container>
+            </React.Fragment>;
+        }
+
+        if (removed && this.props.isView) {
+			return <Empty icon="block" style={{
+				background: "#fff"
+			}} text={"Content user was blocked!"} isShown={true} />;
+		}
+
+		if ((error || this.state.isBlocked) && !this.props.isView) {
+			return null;
+		}
+
+		if ((error || this.state.isBlocked) && this.props.isView) {
+			return <Empty icon="block" style={{
+				background: "#fff"
+			}} text={"Content user was blocked!"} isShown={true} />;
+        }
+
+        if(!item.likes || !item.comments || !item.shares || !item.content){
+            return null;
+        }
+        if (!hasContent && ShimmerView) {
+			return <ShimmerView style={shimmerStyle} isTopMarginNull={this.props.isView ? true : false} />;
+        }
+		const inRoles = this.inRoleIds((Methods.getUser(item.user).roles ? Methods.getUser(item.user).roles : []), (!Methods.getUser(item.user).roles ? false : item.user));
+		let showPostOwner = (Methods.getUser(item.user)._id === this.props.user._id && Methods.getUser(item.user).type === this.props.userType && Methods.getUser(item.user).type !== "F") ? true : false
+		showPostOwner = inRoles ? inRoles : showPostOwner;
+		const _canComment = settings.filter((item) => {
+			return item.sub === 'can_comment'
+        })
+
+        const ICON_SIZE = 20;
+
+		let can_comment = _canComment.length === 0 ? true : _canComment[0]['value'];
+		can_comment = Methods.you()._id === Methods.getUser(item.user)._id || Methods.you()._id === Methods.getUser(item.userTo)._id ? true : can_comment;
+
+		const _canCommentLinks = settings.filter((item) => {
+			return item.sub === 'can_comment_link'
+		})
+
+		const can_comment_link = _canCommentLinks.length === 0 ? true : _canCommentLinks[0]['value'];
+
+
+
+        //if(item.media.length === 0) return null;
+
+        const _name = (item.sport && item.sport._id !== null)?item.sport.image.split("/")[1]:"";
+        const _icon = Methods.nullify(_name).replace(".svg", "");
+        const previewComments = this.inComments();
+        const _that = this;
+
+        const renderCommentBox = () => {
+            if(this.state.isPostingComment && !this.state.isTypingReply){
+                return (
+                    <Animated.View style={{
+                        padding: ms(10),
+                        minHeight: ms(50),
+                        flexDirection: 'row',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        paddingBottom: Methods.ifIphoneX(Methods.getStatusBarHeight(), ms(10))
+                    }}>
+                        <ActivityIndicator color={Theme2['500']}/>
+                    </Animated.View>
+                )
+            }
+            return(
+                <React.Fragment>
+                    <View style={{
+                        margin: 10,
+                        paddingHorizontal: 10,
+                        //marginTop: previewComments.length>0?0:10,
+                        height: 40,
+                        //paddingHorizontal: 10,
+                        //backgroundColor: '#eee',
+                        flexDirection: 'row',
+                        //borderColor: '#ddd',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        //borderWidth: 1,
+                        borderRadius: 40 / 2
+                    }}>
+                        {
+                            /*<Methods.Avatar
+                                url={inRoles?Methods.getUser(item.user).image:Methods.you().image}
+                                height={30}
+                                hasStroke={false}
+                                hasRadius={true}
+                                resizeMode={"contain"}
+                                {...this.props}
+                            />*/
+                        }
+                        <TouchableOpacity onPress={() => {
+                            this.setState({ isCameraOpen: true });
+                        }}>
+                            <Icon name={"md-camera"} style={{
+                                color: 'green',
+                                fontSize: 30
+                            }} />
+                        </TouchableOpacity>
+
+                        {!isCommentBoxExpanded &&
+                            <TouchableOpacity onPress={()=>{
+                                this.setState({ isCommentBoxExpanded: true  });
+                            }} style={{
+                                marginHorizontal: 10,
+                                height: 35,
+                                flex: 1,
+                                //backgroundColor: '#eee',
+                                display: 'flex',
+                                flexDirection: 'row',
+                                borderColor: '#ddd',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                borderWidth: 1,
+                                borderRadius: 35 / 2
+                            }}>
+                                <Text style={{
+                                        flex: 1,
+                                        paddingHorizontal: 10,
+                                        color: "#999"
+                                    }}>Write a comment...</Text>
+                            </TouchableOpacity>
+                        }
+
+                        {isCommentBoxExpanded &&
+                            <MentionsTextInput
+                                style={[{
+                                    marginHorizontal: 10,
+                                    flex: 1,
+                                    flexDirection: 'column-reverse',
+                                    position: 'relative'
+                                }]}
+                                textInputStyle={{
+                                    minHeight: 35,
+                                    maxHeight: 75,
+                                    paddingVertical: 10,
+                                    paddingHorizontal: 10,
+                                    width: '100%',
+                                    //backgroundColor: '#eee',
+                                    display: 'flex',
+                                    flexDirection: 'row',
+                                    borderColor: '#ddd',
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    borderWidth: 1,
+                                    borderRadius: 35 / 2,
+                                    height: this.state.textInputHeight || 35
+                                }}
+                                ref={(textField)=>{
+                                    this.textField = textField;
+                                }}
+                                autoFocus={isCommentBoxExpanded}
+                                multiline={true}
+                                placeholder={'Write something...'}
+                                underlineColorAndroid={"rgba(0,0,0,0)"}
+                                onBlur={() => {
+                                    if (Platform.OS !== 'web') {
+                                        this.setState({ isKeyboardOnly: false, isCommentBoxExpanded: this.state.comment.length === 0?false:true });
+                                        Keyboard.dismiss()
+                                    }
+                                }} onFocus={() => {
+                                    if (Platform.OS !== 'web') {
+                                        this.setState({ isKeyboardOnly: true });
+                                    }
+                                    this.setState({ isSelectingSport: false });
+                                }}
+                                suggestionsPanelStyle={{
+                                    backgroundColor: 'rgba(100,100,100,0.5)'
+                                }}
+                                loadingComponent={() => <View style={{ flex: 1, width, justifyContent: 'center', alignItems: 'center' }}><ActivityIndicator /></View>}
+                                textInputMinHeight={ms(40)}
+                                textInputMaxHeight={ms(75)}
+                                trigger={'@'}
+                                triggerLocation={'anywhere'} // 'new-word-only', 'anywhere'
+                                value={this.state.comment}
+                                onChangeText={(content) => {
+                                    const friends = Methods.you().friends;
+
+                                    let rawText = Methods.nullify(content);
+                                    Methods.listify(friends).forEach((item, i) => {
+                                        const _content = "%" + item._id + "^" + item.type + "%";
+                                        rawText = rawText.replace(item.name, _content);
+                                        rawText = rawText.replace("@", "");
+                                    })
+
+                                    this.setState({ comment: content, rawComment: rawText });
+                                }}
+                                triggerCallback={this.callback.bind(this)}
+                                renderSuggestionsRow={(item, hidePanel) => {
+                                    return Methods.renderSuggestionsRow(item, hidePanel, this.onSuggestionTap.bind(this))
+                                }}
+                                onContentSizeChange={(e) => {
+                                    this.setState({ textInputHeight: e.nativeEvent.contentSize.height });
+                                }}
+                                suggestionsData={Methods.you().friends.filter((item, i) => {
+                                    const _filter = Methods.nullify(this.state.keyword).replace("@", "");
+                                    return item.name.toLowerCase().indexOf(_filter.toLowerCase()) > -1;
+                                })} // array of objects
+                                keyExtractor={(item, index) => item._id}
+                                suggestionRowHeight={height/3}
+                                horizontal={false} // default is true, change the orientation of the list
+                                MaxVisibleRowCount={1}
+                            />
+                        }
+
+                        <TouchableOpacity style={{
+                            height: 35,
+                            paddingHorizontal: 10,
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            borderRadius: 35 / 2,
+                            backgroundColor: Theme2['500']
+                        }} onPress={()=>{
+                            if(this.state.comment.length === 0) return;
+
+                            this.comment();
+                        }}>
+                            <Text style={{
+                                color: '#fff'
+                            }}>Post</Text>
+                        </TouchableOpacity>
+                    </View>
+                    {this.state.isCameraOpen && this.renderCamera()}
+                </React.Fragment>
+            )
+        }
+
+        const filteredComments = item.comments.filter((comment, i) => {
+            return comment.content.length === 0 && comment.length ? false : true
+        });
+
+
+        if(this.props.isPageView){
+            const {children} = this.props;
+            const value = {
+                Post: this,
+                props: this.props,
+                showPostOwner,
+                isShowingCommentBox: !this.state.isTypingReply,
+                post: {
+                    isLoading: !hasContent,
+                    isError: false,
+                    body: item,
+                    commentBox: () => this.renderCommentBox(),
+                    render: () => this.renderBody(false),
+                    loading: () => <ShimmerView style={shimmerStyle} isTopMarginNull={this.props.isView ? true : false} />
+                }
+            }
+            return(
+                <React.Fragment>
+                    <PostContext.Provider value={value}>
+
+                        {typeof children === "function"
+                        ? children(value)
+                        : children}
+                    </PostContext.Provider>
+                </React.Fragment>
+            )
+        }
+
+        return null;
+    }
+
+    lastTap = null;
+
+    handleDoubleTap = () => {
+        const now = Date.now();
+        const DOUBLE_PRESS_DELAY = 300;
+        if (this.lastTap && (now - this.lastTap) < DOUBLE_PRESS_DELAY) {
+            this.props.editorData.actions.edit();
+        } else {
+            this.lastTap = now;
+        }
+    }
+
+    render = () => {
+
+        if(this.props.isPageView){
+            return this.renderFullPage();
+        }
+
+        const item = this.state.post;
+		const { isDeleting, isLiked, isSharing, isCommentBoxExpanded, hasContent, postToken, postEditToken, error, removed, settings, isShowingComments, isEditting, showCommentBox } = this.state;
+		const User = Methods.you();
+        const { style, hideSportLabel, shimmerStyle,  MaterialIcon, SvgUri, isFirstTwo } = this.props;
+        const {...RNRest} = this.props.NativeBase;
+
+		const inRoles = this.inRoleIds((Methods.getUser(item.user).roles ? Methods.getUser(item.user).roles : []), (!Methods.getUser(item.user).roles ? false : item.user));
+		let showPostOwner = (Methods.getUser(item.user)._id === this.props.user._id && Methods.getUser(item.user).type === this.props.userType && Methods.getUser(item.user).type !== "F") ? true : false
+		showPostOwner = inRoles ? inRoles : showPostOwner;
+		const _canComment = settings.filter((item) => {
+			return item.sub === 'can_comment'
+        })
+
+        const ICON_SIZE = 20;
+
+		let can_comment = _canComment.length === 0 ? true : _canComment[0]['value'];
+		can_comment = Methods.you()._id === Methods.getUser(item.user)._id || Methods.you()._id === Methods.getUser(item.userTo)._id ? true : can_comment;
+
+		const _canCommentLinks = settings.filter((item) => {
+			return item.sub === 'can_comment_link'
+		})
+
+		const can_comment_link = _canCommentLinks.length === 0 ? true : _canCommentLinks[0]['value'];
+
+
+
+        //if(item.media.length === 0) return null;
+
+        const _name = (item.sport && item.sport._id !== null)?item.sport.image.split("/")[1]:"";
+        const _icon = Methods.nullify(_name).replace(".svg", "");
+        const previewComments = this.inComments();
+        const _that = this;
+
+        if (removed) {
+			return null;
+        }
+
+        if (!hasContent && ShimmerView) {
+			return <ShimmerView style={shimmerStyle} isTopMarginNull={this.props.isView ? true : false} />;
+        }
+
+        if (removed && this.props.isView) {
+			return <Empty icon="block" style={{
+				background: "#fff"
+			}} text={"Content user was blocked!"} isShown={true} />;
+		}
+
+		if ((error || this.state.isBlocked) && !this.props.isView) {
+			return null;
+		}
+
+		if ((error || this.state.isBlocked) && this.props.isView) {
+			return <Empty icon="block" style={{
+				background: "#fff"
+			}} text={"Content user was blocked!"} isShown={true} />;
+        }
+
+        if(!item.likes || !item.comments || !item.shares || !item.content){
+            return null;
+        }
+
+        const {renderCommentBox, renderBody} = this
+
+        const filteredComments = previewComments;
+
+        const isSingleVideo = (item.media.length === 1 && (item.media[0] && item.media[0].type==="video"));
+
+        return (
+            <InViewPort isPost={true} delay={2500} onChange={(isVisible) => {
+                if(filteredComments.length>0) return;
+                if(this.state.showCommentBox) return;
+                this.setState({ showCommentBox: isVisible });
+            }}>
+                {renderBody()}
+            </InViewPort>
+        );
+    }
+
+    renderPostControls = ({...args}) => {
+
+        const {viewCount = -1} = args;
+
+        const item = this.state.post;
+		const { isDeleting, isLiked, isSharing, isCommentBoxExpanded, hasContent, postToken, postEditToken, error, removed, settings, isShowingComments, isEditting, showCommentBox } = this.state;
+		const User = Methods.you();
+        const { style, hideSportLabel, shimmerStyle,  MaterialIcon, SvgUri, isFirstTwo } = this.props;
+        const {...RNRest} = this.props.NativeBase;
+
+		const inRoles = this.inRoleIds((Methods.getUser(item.user).roles ? Methods.getUser(item.user).roles : []), (!Methods.getUser(item.user).roles ? false : item.user));
+		let showPostOwner = (Methods.getUser(item.user)._id === this.props.user._id && Methods.getUser(item.user).type === this.props.userType && Methods.getUser(item.user).type !== "F") ? true : false
+		showPostOwner = inRoles ? inRoles : showPostOwner;
+		const _canComment = settings.filter((item) => {
+			return item.sub === 'can_comment'
+        })
+
+        const ICON_SIZE = 22;
+
+        const isShared = this.props.isShared
+
+		let can_comment = _canComment.length === 0 ? true : _canComment[0]['value'];
+		can_comment = Methods.you()._id === Methods.getUser(item.user)._id || Methods.you()._id === Methods.getUser(item.userTo)._id ? true : can_comment;
+
+		const _canCommentLinks = settings.filter((item) => {
+			return item.sub === 'can_comment_link'
+		})
+
+		const can_comment_link = _canCommentLinks.length === 0 ? true : _canCommentLinks[0]['value'];
+
+
+
+        //if(item.media.length === 0) return null;
+
+        const _name = (item.sport && item.sport._id !== null)?item.sport.image.split("/")[1]:"";
+        const _icon = Methods.nullify(_name).replace(".svg", "");
+
+        const previewComments = this.inComments();
+        const _that = this;
+
+        if(isShared){
+            return(
+                <View style={{
+                    //flex: 1,
+                    flexDirection: 'row',
+                    paddingHorizontal: 0,
+                    alignItems: 'center'
+                }}>
+                    {item.likes.length > 0 && <Text style={{ color: '#999', marginRight: 5, fontSize: 12 }}>{Methods.shortDigit(item.likes.length, "Like").data}</Text>}
+                    {item.comments.length > 0 && <Text style={{ color: '#999', marginRight: 5, fontSize: 12 }}>{Methods.shortDigit(item.comments.length, "Comment").data}</Text>}
+                    {item.shares.length > 0 && <Text style={{ color: '#999', fontSize: 12 }}>{Methods.shortDigit(item.shares.length, "Share").data}</Text>}
+                </View>
+            )
+        }
+
+        return(
+            <React.Fragment>
+                <View style={{
+                    marginHorizontal: 0,
+                    height: 0,//1,
+                    backgroundColor: '#eee'
+                }} />
+                <View style={{
+                    //height: 45,
+                    paddingVertical: 15,
+                    backgroundColor: '#fff',
+                    flexDirection: 'row',
+                    paddingHorizontal: 15,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                }}>
+                    <View style={{
+                        flex: 1,
+                        flexDirection: 'row',
+                        paddingHorizontal: 0,
+                        alignItems: 'center'
+                    }}>
+                        {viewCount > -1 && <Text style={{ color: '#999', marginRight: 5, fontSize: 12 }}>{Methods.numify(viewCount)===0?"No views":Methods.shortDigit(Methods.numify(viewCount), "view").data}</Text>}
+                        {item.likes.length === -1 && <Text style={{ color: '#999', marginRight: 5, fontSize: 12 }}>{Methods.shortDigit(item.likes.length, "Like").data}</Text>}
+                        {!this.props.isPageView && viewCount < 0 && item.comments.length > 0 && <Text style={{ color: '#999', marginRight: 5, fontSize: 12 }}>View all {Methods.shortDigit(item.comments.length, "Comment").data}</Text>}
+                        {item.shares.length === -1 && <Text style={{ color: '#999', fontSize: 12 }}>{Methods.shortDigit(item.shares.length, "Share").data}</Text>}
+                    </View>
+                    <PostItemButton noIcon={!isShared?false:true} style={{
+                        paddingHorizontal: 3
+                    }} onPress={() => {
+                        if(isShared) return;
+                        this.like()
+                    }} Icon={<Methods.LikeIcon liked={isLiked} size={ICON_SIZE + 2} />
+                    } Label={!isShared?false:Methods.shortDigit(item.likes.length, "Like").data} count={Methods.shortDigit(item.likes.length, "Like").text} LabelColor={isLiked ? Theme2['500'] : "#000"} />
+                    <PostItemButton noIcon={!isShared?false:true} style={{
+                        paddingHorizontal: 3
+                    }} countColor={Theme2['500']} onPress={() => {
+                        if(isShared) return;
+                        if(!this.props.isPageView  && Platform.OS!=="web"){
+                            if(Methods.shared('HomeScreen') && this.props.isHome){
+                                if(this.state.hasExternalTextInput){
+                                    Methods.shared('HomeScreen')._setTimelineState(false);
+                                    this.setState({ hasExternalTextInput: false });
+                                } else{
+                                    Methods.shared('HomeScreen')._setTimelineState(this);
+                                    this.setState({ hasExternalTextInput: true });
+                                }
+
+                            }
+                        } else if (this.props.isPageView) {
+                            this.setState({ showCommentBox: true });
+                        } else {
+                            this.setState({ isShowingComments: true });
+                            const _user = item.user;
+                            if (Platform.OS !== "web") {
+                                const route = "Post";
+                                NavigationService.navigate({ routeName: route, params: {post:item, screenId: item._id}, key: item._id })
+                            }
+                        }
+                    }} Icon={
+                        <Methods.CommentIcon commented={false} size={ICON_SIZE} />
+                    } count={Methods.shortDigit(item.comments.length, "Comment").text} Label={!isShared?false:Methods.shortDigit(item.comments.length, "Comment").data} />
+                    {isShared &&
+                        <PostItemButton noIcon={!isShared?false:true} style={{
+                            paddingHorizontal: 3
+                        }} countColor={"#4a5"} Icon={
+                            <Methods.ShareIcon shared={false} size={ICON_SIZE} />
+                        } count={Methods.shortDigit(item.shares.length, "Share").text} Label={!isShared?false:Methods.shortDigit(item.shares.length, "Share").data} />
+                    }
+                    {!isShared &&
+                        <ShareContext {...this.props} shareType={"POST"} post={item} shareContent={item} Embed={
+                            <View />
+                        }>
+                            <PostItemButton noIcon={!isShared?false:true} style={{
+                                paddingHorizontal: 3
+                            }} countColor={"#4a5"} Icon={
+                                <Methods.ShareIcon shared={false} size={ICON_SIZE} />
+                            } count={Methods.shortDigit(item.shares.length, "Share").text} Label={!isShared?false:Methods.shortDigit(item.shares.length, "Share").data} />
+                        </ShareContext>
+                    }
+                    {!this.props.isShared &&
+                        <FeedBackPopUp
+                            {...this.props}
+                            hasCustomButton
+                            CustomActions={(Methods.getUser(item.user)._id === Methods.you()._id && Methods.getUser(item.user).type === "F") ? {
+                                Edit: {
+                                    icon: "edit",
+                                    label: "Edit Post",
+                                    action: (cb) => {
+                                        this.props.editorData.actions.edit();
+                                        cb();
+                                    }
+                                },
+                                Remove: {
+                                    icon: "delete",
+                                    label: "Delete Post",
+                                    action: (cb) => {
+                                        //this.setState({ isDeleting: true });
+                                        if(this.confirmBox){
+                                            this.confirmBox.openBottomSheet()
+                                        }
+                                        //this.deleteComment()
+                                        cb();
+                                    }
+                                }
+                            } : {}}
+                            FancyModal={this.props.FancyModal}
+                            Icon={
+                                <MaterialIcon size={ICON_SIZE} name={"more-horiz"} color={Theme['500']} style={{
+                                    color: Theme['500'],
+                                    marginLeft: 5
+                                }} />
+                            }
+
+                            user={{
+                                id: item._id,
+                                type: item.commentType
+                            }}
+                            object={{
+                                id: item._id,
+                                type: item.commentType,
+                                content: item.content,
+                                image: false
+                            }}
+
+                            userTo={(Methods.getUser(item.user)._id === Methods.you()._id && Methods.getUser(item.user).type === "F") ? Methods.you() : this.props.user}
+
+                            owner={item.user}
+                            menus={
+                                (Methods.getUser(item.user)._id === this.props.user._id && Methods.getUser(item.user).type === this.props.userType) ?
+                                    {
+                                        /*Block:{label:"Hide Post", cb : () => {
+                                        this.setState({ error: true, isBlocked: true, removed: true });
+                                        this._isMounted = false;
+                                        Methods.alert("Post hidden!")
+                                        }},*/
+                                        MasterBlock: {
+                                            label: "Remove Post", data: {}, cb: () => {
+                                                this.setState({ error: true, isBlocked: true, removed: true });
+                                                this._isMounted = false;
+                                                this.alert("Post removed!")
+                                            }
+                                        }
+                                    } :
+                                    (Methods.getUser(item.user)._id === Methods.you()._id && Methods.getUser(item.user).type === "F") ?
+                                        {
+                                            MasterBlock: {
+                                                label: "Hide Post", icon: "block", cb: () => {
+                                                    this.setState({ error: true, isBlocked: true, removed: true });
+                                                    this._isMounted = false;
+                                                    this.alert("Post hidden!")
+                                                }
+                                            }
+                                        }
+                                        :
+                                        {
+                                            FeedBack: { label: "Give Feedback?", cb: () => { } },
+                                            Unfollow: {
+                                                label: `Unfollow ${(Methods.getUser(item.user)._id === this.props.user._id && Methods.getUser(item.user).type === this.props.userType && Methods.getUser(item.user).type !== "F") ? Methods.getUser(item.userTo).name : Methods.getUser(item.userTo).name}`, cb: () => {
+                                                    this.setState({ error: true, isBlocked: true, removed: true });
+                                                    this._isMounted = false;
+                                                    this.alert("Posts from this user won't show again!")
+                                                }
+                                            },
+                                            Block: {
+                                                label: "Hide Post", cb: () => {
+                                                    this.setState({ error: true, isBlocked: true, removed: true });
+                                                    this._isMounted = false;
+                                                    this.alert("Post hidden!")
+                                                }
+                                            }
+                                        }}
+                        />
+                    }
+                </View>
+            </React.Fragment>
+        )
+    }
+
+    onReply = (comment = {_id:false, user: false}, user = false) => {
+        const _user = user?user:comment.user;
+        const content = _user && _user._id === Methods.you()._id?`${_user.name}`:` `;
+        const raw = _user && _user._id === Methods.you()._id?`%${_user._id}^${_user.type}% `:` `;
+        this.setState({
+            isReplyComment: comment,
+            isReplyToCommentUser: user?user:comment.user,
+            isReplyToComment: true,
+            comment: content,
+            content: content,
+            rawComment: raw,
+            taggableUsers : [Methods.you(), Methods.you().friends, Methods.you().pages],
+            isCommentBoxExpanded: true,
+        })
+    }
+
+    inComments = () => {
+        const {friends, _id} = Methods.you();
+        const {comments} = this.state.post;
+        const friendIds = Methods.listify(friends).map((item)=>`${item._id}^F`);
+        friendIds.push(`${_id}^F`);
+
+        const _comments = Methods.listify(comments).filter((item)=>{
+            const _str = `${Methods.getUser(item.owner)._id}^${Methods.getUser(item.owner).type}`;
+            return friendIds.includes(_str);
+        });
+
+        return _comments;
+    }
+
+    onSuggestionTap = (user, hidePanel) => {
+        const {comment, rawContent} = this.state;
+        hidePanel();
+
+        let _comment = comment.slice(0, - this.state.keyword.length);
+        _comment = _comment + user.name;
+
+        let rawComment = rawContent.slice(0, - this.state.keyword.length);
+        let rawText = Methods.nullify(_comment);
+        Methods.listify(Methods.you().friends).forEach((item, i) => {
+            const _content = "%" + item._id + "^" + item.type + "%";
+            rawText = rawText.replace(item.name, _content);
+            rawText = rawText.replace("@", "");
+        })
+        //rawComment = _comment + `%${user._id}^${user.type}%`;
+
+        this.setState({
+            value: _comment + '@' + user.name,
+            rawComment: rawText,
+            comment: _comment,
+            textField: this.textField
+        }, () => {
+            if(this.textField){
+                this.textField._textInput.focus()
+            }
+        })
+    }
+
+    onSuggestionEditTap = (user, hidePanel) => {
+        const {content} = this.state;
+        hidePanel();
+
+        let _comment = content.slice(0, - this.state.keyword.length);
+        _comment = _comment + user.name;
+
+        let rawText = Methods.nullify(_comment);
+        Methods.listify(Methods.you().friends).forEach((item, i) => {
+            const _content = "%" + item._id + "^" + item.type + "%";
+            rawText = rawText.replace(item.name, _content);
+            rawText = rawText.replace("@", "");
+        })
+        //rawComment = _comment + `%${user._id}^${user.type}%`;
+
+        this.setState({
+            value: _comment + '@' + user.name,
+            rawEditContent: rawText,
+            content: _comment
+        })
+    }
+
+    callback = (keyword = '') => {
+        const _filter = keyword.replace("@","");
+        this.setState({
+            keyword: keyword,
+            friends: Methods.you().friends.filter((item,i)=>{
+                return item.name.toLowerCase().indexOf(_filter.toLowerCase()) > -1;
+            })
+        })
+    }
+
+    renderComments = () => {
+        const {isShowingComments, post, friends} = this.state;
+        const {MaterialIcon,...Props} = this.props;
+        const ICON_SIZE = 14;
+        const isLiked = false;
+        return(
+            <ModalView {...this.props} onCancel={() => {
+                this.setState({ isShowingComments: false });
+            }} onAction={() => {
+
+            }} title={"Comments"} hasAction={!true} actionBtnText={"DONE"} closeBtnText={"BACK"} animationType={"slide"} presentationStyle={'formSheet'} visible={isShowingComments}>
+                <Props.Container style={{
+                    flex: 1,
+                    minHeight: '100%',
+                    maxHeight: '100%'
+                }}>
+                    <ScrollView style={{
+                        padding: ms(10),
+                        flex: 1
+                    }}>
+                        {
+                            post.comments.filter((comment, i)=>{
+                                return comment.content.length === 0 && comment.length?false:true
+                            }).map((comment, i)=>{
+                                return(
+                                    <PostComment onReplyFocus={()=>{
+                                        this.setState({ isTypingReply: true });
+                                    }}  onReplyBlur={()=>{
+                                        this.setState({ isTypingReply: false });
+                                    }}  comment={comment} key={comment._id} {...this.props}/>
+                                )
+                            })
+                        }
+                    </ScrollView>
+                    {(this.state.isPostingComment && !this.state.isTypingReply) &&
+                        <Animated.View style={{
+                            padding: ms(10),
+                            borderTopColor: '#ccc',
+                            borderTopWidth: 1,
+                            minHeight: ms(50),
+                            flexDirection: 'row',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            paddingBottom: Methods.ifIphoneX(Methods.getStatusBarHeight(), ms(10))
+                        }}>
+                            <ActivityIndicator color={Theme2['500']}/>
+                        </Animated.View>
+                    }
+                    {(!this.state.isPostingComment && !this.state.isTypingReply) &&
+                        <Animated.View style={{
+                            padding: ms(10),
+                            borderTopColor: '#ccc',
+                            borderTopWidth: 1,
+                            minHeight: ms(50),
+                            flexDirection: 'row',
+                            paddingBottom: Methods.ifIphoneX(Methods.getStatusBarHeight(), ms(10))
+                        }}>
+                            {this.is && Methods.renderAvatar({url: Methods.you().image, resizeMode:"contain", hasStroke: false, height: ms(30), props: this.props})}
+                            <MentionsTextInput
+                                style={{
+                                    flex: 1,
+                                    height: '100%',
+                                    backgroundColor: '#eee',
+                                    borderRadius: ms(10),
+                                    marginHorizontal: ms(5)
+                                }}
+                                textInputStyle={{
+                                    flex: 1,
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    //paddingTop: Platform.OS==="web"?0:ms(10),
+                                    paddingBottom: 0,
+                                    paddingHorizontal: ms(10),
+                                    fontSize: 16,
+                                    textAlignVertical: 'center',
+                                    outline: 'none',
+                                    lineHeight: Platform.OS==="web"?`${ms(35)}px`:ms(35)
+                                }}
+                                multiline={false}
+                                placeholder={'Write something...'} underlineColorAndroid={"rgba(0,0,0,0)"}
+                                onBlur={() => {
+                                    if (Platform.OS !== 'web') {
+                                        this.setState({ isKeyboardOnly: false });
+                                        Keyboard.dismiss()
+                                    }
+                                }} onFocus={() => {
+                                    if (Platform.OS !== 'web') {
+                                        this.setState({ isKeyboardOnly: true });
+                                    }
+                                    this.setState({ isSelectingSport: false });
+                                }}
+                                horizontal={false}
+                                suggestionsPanelStyle={{ backgroundColor: 'rgba(100,100,100,0.1)' }}
+                                loadingComponent={() => <View style={{ flex: 1, width, justifyContent: 'center', alignItems: 'center' }}><ActivityIndicator /></View>}
+                                textInputMinHeight={ms(40)}
+                                textInputMaxHeight={ms(40)}
+                                trigger={'@'}
+                                triggerLocation={'anywhere'} // 'new-word-only', 'anywhere'
+                                value={this.state.comment}
+                                onChangeText={(content) => {
+                                    const friends = Methods.you().friends;
+
+                                    let rawText = Methods.nullify(content);
+                                    Methods.listify(friends).forEach((item, i) => {
+                                        const _content = "%" + item._id + "^" + item.type + "%";
+                                        rawText = rawText.replace(item.name, _content);
+                                        rawText = rawText.replace("@", "");
+                                    })
+
+                                    this.setState({ comment:content, rawComment: rawText });
+                                }}
+                                triggerCallback={this.callback.bind(this)}
+                                renderSuggestionsRow={(item, hidePanel)=>{
+                                    return Methods.renderSuggestionsRow(item, hidePanel, this.onSuggestionTap.bind(this))
+                                }}
+                                suggestionsData={Methods.you().friends.filter((item,i)=>{
+                                    const _filter = Methods.nullify(this.state.keyword).replace("@","");
+                                    return item.name.toLowerCase().indexOf(_filter.toLowerCase()) > -1;
+                                })} // array of objects
+                                keyExtractor={(item, index) => item._id}
+                                suggestionRowHeight={height/3}
+                                horizontal={false} // default is true, change the orientation of the list
+                                MaxVisibleRowCount={1}
+                            />
+                            <TouchableOpacity style={{
+                                backgroundColor: this.state.comment.length === 0?'#ccc':Theme['500'],
+                                paddingHorizontal: ms(10),
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                height: ms(40),
+                                borderRadius: ms(10)
+                            }} onPress={()=>{
+                                if(this.state.comment.length === 0) return;
+
+                                this.comment();
+                            }}>
+                                <Text style={{
+                                    color: '#fff',
+                                    fontSize:ms(14)
+                                }}>POST</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={{
+                                paddingHorizontal: ms(10),
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                height: ms(40),
+                                borderRadius: ms(10),
+                                marginLeft: ms(5)
+                            }} onPress={()=>{
+                                this.setState({ isCameraOpen: true });
+                            }}>
+                                <MaterialIcon size={30} name={"camera-alt"} color={'#ccc'} style={{
+                                    color: '#ccc'
+                                }} />
+                            </TouchableOpacity>
+                        </Animated.View>
+                    }
+                    {this.state.isCameraOpen && this.renderCamera()}
+                </Props.Container>
+            </ModalView>
+        )
+    }
+
+    renderEditor = () => {
+        const {isEditting, post, friends} = this.state;
+        const {MaterialIcon,...Props} = this.props;
+        const ICON_SIZE = 14;
+        const isLiked = false;
+        return(
+            <ModalView {...this.props} onCancel={() => {
+                this.setState({ isEditting: false });
+            }} onAction={() => {
+
+            }} title={"Edit Post"} hasAction={!true} actionBtnText={"DONE"} closeBtnText={"BACK"} animationType={"slide"} presentationStyle={'formSheet'} visible={isEditting}>
+                <View style={{
+                    flex: 1,
+                    padding: ms(10)
+                }}>
+                    <MentionsTextInput
+                        style={{
+                            flex: 1,
+                            backgroundColor: '#eee',
+                            borderRadius: 5,
+                            marginHorizontal: ms(5)
+                        }}
+                        textInputStyle={{
+                            flex: 1,
+                            display: 'flex',
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            paddingHorizontal: ms(5),
+                            paddingVertical: ms(5),
+                            alignContent: 'flex-start',
+                            textAlignVertical: 'top',
+                            outline: 'none'
+                        }}
+                        placeholder={'Write something...'} underlineColorAndroid={"rgba(0,0,0,0)"}
+                        onBlur={() => {
+                            if (Platform.OS !== 'web') {
+                                this.setState({ isKeyboardOnly: false });
+                                Keyboard.dismiss()
+                            }
+                        }} onFocus={() => {
+                            if (Platform.OS !== 'web') {
+                                this.setState({ isKeyboardOnly: true });
+                            }
+                            this.setState({ isSelectingSport: false });
+                        }}
+                        horizontal={false}
+                        suggestionsPanelStyle={{ backgroundColor: 'rgba(100,100,100,0.1)' }}
+                        loadingComponent={() => <View style={{ flex: 1, width, justifyContent: 'center', alignItems: 'center' }}><ActivityIndicator /></View>}
+                        textInputMinHeight={ms(40)}
+                        textInputMaxHeight={ms(40)}
+                        trigger={'@'}
+                        triggerLocation={'anywhere'} // 'new-word-only', 'anywhere'
+                        value={this.state.content}
+                        onChangeText={(content) => {
+                            const friends = Methods.you().friends;
+
+                            let rawText = Methods.nullify(content);
+                            Methods.listify(friends).forEach((item, i) => {
+                                const _content = "%" + item._id + "^" + item.type + "%";
+                                rawText = rawText.replace(item.name, _content);
+                                rawText = rawText.replace("@", "");
+                            })
+
+                            this.setState({ content: content, rawEditContent: rawText });
+                        }}
+                        triggerCallback={this.callback.bind(this)}
+                        renderSuggestionsRow={(item, hidePanel) => {
+                            return Methods.renderSuggestionsRow(item, hidePanel, this.onSuggestionEditTap.bind(this))
+                        }}
+                        suggestionsData={Methods.you().friends.filter((item, i) => {
+                            const _filter = Methods.nullify(this.state.keyword).replace("@", "");
+                            return item.name.toLowerCase().indexOf(_filter.toLowerCase()) > -1;
+                        })} // array of objects
+                        keyExtractor={(item, index) => item._id}
+                        suggestionRowHeight={height/3}
+                        horizontal={false} // default is true, change the orientation of the list
+                        MaxVisibleRowCount={1}
+                    />
+                </View>
+                <TouchableOpacity activeOpacity={0.8} style={{
+                    margin: ms(10),
+                    backgroundColor: Theme2['500'],
+                    height: ms(45),
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                }} onPress={()=>{
+                    this.editPost()
+                }}>
+                    {this.state.isPostingComment &&
+                        <ActivityIndicator color={'#fff'}/>
+                    }
+
+                    {!this.state.isPostingComment &&
+                        <Text style={{
+                            color: '#fff',
+                            fontSize: 15
+                        }}>POST</Text>
+                    }
+                </TouchableOpacity>
+            </ModalView>
+        )
+    }
+}
+
+class LinkView extends React.Component{
+    constructor(p){
+        super(p);
+
+        this.state = {
+
+        }
+    }
+
+    render = () =>  {
+
+        const {link, isFirstTwo} = this.props;
+
+        if(typeof link === "string") return null;
+
+        const title = link['title']!==""?link['title']:false;
+
+        const url = link['url']!==""?link['url']:false;
+
+        const image = link['images'][0]?link['images'][0]:false;
+
+        const description = false//link['description']!==""?Methods.nullify(link['description']).trim():false;
+
+        const _url = Methods.getUrl(url.indexOf('google.com')>-1?`https://www.google.com/`:url);
+
+        const imageUrl = Methods.isWebsite(image)?image:`${Methods.nullify(_url).toLowerCase()}${image}`;
+        if(!title) return null;
+        return(
+            <View style={{
+                //height: 100,
+                marginBottom: 10,
+                width,
+                backgroundColor: 'rgb(241,241,241)'
+            }}>
+                {image &&
+                    <Image style={{
+                        width,
+                        height: width / 2
+                    }} source={{uri: Methods.isWebsite(image)?image:imageUrl}}/>
+                }
+                <View style={{
+                    padding: 10
+                }}>
+                    {url &&
+                        <Text numberOfLines={1} style={{
+                            color: '#555',
+                            paddingHorizontal: 5,
+                            paddingBottom: 3,
+                            fontSize: 11
+                        }}>{Methods.getUrl(url, true).trim().toUpperCase()}</Text>
+                    }
+                    {title &&
+                        <Text numberOfLines={1}  style={{
+                            color:'black',
+                            paddingHorizontal: 5,
+                            paddingBottom: 3,
+                            fontWeight: 'bold',
+                            fontSize: 16
+                        }}>{title.trim()}</Text>
+                    }
+                    {description &&
+                        <Text numberOfLines={2} style={{
+                            color: '#555',
+                            paddingHorizontal: 5
+                        }}>{description}</Text>
+                    }
+                </View>
+            </View>
+        )
+    }
+}
+
+const OnlineContext = React.createContext({isOnline:false});
+
+class IsOnline extends Component{
+    render = () =>  {
+        const value = {
+            isOnline: this.props.user.isOnline?true:false
+        }
+        return(
+            <OnlineContext.Provider value={value}>
+                {typeof this.props.children === "function"
+                    ? this.props.children(value)
+                    : this.props.children}
+            </OnlineContext.Provider>
+        )
+    }
+}
+
+export class ContentEditor extends Component{
+    constructor(props){
+        super(props);
+        const {content, comment, rawContent} = this.props;
+        this.state = {
+            isEditting: false,
+            isPostingComment: false,
+            content,
+            comment,
+            rawContent,
+            keyword: ''
+        }
+    }
+
+    onSuggestionTap = (user, hidePanel) => {
+        const {comment, rawContent} = this.state;
+        hidePanel();
+
+        let _comment = comment.slice(0, - this.state.keyword.length);
+        _comment = _comment + user.name;
+
+        let rawComment = rawContent.slice(0, - this.state.keyword.length);
+        let rawText = Methods.nullify(_comment);
+        Methods.getTaggableUsers().forEach((item, i) => {
+			//[@michel:5455345]
+            const _content = "%" + item._id + "^" + item.type + "%";
+            rawText = rawText.replace(item.name, _content);
+            rawText = rawText.replace("@", "");
+        })
+        //rawComment = _comment + `%${user._id}^${user.type}%`;
+
+        this.setState({
+            value: _comment + '@' + user.name,
+            rawContent: rawText,
+            content: _comment,
+            comment: _comment,
+        })
+    }
+
+    callback = (keyword = '') => {
+        const _filter = keyword.replace("@","");
+        this.setState({
+            keyword: keyword,
+            friends: Methods.getTaggableUsers().filter((item,i)=>{
+                return item.name.toLowerCase().indexOf(_filter.toLowerCase()) > -1;
+            })
+        })
+	}
+
+    Container = React.createContext({
+        actions: {},
+        state: {}
+    });
+
+    renderEditor = () => {
+        const {isEditting, content, comment, rawContent, isPostingComment, friends = Methods.getTaggableUsers()} = this.state;
+        const {MaterialIcon,...Props} = this.props;
+        const ICON_SIZE = 14;
+        const isLiked = false;
+
+        const color = Methods.hexToRgb(Theme2['500']);
+
+        return(
+            <ModalView {...this.props} onCancel={() => {
+                this.setState({ isEditting: false });
+            }} onAction={() => {
+
+            }} title={"Edit"} hasAction={!true} actionBtnText={"DONE"} closeBtnText={"BACK"} animationType={"slide"} presentationStyle={'formSheet'} visible={isEditting}>
+                <View style={{
+                    flex: 1
+                }}>
+                    <View style={{
+                        //flexDirection: 'row',
+                        paddingHorizontal: 10,
+                        minHeight: height / 3
+                    }}>
+                        <View style={{
+                            flexDirection: 'row',
+                            //alignItems: 'center',
+                        }}>
+                            <View style={{
+                                marginVertical: 10,
+                                width: 40,
+                                height: 40,
+                                borderRadius: 20,
+                                backgroundColor: '#eee'
+                            }}>
+                                <Methods.Avatar url={this.props.author.image} withOnlineCheck={false} height={40} hasStroke={false} {...this.props}/>
+                            </View>
+
+                            <Text style={{paddingHorizontal: ms(10),paddingTop: ms(15), fontWeight:'600'}}>{Methods.nullify(this.props.author.name).toLowerCase()}</Text>
+                        </View>
+                        <RichInputField
+                            isTop
+                            containerStyle={{
+                                borderRadius: 10,
+                                margin: 10,
+                                marginHorizontal: 5,
+                                flex: 1,
+                                borderColor: `rgba(${color.r},${color.g},${color.b},0.5)`,
+                                borderWidth: 1
+                            }}
+                            suggestionsData={Methods.getTaggableUsers()}
+
+                            isTop
+                            textInputStyle={{
+                                minHeight: 35,
+                                maxHeight: 75,
+                                paddingVertical: 10,
+                                paddingHorizontal: 10,
+                                ...Platform.OS==="ios"?{
+                                    paddingTop: 13
+                                }:{},
+                                width: '100%',
+                                //backgroundColor: '#eee',
+                                display: 'flex',
+                                flexDirection: 'row',
+                                borderColor: '#ddd',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                borderWidth: 1,
+                                borderRadius: 35 / 2,
+                                height: this.state.textInputHeight || 35
+                            }}
+                            ref={(textField)=>{
+                                this.textField = textField;
+                            }}
+                            multiline={true}
+                            value={comment}
+                            placeholder={"Write a something..."}
+                            underlineColorAndroid={"rgba(0,0,0,0)"}
+                            onBlur={() => {
+                                if (Platform.OS !== 'web') {
+                                    this.setState({ isKeyboardOnly: false, isCommentBoxExpanded: this.state.comment.length === 0?false:true });
+                                    Keyboard.dismiss()
+                                }
+                            }} onFocus={() => {
+                                if (Platform.OS !== 'web') {
+                                    this.setState({ isKeyboardOnly: true });
+                                }
+                                this.setState({ isSelectingSport: false });
+                            }}
+                            suggestionsPanelStyle={{
+                                backgroundColor: 'rgba(100,100,100,0.5)'
+                            }}
+                            loadingComponent={() => <View style={{ flex: 1, width, justifyContent: 'center', alignItems: 'center' }}><ActivityIndicator /></View>}
+                            textInputMinHeight={ms(40)}
+                            textInputMaxHeight={ms(75)}
+                            trigger={'@'}
+                            triggerLocation={'anywhere'} // 'new-word-only', 'anywhere'
+                            onChangeText={(content) => {
+                                const friends = Methods.you().friends;
+
+                                let rawText = Methods.nullify(content);
+                                Methods.getTaggableUsers().forEach((item, i) => {
+                                    const _content = "%" + item._id + "^" + item.type + "%";
+                                    rawText = rawText.replace(item.name, _content);
+                                    rawText = rawText.replace("@", "");
+                                })
+
+                                this.setState({ comment: content, content, rawContent: rawText });
+                            }}
+                            triggerCallback={this.callback.bind(this)}
+                            renderSuggestionsRow={(item, hidePanel) => {
+                                return Methods.renderSuggestionsRow(item, hidePanel, this.onSuggestionTap.bind(this))
+                            }}
+                            onContentSizeChange={(e) => {
+                                this.setState({ textInputHeight: e.nativeEvent.contentSize.height });
+                            }}
+                            suggestionsData={Methods.getTaggableUsers().filter((item, i) => {
+                                const _filter = Methods.nullify(this.state.keyword).replace("@", "");
+                                return item.name.toLowerCase().indexOf(_filter.toLowerCase()) > -1;
+                            })} // array of objects
+                            keyExtractor={(item, index) => item._id}
+                            suggestionRowHeight={height/3}
+                            horizontal={false} // default is true, change the orientation of the list
+                            MaxVisibleRowCount={1}
+                            textInputProps={{
+                                autoFocus:false,
+                                editable: !isPostingComment
+                            }}
+                        />
+                    </View>
+                    <View style={{
+                        flexDirection: 'row',
+                        marginVertical: 5,
+                        paddingHorizontal: 10,
+                        justifyContent: 'flex-end',
+                    }}>
+                        {!isPostingComment &&
+                            <SaveButton onPress={()=>{
+                                this.setState({
+                                    isEditting: false,
+                                    isPostingComment: false
+                                })
+                            }} style={{
+                                padding: 8,
+                                borderRadius: 4,
+                                //backgroundColor: '#fff',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                display: 'flex',
+                                height: ms(35),
+                                paddingHorizontal: ms(15),
+                                borderRadius: ms(35) / 2
+                            }} label={"Cancel"}/>
+                        }
+
+                        <View style={{
+                            marginHorizontal: 10,
+                        }}/>
+
+                        <SaveButton onPress={this.update} isLoading={isPostingComment} style={{
+                            padding: 8,
+                            borderRadius: 4,
+                            //backgroundColor: '#fff',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            display: 'flex',
+                            height: ms(35),
+                            paddingHorizontal: ms(15),
+                            borderRadius: ms(35) / 2
+                        }} label={"Update"}/>
+                    </View>
+                </View>
+            </ModalView>
+        )
+    }
+
+    update = () => {
+        if(this.state.isPostingComment) return;
+        this.setState({ isPostingComment: true });
+        const Host = Methods.shared(this.props.contentID);
+        if(Host){
+            Host.edit(this.state.content, this.state.rawContent);
+        } else{
+            this.setState({ isPostingComment: false });
+        }
+    }
+
+    render = () => {
+        const edit = () => {
+            this.setState({
+                isEditting: true
+            })
+        }
+        const close = () => {
+            this.setState({
+                isEditting: false,
+                isPostingComment: false
+            })
+        }
+
+        const post = () => {
+            //this.setState({
+                //isPostingComment: true
+            //})
+        }
+        const values = {
+            state: this.state,
+            actions: {
+                edit,
+                close,
+                post
+            },
+            Holder: this
+        }
+
+        return(
+            <React.Fragment>
+                <this.Container.Provider value={values}>
+                    {typeof this.props.children === "function"
+                        ? this.props.children(values)
+                        : this.props.children}
+                </this.Container.Provider>
+                {this.state.isEditting && this.renderEditor()}
+            </React.Fragment>
+        )
+    }
+}
+
+const MediaSwiper = ({SwipeableViews, children, onChangeIndex = (index) => {}, ...props}) => {
+    return(
+        <SwipeableViews style={{
+            flex: 1
+        }} containerStyle={{ display: Platform.OS === 'web' ? 'box' : 'flex', height: '100%' }} slideStyle={{
+            display: 'flex',
+            flexDirection: 'row',
+        }} threshold={16} onChangeIndex={onChangeIndex} style={{
+            flex: 1,
+            backgroundColor: '#eee'
+        }}>
+            {children}
+        </SwipeableViews>
+    )
+}
+
+const VideoItemOffline = () => null;
+const SwipeableViews = (props:any) => null

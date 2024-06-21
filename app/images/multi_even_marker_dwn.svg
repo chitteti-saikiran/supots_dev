@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100" height="140" viewBox="0 0 20 28">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #fff;
+        fill-rule: evenodd;
+      }
+    </style>
+  </defs>
+  <path id="multi-event_marker" data-name="multi-event marker" class="cls-1" d="M374,312h20v18l-10.321,10L374,330V312Z" transform="translate(-374 -312)"/>
+</svg>
